@@ -2,7 +2,7 @@ import Config
 
 config :rednews, Rednews.Repo,
   username: "postgres",
-  password: "admin21",
+  password: "postgres",
   hostname: "localhost",
   port: 5431,
   database: "rednews_dev",
