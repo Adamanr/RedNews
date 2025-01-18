@@ -54,6 +54,7 @@ config :rednews, Rednews.Repo,
   password: "your_db_password",
   database: "rednews_dev",
   hostname: "localhost",
+  port: 5432,
   pool_size: 10
 ```
 
@@ -104,6 +105,7 @@ config :rednews, Rednews.Repo,
   password: "your_db_password",
   database: "rednews_dev",
   hostname: "db",
+  port: 5432,
   pool_size: 10
 ```
 
