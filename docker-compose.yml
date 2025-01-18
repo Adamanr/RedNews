@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    ports:
+      - "4000:4000"
+    environment:
+      DATABASE_URL: "ecto://postgres:admin21@db/postgres"
+      SECRET_KEY_BASE: "17xTcCLV58dxb4pLk5Q92C1Yoh9MQJ3LvNaSG3zIW8oUngSrZTil/OTtUKjDzfu9"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "admin21"
+      POSTGRES_PORT: 5432
+    depends_on:
+      - db
+    networks:
+      - app_network
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin21
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+volumes:
+  pgdata:
+
+networks:
+  app_network:
+    driver: bridge

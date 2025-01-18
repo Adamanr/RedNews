@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content={get_csrf_token()} />
+    <link rel="icon" type="image/svg+xml" href="/images/logo.svg">
+    <.live_title default="Rednews">
+      {assigns[:page_title]}
+    </.live_title>
+    <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}/>
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/sidebar.js"}></script>
+  </head>
+  <body class="bg-gradient-to-br from-gray-50 to-purple-50">
+    <%= unless @conn.request_path in [~p"/users/register", ~p"/users/log_in"] do %>
+      <.sidebar current_user={@current_user}></.sidebar>
+    <% end %>
+    <div class="h-full">
+      {@inner_content}
+    </div>
+  </body>
+</html>

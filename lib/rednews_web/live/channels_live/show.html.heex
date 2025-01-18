@@ -1,0 +1,149 @@
+<nav class="sticky top-0 z-10 backdrop-blur-md bg-white/70 shadow-sm px-4 py-3">
+  <div class="max-w-7xl px-4 sm:px-6 lg:px-8  mx-auto flex justify-between items-center">
+    <div class="flex items-center gap-4">
+      <.back navigate={~p"/channels"} class="flex items-center gap-2 text-slate-700 hover:text-slate-900 font-medium">
+        Каналы
+      </.back>
+    </div>
+    <.link 
+      patch={~p"/channels/channel/#{@channels}/show/edit"} phx-click={JS.push_focus()}
+      class="inline-flex items-center gap-2 bg-slate-800 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-slate-700 transition-colors">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+      </svg>
+      <%= page_title(:edit) %>
+    </.link>
+  </div>
+</nav>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="relative h-80 rounded-xl overflow-hidden mb-8">
+    <%= if @channels.header do %>
+      <img src={@channels.header} alt="Channel header"
+        class="w-full h-full object-cover"/>
+    <% else %>
+      <div class="w-full h-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500"/>
+    <% end %>
+    
+    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+      <div class="flex items-center space-x-6">
+        <div class="relative">
+          <%= if @channels.logo do %>
+            <img src={@channels.logo} alt={@channels.name}
+              class="w-24 h-24 rounded-full border-4 border-white shadow-lg"/>
+          <% else %>
+            <div class="w-24 h-24 rounded-full border-4 border-white shadow-lg bg-gradient-to-br from-indigo-500 to-purple-600"/>
+          <% end %>
+          <%= if @channels.is_verificated do %>
+            <div class="absolute -right-2 -bottom-2 bg-blue-500 rounded-full p-1">
+              <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+          <% end %>
+        </div>
+        
+        <div class="flex-1">
+          <h1 class="text-3xl font-bold text-white mb-2"><%= @channels.name %></h1>
+          <div class="flex items-center space-x-4">
+      
+            <div class="flex items-center text-white">
+              <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <span><%= Calendar.strftime(@channels.inserted_at, "%d.%m.%Y") %></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="lg:col-span-2 space-y-8">
+      <div class="bg-white rounded-xl shadow-md p-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">О канале</h2>
+        <div class={"prose max-w-none
+          #{unless @show_full_desc, do: "line-clamp-3"}"}>
+          <%= @channels.desc %>
+        </div>
+        <%= if String.length(@channels.desc) > 200 do %>
+          <button class="mt-2 text-indigo-600 hover:text-indigo-700 font-medium"
+            phx-click="toggle-description">
+            <%= if @show_full_desc, do: "Свернуть", else: "Читать далее" %>
+          </button>
+        <% end %>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-md p-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">Категории</h2>
+        <div class="flex flex-wrap gap-2">
+            <span class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">
+              <%= @channels.category %>
+            </span>
+        </div>
+      </div>
+
+      <%= if @channels.additional do %>
+        <div class="bg-white rounded-xl shadow-md p-6">
+          <h2 class="text-xl font-bold text-gray-900 mb-4">Дополнительная информация</h2>
+          <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <%= for {key, value} <- @channels.additional do %>
+              <div>
+                <dt class="text-sm font-medium text-gray-500"><%= key %></dt>
+                <dd class="mt-1 text-gray-900"><%= value %></dd>
+              </div>
+            <% end %>
+          </dl>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="space-y-8">
+      <a href={"/users/user/#{@author.id}"}>
+       <div href={"/users/user/#{@author.id}"} class="bg-white rounded-xl shadow-md p-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">Автор</h2>
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <img src={@author.avatar} class="w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-rose-500"/>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-lg font-medium text-gray-900">
+                <%= @author.username %>
+              </h3>
+              <p class="text-sm text-gray-500">
+                Каналов: <%= Accounts.count_user_channels(@author.id) %>
+              </p>
+            </div>
+          </div>
+        </div>
+      </a>
+     
+
+      <%= if @channels.links do %>
+        <div class="rounded-xl shadow-md ">
+          <a href={@channels.links}
+            class="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+            Перейти на сайт
+            <svg class="ml-2 -mr-1 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+            </svg>
+          </a>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<.modal :if={@live_action == :edit} id="channels-modal" show on_cancel={JS.patch(~p"/channels/channel/#{@channels}")}>
+  <.live_component
+    module={RednewsWeb.ChannelsLive.FormComponent}
+    id={@channels.id}
+    title={@page_title}
+    action={@live_action}
+    channels={@channels}
+    navigate={~p"/channels/channel/#{@channels}"}
+  />
+</.modal>
