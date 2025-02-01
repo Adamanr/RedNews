@@ -92,7 +92,7 @@ docker-compose up --build
 ### 8. Установите зависимости проекта
 
 ```bash
-docker-compose exec web mix deps.get 
+docker-compose exec app mix deps.get 
 ```
 
 ### 9. Настройте базу данных
@@ -112,7 +112,7 @@ config :rednews, Rednews.Repo,
 Создайте и выполните миграции:
 
 ```bash
-docker-compose exec web mix deps.get
+docker-compose exec app mix ecto.create
 docker-compose exec app mix ecto.migrate
 ```
 
