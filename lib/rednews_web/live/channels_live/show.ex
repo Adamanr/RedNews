@@ -1,4 +1,5 @@
 defmodule RednewsWeb.ChannelsLive.Show do
+  alias Rednews.Posts
   use RednewsWeb, :live_view
 
   alias Rednews.Accounts
@@ -7,12 +8,14 @@ defmodule RednewsWeb.ChannelsLive.Show do
   def mount(%{"id" => id}, _session, socket) do
     channel = Accounts.get_channel!(id)
     author = Accounts.get_user!(channel.author)
+    headlines = Posts.list_headlines(:channel, %{channel: id})
 
     socket =
       socket
       |> assign(:page_title, channel.name)
       |> assign(:channels, channel)
       |> assign(:author, author)
+      |> assign(:headlines, headlines)
       |> assign(:show_full_desc, false)
 
     {:ok, socket}
@@ -32,8 +35,8 @@ defmodule RednewsWeb.ChannelsLive.Show do
     {:ok, _} = Accounts.delete_channels(channels)
 
     {:noreply,
-    socket
-    |> push_navigate(to: "/articles")}
+     socket
+     |> push_navigate(to: "/articles")}
   end
 
   defp page_title(:show), do: "Show Channels"

@@ -4,19 +4,20 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
-    <link rel="icon" type="image/svg+xml" href="/images/logo.svg">
+    <link rel="icon" type="image/svg+xml" href="/images/logo.svg" />
     <.live_title default="Rednews">
       {assigns[:page_title]}
     </.live_title>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
-    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}/>
-    <script defer phx-track-static type="text/javascript" src={~p"/assets/sidebar.js"}></script>
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"} />
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/sidebar.js"}>
+    </script>
   </head>
-  <body class="bg-gradient-to-br from-gray-50 to-purple-50">
-    <%= unless @conn.request_path in [~p"/users/register", ~p"/users/log_in"] do %>
-      <.sidebar current_user={@current_user}></.sidebar>
+  <body class="flex h-screen ">
+    <%= if @conn.request_path not in [~p"/users/register", ~p"/users/log_in"] do %>
+      <.sidebar current_user={@current_user} />
     <% end %>
-    <div class="h-full">
+    <div class="flex-1 bg-gradient-to-br from-gray-50 to-purple-50 overflow-y-scroll h-full">
       {@inner_content}
     </div>
   </body>

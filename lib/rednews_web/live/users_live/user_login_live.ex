@@ -4,10 +4,12 @@ defmodule RednewsWeb.UserLoginLive do
   def render(assigns) do
     ~H"""
     <div class="relative flex items-center justify-center min-h-screen bg-[#72adf0]">
-     <div class="hidden lg:block">
-        <img src="https://static.wixstatic.com/media/7ac599_da9f082770c1433591cce89a9ceeaf36~mv2.jpg/v1/fill/w_710,h_710,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/7ac599_da9f082770c1433591cce89a9ceeaf36~mv2.jpg"
-            alt="Registration Illustration"
-            class="max-w-full p-20 h-screen ">
+      <div class="hidden lg:block">
+        <img
+          src="https://static.wixstatic.com/media/7ac599_da9f082770c1433591cce89a9ceeaf36~mv2.jpg/v1/fill/w_710,h_710,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/7ac599_da9f082770c1433591cce89a9ceeaf36~mv2.jpg"
+          alt="Registration Illustration"
+          class="max-w-full p-20 h-screen "
+        />
       </div>
 
       <div class="mx-auto max-w-md px-5 bg-opacity-50 py-8 bg-white shadow-md rounded-lg flex-shrink-0">
@@ -28,13 +30,17 @@ defmodule RednewsWeb.UserLoginLive do
           <.input field={@form[:password]} type="password" label="Пароль" required />
 
           <:actions>
-            <.input field={@form[:remember_me]} type="checkbox" label="Оставаться в системе" />
+            <.input
+              field={@form[:remember_me]}
+              type="checkbox"
+              label="Оставаться в системе"
+            />
             <.link href={~p"/users/reset_password"} class="text-sm font-semibold">
               Забыли пароль?
             </.link>
           </:actions>
           <:actions>
-            <.button phx-disable-with="Logging in..." class="w-full">
+            <.button phx-disable-with="Logging in..." class="bg-zinc-600 w-full">
               Войти <span aria-hidden="true">→</span>
             </.button>
           </:actions>

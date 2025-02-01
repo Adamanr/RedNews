@@ -1,6 +1,6 @@
 <.flash_group flash={@flash} />
 
-<div class="relative h-full bg-gray-50">
+<div class="relative h-full">
   <%= if @latest_headline do %>
     <header class="bg-gradient-to-r from-slate-900 to-blue-900 text-white">
       <div class="max-w-7xl mx-auto px-4 py-8">
@@ -14,22 +14,30 @@
             </div>
             <%= if @latest_headline do %>
               <h1 class="text-4xl font-bold leading-tight">
-                <%= @latest_headline.title %>
+                {@latest_headline.title}
               </h1>
               <p class="text-gray-300 line-clamp-2">
-                <%= String.slice(@latest_headline.content, 0, 150) %>...
+                {String.slice(@latest_headline.content, 0, 150)}...
               </p>
-              <.link navigate={~p"/news/headline/#{@latest_headline}"} class="inline-flex items-center gap-2 text-white hover:text-blue-300 font-semibold">
+              <.link
+                navigate={~p"/news/headline/#{@latest_headline}"}
+                class="inline-flex items-center gap-2 text-white hover:text-blue-300 font-semibold"
+              >
                 Прочитать
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
               </.link>
             <% end %>
           </div>
-          
+
           <div class="relative h-[400px] rounded-2xl overflow-hidden shadow-xl">
-            <img 
+            <img
               src={@latest_headline.header}
               alt="Breaking news"
               class="w-full h-full object-cover"
@@ -40,7 +48,10 @@
     </header>
   <% else %>
     <div class="py-10 text-xl text-gray-800 text-center font-bold">
-      <h1>Важной новости сейчас нет (Как и возможно других новостей), но вы можете их создать тут - <a class="text-sky-400" href="/news">Новости</a></h1>
+      <h1>
+        Важной новости сейчас нет (Как и возможно других новостей), но вы можете их создать тут -
+        <a class="text-sky-400" href="/news">Новости</a>
+      </h1>
     </div>
   <% end %>
 
@@ -58,7 +69,7 @@
           <%= for headline <- @headlines do %>
             <div class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
               <div class="relative h-48">
-                <img 
+                <img
                   src={headline.header || "/api/placeholder/400/200"}
                   alt={headline.title}
                   class="w-full h-full object-cover"
@@ -72,16 +83,19 @@
               <div class="p-6">
                 <div class="flex gap-2 mb-3">
                   <span class="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded-full">
-                    <%= headline.category %>
+                    {headline.category}
                   </span>
                 </div>
                 <h3 class="text-xl font-semibold text-gray-900 mb-2">
-                  <%= headline.title %>
+                  {headline.title}
                 </h3>
                 <p class="text-gray-600 line-clamp-2 mb-4">
-                  <%= String.slice(headline.content, 0, 100) %>...
+                  {String.slice(headline.content, 0, 100)}...
                 </p>
-                <.link navigate={~p"/news/headline/#{headline}"} class="text-blue-600 hover:text-blue-800 font-medium">
+                <.link
+                  navigate={~p"/news/headline/#{headline}"}
+                  class="text-blue-600 hover:text-blue-800 font-medium"
+                >
                   Прочитать →
                 </.link>
               </div>
@@ -106,28 +120,36 @@
               <div class="p-6">
                 <div class="flex justify-between items-start mb-4">
                   <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">
-                    <%= article.category %>
+                    {article.category}
                   </span>
                   <div class="flex items-center gap-2 text-gray-600">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                      />
                     </svg>
                   </div>
                 </div>
                 <h3 class="text-xl font-semibold text-gray-900 mb-3">
-                  <%= article.title %>
+                  {article.title}
                 </h3>
                 <p class="text-gray-600 line-clamp-3 mb-4">
-                  <%= String.slice(article.content, 0, 150) %>...
+                  {String.slice(article.content, 0, 150)}...
                 </p>
                 <div class="flex justify-between items-center">
-                  <.link navigate={~p"/articles/article/#{article}"} class="text-blue-600 hover:text-blue-800 font-medium">
+                  <.link
+                    navigate={~p"/articles/article/#{article}"}
+                    class="text-blue-600 hover:text-blue-800 font-medium"
+                  >
                     Прочитать →
                   </.link>
                   <div class="flex gap-2">
                     <%= for tag <- Enum.take(article.tags || [], 2) do %>
                       <span class="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded-full">
-                        <%= tag %>
+                        {tag}
                       </span>
                     <% end %>
                   </div>
@@ -141,11 +163,13 @@
 
     <div class="grid lg:grid-cols-3 gap-8">
       <%= if length(@channels) != 0 do %>
-    
         <section class="lg:col-span-2">
           <div class="flex justify-between items-center mb-8">
             <h2 class="text-2xl font-bold text-gray-900">Популярные каналы</h2>
-            <.link navigate={~p"/channels"} class="text-blue-600 hover:text-blue-800 font-semibold">
+            <.link
+              navigate={~p"/channels"}
+              class="text-blue-600 hover:text-blue-800 font-semibold"
+            >
               Просмотреть все →
             </.link>
           </div>
@@ -155,7 +179,7 @@
               <div class="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow">
                 <div class="flex items-center gap-4">
                   <div class="w-16 h-16 rounded-full overflow-hidden bg-gray-100">
-                    <img 
+                    <img
                       src={channel.logo || "/api/placeholder/64/64"}
                       alt={channel.name}
                       class="w-full h-full object-cover"
@@ -163,14 +187,18 @@
                   </div>
                   <div>
                     <div class="flex items-center gap-2">
-                      <h3 class="font-semibold text-gray-900"><%= channel.name %></h3>
+                      <h3 class="font-semibold text-gray-900">{channel.name}</h3>
                       <%= if channel.is_verificated do %>
                         <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                          <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                          <path
+                            fill-rule="evenodd"
+                            d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clip-rule="evenodd"
+                          />
                         </svg>
                       <% end %>
                     </div>
-                    <p class="text-sm text-gray-600 line-clamp-1"><%= channel.desc %></p>
+                    <p class="text-sm text-gray-600 line-clamp-1">{channel.desc}</p>
                   </div>
                 </div>
               </div>
@@ -184,9 +212,9 @@
             <%= for category <- @popular_categories do %>
               <div class="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
                 <div class="flex items-center justify-between">
-                  <span class="font-medium text-gray-900"><%= Enum.at(category,0) %></span>
+                  <span class="font-medium text-gray-900">{Enum.at(category, 0)}</span>
                   <span class="text-sm text-gray-600">
-                    <%= Enum.at(category,1) %> статей
+                    {Enum.at(category, 1)} статей
                   </span>
                 </div>
               </div>
@@ -198,7 +226,7 @@
             <div class="flex flex-wrap gap-2">
               <%= for tag <- @popular_tags do %>
                 <span class="bg-white px-3 py-1 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer">
-                  #<%= Enum.at(tag,0) %>
+                  #{Enum.at(tag, 0)}
                 </span>
               <% end %>
             </div>

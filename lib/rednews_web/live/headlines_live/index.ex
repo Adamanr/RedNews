@@ -6,10 +6,9 @@ defmodule RednewsWeb.HeadlinesLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-
     socket =
       socket
-      |> assign(:categories, Posts.list_categories)
+      |> assign(:categories, Posts.list_categories())
       |> assign(:selected_category, "all")
       |> stream(:headlines, Posts.list_headlines())
 
@@ -89,13 +88,5 @@ defmodule RednewsWeb.HeadlinesLive.Index do
   @impl true
   def handle_info({RednewsWeb.HeadlinesLive.FormComponent, {:saved, headlines}}, socket) do
     {:noreply, stream_insert(socket, :headlines, headlines)}
-  end
-
-  @impl true
-  def handle_event("delete", %{"id" => id}, socket) do
-    headlines = Posts.get_headlines!(id)
-    {:ok, _} = Posts.delete_headlines(headlines)
-
-    {:noreply, stream_delete(socket, :headlines, headlines)}
   end
 end

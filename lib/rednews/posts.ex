@@ -58,9 +58,10 @@ defmodule Rednews.Posts do
   def list_categories, do: @categories
 
   import Ecto.Query, warn: false
+  alias Rednews.Accounts
   alias Rednews.Repo
 
-   @doc """
+  @doc """
   Fetches the most popular tags from both articles and headlines.
 
   ## Parameters
@@ -272,6 +273,7 @@ defmodule Rednews.Posts do
         :default -> from(h in Headlines)
         :category -> from(h in Headlines, where: h.category == ^params[:category])
         :tags -> from(h in Headlines, where: ^params[:tags] in h.tags)
+        :channel -> from(h in Headlines, where: h.author == ^params[:channel])
         _ -> raise ArgumentError, "Unknown options: #{options}"
       end
 
@@ -322,6 +324,31 @@ defmodule Rednews.Posts do
   def get_headlines!(id), do: Repo.get!(Headlines, id)
 
   @doc """
+  Checks if the user is an author of any channel.
+
+  Arguments:
+    * user_id - The ID of the user (unused in current implementation)
+    * author_id - The ID of the author to check in channels list
+
+  Returns:
+    * `true` if author_id exists in user's channels
+    * `false` otherwise
+
+  Examples:
+
+      iex> me_author?(1, 2)
+      true # if channel with id 2 exists in list
+
+      iex> me_author?(1, 999)
+      false # if no channel with id 999
+  """
+  @spec me_author?(integer(), integer()) :: boolean()
+  def me_author?(user_id, author_id) when is_integer(author_id) do
+    channels = Accounts.list_user_channels(user_id)
+    Enum.any?(channels, fn channel -> channel.id == author_id end)
+  end
+
+  @doc """
   Creates a headlines.
 
   ## Examples
@@ -336,7 +363,9 @@ defmodule Rednews.Posts do
   def create_headlines(attrs \\ %{}) do
     attrs = split_tag(attrs)
 
-    %Headlines{}
+    headlines = %Headlines{tags: attrs["tags"]}
+
+    headlines
     |> Headlines.changeset(attrs)
     |> Repo.insert()
   end
@@ -408,9 +437,14 @@ defmodule Rednews.Posts do
   def likes(pub_id, pub_type) do
     query =
       case pub_type do
-        :article -> from(l in Likes, where: l.pub_id == ^pub_id and l.pub_type == ^to_string(pub_type))
-        :headline -> from(l in Likes, where: l.pub_id == ^pub_id and l.pub_type == ^to_string(pub_type))
-        _ -> raise ArgumentError, "Unknown publication type: #{pub_type}"
+        :article ->
+          from(l in Likes, where: l.pub_id == ^pub_id and l.pub_type == ^to_string(pub_type))
+
+        :headline ->
+          from(l in Likes, where: l.pub_id == ^pub_id and l.pub_type == ^to_string(pub_type))
+
+        _ ->
+          raise ArgumentError, "Unknown publication type: #{pub_type}"
       end
 
     Repo.aggregate(query, :count)
@@ -433,9 +467,20 @@ defmodule Rednews.Posts do
   def me_like?(pub_id, pub_type, user_id) do
     query =
       case pub_type do
-        :article -> from(l in Likes, where: l.pub_id == ^pub_id and l.user == ^user_id and l.pub_type == ^to_string(pub_type))
-        :headline -> from(l in Likes, where: l.pub_id == ^pub_id and l.user == ^user_id and l.pub_type == ^to_string(pub_type))
-        _ -> raise ArgumentError, "Unknown publication type: #{pub_type}"
+        :article ->
+          from(l in Likes,
+            where:
+              l.pub_id == ^pub_id and l.user == ^user_id and l.pub_type == ^to_string(pub_type)
+          )
+
+        :headline ->
+          from(l in Likes,
+            where:
+              l.pub_id == ^pub_id and l.user == ^user_id and l.pub_type == ^to_string(pub_type)
+          )
+
+        _ ->
+          raise ArgumentError, "Unknown publication type: #{pub_type}"
       end
 
     Repo.exists?(query)
@@ -483,14 +528,142 @@ defmodule Rednews.Posts do
   - `ArgumentError` if an unknown publication type is provided.
   """
   def unlike(pub_id, pub_type, user_id) do
-    query = from(l in Likes, where: l.pub_id == ^pub_id and l.user == ^user_id and l.pub_type == ^to_string(pub_type))
+    query =
+      from(l in Likes,
+        where: l.pub_id == ^pub_id and l.user == ^user_id and l.pub_type == ^to_string(pub_type)
+      )
 
     case Repo.delete_all(query) do
-      {0, _} -> {:error, :not_found} # Лайк не найден
-      {1, _} -> {:ok, :like_removed} # Лайк успешно удален
-      {_, _} -> {:error, :unexpected_result} # Неожиданное количество удаленных записей (например, больше одной)
+      {0, _} -> {:error, :not_found}
+      {1, _} -> {:ok, :like_removed}
+      {_, _} -> {:error, :unexpected_result}
     end
   end
 
+  alias Rednews.Posts.Comments
+  alias Rednews.Accounts.User
 
+  @doc """
+  Creates a new comment.
+
+  ## Parameters
+  - `attrs`: A map of attributes for the comment. Defaults to an empty map.
+
+  ## Returns
+  - `{:ok, comment}`: If the comment is successfully created.
+  - `{:error, changeset}`: If the comment creation fails due to validation errors or other issues.
+
+  ## Examples
+      iex> create_comment(%{content: "Great post!", pub_id: 1, pub_type: :headline, author: 1})
+      {:ok, %Comments{}}
+  """
+  def create_comment(attrs \\ %{}) do
+    %Comments{}
+    |> Comments.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Retrieves all comments for a specific publication.
+
+  ## Parameters
+  - `pub_id`: The ID of the publication.
+  - `pub_type`: The type of the publication (e.g., `:headline`, `:article`).
+
+  ## Returns
+  - A list of maps, where each map contains a `comment` and its associated `author`.
+
+  ## Examples
+      iex> get_comments(1, :headline)
+      [%{comment: %Comments{}, author: %User{}}]
+
+  """
+  def get_comments(pub_id, pub_type) do
+    Comments
+    |> where([c], c.pub_id == ^pub_id and c.pub_type == ^pub_type)
+    |> join(:inner, [c], u in User, on: c.author == u.id)
+    |> select([c, u], %{comment: c, author: u})
+    |> order_by([c], desc: c.inserted_at)
+    |> Repo.all()
+  end
+
+  @doc """
+  Retrieves all reply comments for a specific comment.
+
+  ## Parameters
+  - `pub_id`: The ID of the publication.
+  - `pub_type`: The type of the publication (e.g., `:headline`, `:article`).
+  - `com_id`: The ID of the parent comment.
+
+  ## Returns
+  - A list of maps, where each map contains a `comment` and its associated `author`.
+
+  ## Examples
+      iex> get_reply_comments(1, :headline, 5)
+      [%{comment: %Comments{}, author: %User{}}]
+  """
+  def get_reply_comments(pub_id, pub_type, com_id) do
+    Comments
+    |> where([c], c.pub_id == ^pub_id and c.pub_type == ^pub_type and c.reply_id == ^com_id)
+    |> join(:inner, [c], u in User, on: c.author == u.id)
+    |> select([c, u], %{comment: c, author: u})
+    |> order_by([c], desc: c.inserted_at)
+    |> Repo.all()
+  end
+
+  @doc """
+  Retrieves a single comment by its ID and publication type.
+
+  ## Parameters
+  - `com_id`: The ID of the comment.
+  - `pub_type`: The type of the publication (e.g., `:headline`, `:article`).
+
+  ## Returns
+  - The comment if found, or `nil` if no comment matches the criteria.
+
+  ## Examples
+      iex> get_comment(1, :headline)
+      %Comments{}
+  """
+  def get_comment(com_id, pub_type) do
+    Comments
+    |> where([c], c.id == ^com_id and c.pub_type == ^pub_type)
+    |> Repo.one()
+  end
+
+  @doc """
+  Deletes a comment and all its associated replies.
+
+  ## Parameters
+  - `id`: The ID of the comment to delete.
+
+  ## Returns
+  - `{:ok, deleted_comment}`: If the comment and its replies are successfully deleted.
+  - `{:error, :not_found}`: If the comment does not exist.
+  - `{:error, changeset}`: If the deletion fails due to database constraints or other issues.
+
+  ## Examples
+      iex> delete_comment(1)
+      {:ok, %Comments{}}
+  """
+  def delete_comment(id) do
+    Repo.transaction(fn ->
+      case Repo.get(Comments, id) do
+        nil ->
+          Repo.rollback(:not_found)
+
+        comment ->
+          replies_query =
+            from c in Comments,
+              where: c.reply_id == ^id
+
+          Repo.delete_all(replies_query)
+
+          case Repo.delete(comment) do
+            {:ok, deleted_comment} -> deleted_comment
+            {:error, changeset} -> Repo.rollback(changeset)
+          end
+      end
+    end)
+  end
 end

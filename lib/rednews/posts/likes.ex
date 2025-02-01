@@ -3,7 +3,6 @@ defmodule Rednews.Posts.Likes do
   import Ecto.Changeset
 
   schema "likes" do
-
     field :user, :id
     field :pub_type, :string
     field :pub_id, :integer

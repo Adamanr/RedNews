@@ -4,9 +4,39 @@ defmodule RednewsWeb.ChannelsLiveTest do
   import Phoenix.LiveViewTest
   import Rednews.AccountsFixtures
 
-  @create_attrs %{links: "some links", name: "some name", header: "some header", desc: "some desc", category: ["option1", "option2"], is_verificated: true, logo: "some logo", additional: %{}, stars: 42}
-  @update_attrs %{links: "some updated links", name: "some updated name", header: "some updated header", desc: "some updated desc", category: ["option1"], is_verificated: false, logo: "some updated logo", additional: %{}, stars: 43}
-  @invalid_attrs %{links: nil, name: nil, header: nil, desc: nil, category: [], is_verificated: false, logo: nil, additional: nil, stars: nil}
+  @create_attrs %{
+    links: "some links",
+    name: "some name",
+    header: "some header",
+    desc: "some desc",
+    category: ["option1", "option2"],
+    is_verificated: true,
+    logo: "some logo",
+    additional: %{},
+    stars: 42
+  }
+  @update_attrs %{
+    links: "some updated links",
+    name: "some updated name",
+    header: "some updated header",
+    desc: "some updated desc",
+    category: ["option1"],
+    is_verificated: false,
+    logo: "some updated logo",
+    additional: %{},
+    stars: 43
+  }
+  @invalid_attrs %{
+    links: nil,
+    name: nil,
+    header: nil,
+    desc: nil,
+    category: [],
+    is_verificated: false,
+    logo: nil,
+    additional: nil,
+    stars: nil
+  }
 
   defp create_channels(_) do
     channels = channels_fixture()

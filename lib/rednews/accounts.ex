@@ -378,6 +378,7 @@ defmodule Rednews.Accounts do
   def list_user_channels(user_id) do
     Channels
     |> where([c], c.author == ^user_id)
+    |> select([c], %{name: c.name, id: c.id})
     |> Repo.all()
   end
 
@@ -456,9 +457,8 @@ defmodule Rednews.Accounts do
   """
   def count_user_channels(user_id) do
     from(c in Channels, where: c.author == ^user_id)
-      |> Repo.aggregate(:count)
+    |> Repo.aggregate(:count)
   end
-
 
   @doc """
   Gets a single channels.

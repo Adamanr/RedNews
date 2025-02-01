@@ -231,7 +231,7 @@ defmodule RednewsWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
+        "phx-submit-loading:opacity-75 rounded-lg py-2 px-3",
         "text-sm font-semibold leading-6 text-white active:text-white/80",
         @class
       ]}
@@ -519,8 +519,6 @@ defmodule RednewsWeb.CoreComponents do
     """
   end
 
-
-
   @doc """
   Renders the sidebar component.
 
@@ -531,121 +529,342 @@ defmodule RednewsWeb.CoreComponents do
       <.sidebar current_user={@current_user} />
   """
   attr :current_user, :any, required: true
+
   def sidebar(assigns) do
     ~H"""
-    <div class="w-full bg-gray-900 z-30">
-      <div class=" left-0 h-16 py-1 z-30 max-w-7xl mx-auto w-full shadow-lg">
-        <div class="flex flex-col items-center h-full">
-          <nav class="flex-1 w-full">
-            <ul class="flex items-center px-5 ">
-              <li class="">
-                <div class="block p-3 rounded-xl hover:bg-blue-500 transition-colors duration-200" onclick="openRightPanel(event)">
-                  <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M7 8H17M7 12H17M7 16H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </div>
-              </li>
-              <li class="grow  text-center ">
-                <a href="/" class="text-4xl justify-center mx-auto font-extrabold flex text-white">
-                  <img src="/images/logo.svg" class="h-9 w-9 me-2"/>
-                  <span class="text-rose-600">Red</span>News
-                </a>
-              </li>
-              <%= if @current_user do %>
-                <li class="flex flex-col items-center gap-2">
-                  <.link
-                    href="/users/settings"
-                    class="p-2 rounded-lg hover:bg-blue-500 transition-colors duration-200 w-full text-center"
-                  >
-                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    </svg>
-                  </.link>
-                </li>
+    <div class="w-16 bg-gray-900 z-30">
+      <nav class="h-screen w-full">
+        <ul class="flex h-screen flex-col items-center px-5">
+          <li class="text-center mt-4">
+            <a
+              href="/"
+              class="text-xl flex flex-col justify-center mx-auto font-extrabold flex text-white"
+            >
+              <img src="/images/logo.svg" class="h-9 w-9 me-2" />
+              <p class="tex-xm"><span class="text-rose-600">R</span>N</p>
+            </a>
+          </li>
+          <li class="flex-1 mt-4">
+            <div
+              class="block p-3 rounded-xl hover:bg-blue-500 transition-colors duration-200"
+              onclick="openRightPanel(event)"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M7 8H17M7 12H17M7 16H13"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+          </li>
+          <%= if @current_user do %>
+            <li class="">
+              <.link
+                href=""
+                class="p-2 rounded-lg w-full transition-colors duration-200 w-full text-center"
+              >
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+              </.link>
+            </li>
 
-                <li class="flex flex-col items-center gap-2">
-                  <.link
-                    href="/users/log_out"
-                    method="delete"
-                    class="p-2 rounded-lg hover:bg-blue-500 transition-colors duration-200 w-full text-center"
-                  >
-                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                    </svg>
-                  </.link>
-                </li>
-              <% else %>
-                <li class="flex justify-center">
-                  <.link
-                    href="/users/log_in"
-                    class="p-3 rounded-xl hover:bg-blue-500 transition-colors duration-200"
-                  >
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
-                    </svg>
-                  </.link>
-                </li>
-              <% end %>
-            </ul>
-          </nav>
-        </div>
-      </div>
+            <li class="mb-4">
+              <.link
+                href="/users/log_out"
+                method="delete"
+                class="rounded-lg transition-colors duration-200 w-full text-center"
+              >
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  />
+                </svg>
+              </.link>
+            </li>
+          <% else %>
+            <li class="">
+              <.link
+                href="/users/log_in"
+                class=" rounded-xl hover:bg-blue-500 transition-colors duration-200"
+              >
+                <svg
+                  class="w-6 h-6 mb-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                  />
+                </svg>
+              </.link>
+            </li>
+          <% end %>
+        </ul>
+      </nav>
 
-      <div id="rightPanel" class="fixed hidden left-0 top-0 z-20 h-fit mt-10 rounded-r-lg w-70  bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out">
+      <div
+        id="rightPanel"
+        class="fixed hidden left-16 h-screen -top-10  z-20 mt-10 rounded-r-lg w-70  bg-white  transform translate-x-full transition-transform duration-300 ease-in-out"
+      >
         <div class="p-6">
           <div class="flex items-center justify-between mb-6">
             <h2 class="text-xl font-semibold text-gray-800">Menu</h2>
-            <button onclick="openRightPanel()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+            <button
+              onclick="openRightPanel()"
+              class="p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+            >
               <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           </div>
           <nav>
             <ul class="space-y-4 flex flex-col">
               <li>
-                <a href="/" class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-                  <svg class="w-5 h-5 text-gray-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                <a
+                  href="/"
+                  class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                >
+                  <svg
+                    class="w-5 h-5 text-gray-600 mr-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                    />
                   </svg>
                   <span class="text-gray-700">Главная</span>
                 </a>
               </li>
               <li>
-                <a href="/articles" class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-                  <svg class="w-5 h-5 text-gray-600 mr-3" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>list_check_3_fill</title> <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Editor" transform="translate(-48.000000, -240.000000)" fill-rule="nonzero"> <g id="list_check_3_fill" transform="translate(48.000000, 240.000000)"> <path d="M24,0 L24,24 L0,24 L0,0 L24,0 Z M12.5934901,23.257841 L12.5819402,23.2595131 L12.5108777,23.2950439 L12.4918791,23.2987469 L12.4918791,23.2987469 L12.4767152,23.2950439 L12.4056548,23.2595131 C12.3958229,23.2563662 12.3870493,23.2590235 12.3821421,23.2649074 L12.3780323,23.275831 L12.360941,23.7031097 L12.3658947,23.7234994 L12.3769048,23.7357139 L12.4804777,23.8096931 L12.4953491,23.8136134 L12.4953491,23.8136134 L12.5071152,23.8096931 L12.6106902,23.7357139 L12.6232938,23.7196733 L12.6232938,23.7196733 L12.6266527,23.7031097 L12.609561,23.275831 C12.6075724,23.2657013 12.6010112,23.2592993 12.5934901,23.257841 L12.5934901,23.257841 Z M12.8583906,23.1452862 L12.8445485,23.1473072 L12.6598443,23.2396597 L12.6498822,23.2499052 L12.6498822,23.2499052 L12.6471943,23.2611114 L12.6650943,23.6906389 L12.6699349,23.7034178 L12.6699349,23.7034178 L12.678386,23.7104931 L12.8793402,23.8032389 C12.8914285,23.8068999 12.9022333,23.8029875 12.9078286,23.7952264 L12.9118235,23.7811639 L12.8776777,23.1665331 C12.8752882,23.1545897 12.8674102,23.1470016 12.8583906,23.1452862 L12.8583906,23.1452862 Z M12.1430473,23.1473072 C12.1332178,23.1423925 12.1221763,23.1452606 12.1156365,23.1525954 L12.1099173,23.1665331 L12.0757714,23.7811639 C12.0751323,23.7926639 12.0828099,23.8018602 12.0926481,23.8045676 L12.108256,23.8032389 L12.3092106,23.7104931 L12.3186497,23.7024347 L12.3186497,23.7024347 L12.3225043,23.6906389 L12.340401,23.2611114 L12.337245,23.2485176 L12.337245,23.2485176 L12.3277531,23.2396597 L12.1430473,23.1473072 Z" id="MingCute" fill-rule="nonzero"> </path> <path d="M7,13 C8.05436227,13 8.91816517,13.81585 8.99451427,14.8507339 L9,15 L9,18 C9,19.0543909 8.18412267,19.9181678 7.14926241,19.9945144 L7,20 L4,20 C2.94563773,20 2.08183483,19.18415 2.00548573,18.1492661 L2,18 L2,15 C2,13.9456091 2.81587733,13.0818322 3.85073759,13.0054856 L4,13 L7,13 Z M16,17 C16.5523,17 17,17.4477 17,18 C17,18.51285 16.613973,18.9355092 16.1166239,18.9932725 L16,19 L12,19 C11.4477,19 11,18.5523 11,18 C11,17.48715 11.386027,17.0644908 11.8833761,17.0067275 L12,17 L16,17 Z M20,13 C20.5523,13 21,13.4477 21,14 C21,14.5523 20.5523,15 20,15 L12,15 C11.4477,15 11,14.5523 11,14 C11,13.4477 11.4477,13 12,13 L20,13 Z M7,3 C8.10457,3 9,3.89543 9,5 L9,8 C9,9.10457 8.10457,10 7,10 L4,10 C2.89543,10 2,9.10457 2,8 L2,5 C2,3.89543 2.89543,3 4,3 L7,3 Z M16,7 C16.5523,7 17,7.44772 17,8 C17,8.51283143 16.613973,8.93550653 16.1166239,8.9932722 L16,9 L12,9 C11.4477,9 11,8.55228 11,8 C11,7.48716857 11.386027,7.06449347 11.8833761,7.0067278 L12,7 L16,7 Z M20,3 C20.5523,3 21,3.44772 21,4 C21,4.51283143 20.613973,4.93550653 20.1166239,4.9932722 L20,5 L12,5 C11.4477,5 11,4.55228 11,4 C11,3.48716857 11.386027,3.06449347 11.8833761,3.0067278 L12,3 L20,3 Z" id="形状" fill="currentColor"> </path> </g> </g> </g> </g></svg>
+                <a
+                  href="/articles"
+                  class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                >
+                  <svg
+                    class="w-5 h-5 text-gray-600 mr-3"
+                    viewBox="0 0 24 24"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    fill="currentColor"
+                  >
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                      <title>list_check_3_fill</title>
+
+                      <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g
+                          id="Editor"
+                          transform="translate(-48.000000, -240.000000)"
+                          fill-rule="nonzero"
+                        >
+                          <g id="list_check_3_fill" transform="translate(48.000000, 240.000000)">
+                            <path
+                              d="M24,0 L24,24 L0,24 L0,0 L24,0 Z M12.5934901,23.257841 L12.5819402,23.2595131 L12.5108777,23.2950439 L12.4918791,23.2987469 L12.4918791,23.2987469 L12.4767152,23.2950439 L12.4056548,23.2595131 C12.3958229,23.2563662 12.3870493,23.2590235 12.3821421,23.2649074 L12.3780323,23.275831 L12.360941,23.7031097 L12.3658947,23.7234994 L12.3769048,23.7357139 L12.4804777,23.8096931 L12.4953491,23.8136134 L12.4953491,23.8136134 L12.5071152,23.8096931 L12.6106902,23.7357139 L12.6232938,23.7196733 L12.6232938,23.7196733 L12.6266527,23.7031097 L12.609561,23.275831 C12.6075724,23.2657013 12.6010112,23.2592993 12.5934901,23.257841 L12.5934901,23.257841 Z M12.8583906,23.1452862 L12.8445485,23.1473072 L12.6598443,23.2396597 L12.6498822,23.2499052 L12.6498822,23.2499052 L12.6471943,23.2611114 L12.6650943,23.6906389 L12.6699349,23.7034178 L12.6699349,23.7034178 L12.678386,23.7104931 L12.8793402,23.8032389 C12.8914285,23.8068999 12.9022333,23.8029875 12.9078286,23.7952264 L12.9118235,23.7811639 L12.8776777,23.1665331 C12.8752882,23.1545897 12.8674102,23.1470016 12.8583906,23.1452862 L12.8583906,23.1452862 Z M12.1430473,23.1473072 C12.1332178,23.1423925 12.1221763,23.1452606 12.1156365,23.1525954 L12.1099173,23.1665331 L12.0757714,23.7811639 C12.0751323,23.7926639 12.0828099,23.8018602 12.0926481,23.8045676 L12.108256,23.8032389 L12.3092106,23.7104931 L12.3186497,23.7024347 L12.3186497,23.7024347 L12.3225043,23.6906389 L12.340401,23.2611114 L12.337245,23.2485176 L12.337245,23.2485176 L12.3277531,23.2396597 L12.1430473,23.1473072 Z"
+                              id="MingCute"
+                              fill-rule="nonzero"
+                            >
+                            </path>
+
+                            <path
+                              d="M7,13 C8.05436227,13 8.91816517,13.81585 8.99451427,14.8507339 L9,15 L9,18 C9,19.0543909 8.18412267,19.9181678 7.14926241,19.9945144 L7,20 L4,20 C2.94563773,20 2.08183483,19.18415 2.00548573,18.1492661 L2,18 L2,15 C2,13.9456091 2.81587733,13.0818322 3.85073759,13.0054856 L4,13 L7,13 Z M16,17 C16.5523,17 17,17.4477 17,18 C17,18.51285 16.613973,18.9355092 16.1166239,18.9932725 L16,19 L12,19 C11.4477,19 11,18.5523 11,18 C11,17.48715 11.386027,17.0644908 11.8833761,17.0067275 L12,17 L16,17 Z M20,13 C20.5523,13 21,13.4477 21,14 C21,14.5523 20.5523,15 20,15 L12,15 C11.4477,15 11,14.5523 11,14 C11,13.4477 11.4477,13 12,13 L20,13 Z M7,3 C8.10457,3 9,3.89543 9,5 L9,8 C9,9.10457 8.10457,10 7,10 L4,10 C2.89543,10 2,9.10457 2,8 L2,5 C2,3.89543 2.89543,3 4,3 L7,3 Z M16,7 C16.5523,7 17,7.44772 17,8 C17,8.51283143 16.613973,8.93550653 16.1166239,8.9932722 L16,9 L12,9 C11.4477,9 11,8.55228 11,8 C11,7.48716857 11.386027,7.06449347 11.8833761,7.0067278 L12,7 L16,7 Z M20,3 C20.5523,3 21,3.44772 21,4 C21,4.51283143 20.613973,4.93550653 20.1166239,4.9932722 L20,5 L12,5 C11.4477,5 11,4.55228 11,4 C11,3.48716857 11.386027,3.06449347 11.8833761,3.0067278 L12,3 L20,3 Z"
+                              id="形状"
+                              fill="currentColor"
+                            >
+                            </path>
+                          </g>
+                        </g>
+                      </g>
+                    </g>
+                  </svg>
                   <span class="text-gray-700">Статьи</span>
                 </a>
               </li>
               <li>
-                <a href="/news" class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-                  <svg class="w-5 h-5 text-gray-600 mr-3" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>news</title> <g id="Layer_2" data-name="Layer 2"> <g id="invisible_box" data-name="invisible box"> <rect width="48" height="48" fill="none"></rect> </g> <g id="icons_Q2" data-name="icons Q2"> <path d="M40,8V40H8V8H40m2-4H6A2,2,0,0,0,4,6V42a2,2,0,0,0,2,2H42a2,2,0,0,0,2-2V6a2,2,0,0,0-2-2Z"></path> <path d="M34,30H14a2,2,0,0,0,0,4H34a2,2,0,0,0,0-4Z"></path> <path d="M34,22H28a2,2,0,0,0,0,4h6a2,2,0,0,0,0-4Z"></path> <path d="M34,14H28a2,2,0,0,0,0,4h6a2,2,0,0,0,0-4Z"></path> <rect x="12" y="14" width="10" height="12" rx="2" ry="2"></rect> </g> </g> </g></svg>
+                <a
+                  href="/news"
+                  class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                >
+                  <svg
+                    class="w-5 h-5 text-gray-600 mr-3"
+                    viewBox="0 0 48 48"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                  >
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                      <title>news</title>
+
+                      <g id="Layer_2" data-name="Layer 2">
+                        <g id="invisible_box" data-name="invisible box">
+                          <rect width="48" height="48" fill="none"></rect>
+                        </g>
+
+                        <g id="icons_Q2" data-name="icons Q2">
+                          <path d="M40,8V40H8V8H40m2-4H6A2,2,0,0,0,4,6V42a2,2,0,0,0,2,2H42a2,2,0,0,0,2-2V6a2,2,0,0,0-2-2Z">
+                          </path>
+
+                          <path d="M34,30H14a2,2,0,0,0,0,4H34a2,2,0,0,0,0-4Z"></path>
+
+                          <path d="M34,22H28a2,2,0,0,0,0,4h6a2,2,0,0,0,0-4Z"></path>
+
+                          <path d="M34,14H28a2,2,0,0,0,0,4h6a2,2,0,0,0,0-4Z"></path>
+
+                          <rect x="12" y="14" width="10" height="12" rx="2" ry="2"></rect>
+                        </g>
+                      </g>
+                    </g>
+                  </svg>
                   <span class="text-gray-700">Новости</span>
                 </a>
               </li>
               <li>
-                <a href="/channels" class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-                  <svg class="w-5 h-5 text-gray-600 mr-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3.5 8.5C3.5 7.94772 3.94772 7.5 4.5 7.5H12.5V9.5H4.5C3.94772 9.5 3.5 9.05228 3.5 8.5V8.5Z" stroke="currentColor"></path> <path d="M14.5 7.5H19.5C20.0523 7.5 20.5 7.94772 20.5 8.5V8.5C20.5 9.05228 20.0523 9.5 19.5 9.5H14.5V7.5Z" stroke="currentColor"></path> <path d="M3.5 12.5C3.5 11.9477 3.94772 11.5 4.5 11.5H9.5V13.5H4.5C3.94772 13.5 3.5 13.0523 3.5 12.5V12.5Z" stroke="currentColor"></path> <path d="M11.5 11.5H19.5C20.0523 11.5 20.5 11.9477 20.5 12.5V12.5C20.5 13.0523 20.0523 13.5 19.5 13.5H11.5V11.5Z" stroke="currentColor"></path> <path d="M3.5 16.5C3.5 15.9477 3.94772 15.5 4.5 15.5H15.5V17.5H4.5C3.94772 17.5 3.5 17.0523 3.5 16.5V16.5Z" stroke="currentColor"></path> <path d="M17.5 15.5H19.5C20.0523 15.5 20.5 15.9477 20.5 16.5V16.5C20.5 17.0523 20.0523 17.5 19.5 17.5H17.5V15.5Z" stroke="currentColor"></path> </g></svg>
+                <a
+                  href="/channels"
+                  class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                >
+                  <svg
+                    class="w-5 h-5 text-gray-600 mr-3"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                      <path
+                        d="M3.5 8.5C3.5 7.94772 3.94772 7.5 4.5 7.5H12.5V9.5H4.5C3.94772 9.5 3.5 9.05228 3.5 8.5V8.5Z"
+                        stroke="currentColor"
+                      >
+                      </path>
+
+                      <path
+                        d="M14.5 7.5H19.5C20.0523 7.5 20.5 7.94772 20.5 8.5V8.5C20.5 9.05228 20.0523 9.5 19.5 9.5H14.5V7.5Z"
+                        stroke="currentColor"
+                      >
+                      </path>
+
+                      <path
+                        d="M3.5 12.5C3.5 11.9477 3.94772 11.5 4.5 11.5H9.5V13.5H4.5C3.94772 13.5 3.5 13.0523 3.5 12.5V12.5Z"
+                        stroke="currentColor"
+                      >
+                      </path>
+
+                      <path
+                        d="M11.5 11.5H19.5C20.0523 11.5 20.5 11.9477 20.5 12.5V12.5C20.5 13.0523 20.0523 13.5 19.5 13.5H11.5V11.5Z"
+                        stroke="currentColor"
+                      >
+                      </path>
+
+                      <path
+                        d="M3.5 16.5C3.5 15.9477 3.94772 15.5 4.5 15.5H15.5V17.5H4.5C3.94772 17.5 3.5 17.0523 3.5 16.5V16.5Z"
+                        stroke="currentColor"
+                      >
+                      </path>
+
+                      <path
+                        d="M17.5 15.5H19.5C20.0523 15.5 20.5 15.9477 20.5 16.5V16.5C20.5 17.0523 20.0523 17.5 19.5 17.5H17.5V15.5Z"
+                        stroke="currentColor"
+                      >
+                      </path>
+                    </g>
+                  </svg>
                   <span class="text-gray-700">Каналы</span>
                 </a>
               </li>
               <%= if assigns.current_user != nil do %>
                 <li>
-                  <a href={"/users/user/#{assigns.current_user.id}"} class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-                    <svg class="w-5 h-5 text-gray-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                  <a
+                    href={"/users/user/#{assigns.current_user.id}"}
+                    class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                  >
+                    <svg
+                      class="w-5 h-5 text-gray-600 mr-3"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                      />
                     </svg>
                     <span class="text-gray-700">Профиль</span>
                   </a>
                 </li>
               <% end %>
               <li class="disable" title="Будет позже">
-                <a href="#" class="flex items-center p-3 rounded-lg disable hover:bg-gray-100 transition-colors duration-200">
-                  <svg class="w-5 h-5 text-gray-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <a
+                  href="#"
+                  class="flex items-center p-3 rounded-lg disable hover:bg-gray-100 transition-colors duration-200"
+                >
+                  <svg
+                    class="w-5 h-5 text-gray-600 mr-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
                   </svg>
                   <span class="text-gray-700">Settings</span>
                 </a>

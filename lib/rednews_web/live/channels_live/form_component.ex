@@ -28,11 +28,11 @@ defmodule RednewsWeb.ChannelsLive.FormComponent do
           field={@form[:category]}
           type="select"
           label="Категория"
-          options={Posts.list_categories}
+          options={Posts.list_categories()}
         />
         <.input field={@form[:links]} type="text" label="Ссылка на сайт канала" />
         <:actions>
-          <.button phx-disable-with="Saving...">Сохранить</.button>
+          <.button class="bg-zinc-600" phx-disable-with="Saving...">Сохранить</.button>
         </:actions>
       </.simple_form>
     </div>
@@ -58,7 +58,6 @@ defmodule RednewsWeb.ChannelsLive.FormComponent do
   def handle_event("save", %{"channels" => channels_params}, socket) do
     save_channels(socket, socket.assigns.action, channels_params)
   end
-
 
   defp save_channels(socket, :edit, channels_params) do
     channels_params = Map.put(channels_params, "author", socket.assigns.myself.cid)

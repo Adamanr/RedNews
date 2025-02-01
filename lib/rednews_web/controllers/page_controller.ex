@@ -25,5 +25,4 @@ defmodule RednewsWeb.PageController do
       popular_categories: Posts.get_popular_categories()
     )
   end
-
 end

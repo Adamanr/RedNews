@@ -8,7 +8,15 @@ defmodule Rednews.PostsTest do
 
     import Rednews.PostsFixtures
 
-    @invalid_attrs %{title: nil, content: nil, is_fake: nil, likes: nil, category: nil, tags: nil, additional: nil}
+    @invalid_attrs %{
+      title: nil,
+      content: nil,
+      is_fake: nil,
+      likes: nil,
+      category: nil,
+      tags: nil,
+      additional: nil
+    }
 
     test "list_article/0 returns all article" do
       articles = articles_fixture()
@@ -21,7 +29,15 @@ defmodule Rednews.PostsTest do
     end
 
     test "create_articles/1 with valid data creates a articles" do
-      valid_attrs = %{title: "some title", content: "some content", is_fake: true, likes: 42, category: "some category", tags: ["option1", "option2"], additional: %{}}
+      valid_attrs = %{
+        title: "some title",
+        content: "some content",
+        is_fake: true,
+        likes: 42,
+        category: "some category",
+        tags: ["option1", "option2"],
+        additional: %{}
+      }
 
       assert {:ok, %Articles{} = articles} = Posts.create_articles(valid_attrs)
       assert articles.title == "some title"
@@ -39,7 +55,16 @@ defmodule Rednews.PostsTest do
 
     test "update_articles/2 with valid data updates the articles" do
       articles = articles_fixture()
-      update_attrs = %{title: "some updated title", content: "some updated content", is_fake: false, likes: 43, category: "some updated category", tags: ["option1"], additional: %{}}
+
+      update_attrs = %{
+        title: "some updated title",
+        content: "some updated content",
+        is_fake: false,
+        likes: 43,
+        category: "some updated category",
+        tags: ["option1"],
+        additional: %{}
+      }
 
       assert {:ok, %Articles{} = articles} = Posts.update_articles(articles, update_attrs)
       assert articles.title == "some updated title"
@@ -74,7 +99,17 @@ defmodule Rednews.PostsTest do
 
     import Rednews.PostsFixtures
 
-    @invalid_attrs %{header: nil, title: nil, category: nil, content: nil, is_fake: nil, additional: nil, important: nil, is_very_important: nil, tags: nil}
+    @invalid_attrs %{
+      header: nil,
+      title: nil,
+      category: nil,
+      content: nil,
+      is_fake: nil,
+      additional: nil,
+      important: nil,
+      is_very_important: nil,
+      tags: nil
+    }
 
     test "list_headlines/0 returns all headlines" do
       headlines = headlines_fixture()
@@ -87,7 +122,17 @@ defmodule Rednews.PostsTest do
     end
 
     test "create_headlines/1 with valid data creates a headlines" do
-      valid_attrs = %{header: "some header", title: "some title", category: ["option1", "option2"], content: "some content", is_fake: true, additional: %{}, important: 42, is_very_important: true, tags: ["option1", "option2"]}
+      valid_attrs = %{
+        header: "some header",
+        title: "some title",
+        category: ["option1", "option2"],
+        content: "some content",
+        is_fake: true,
+        additional: %{},
+        important: 42,
+        is_very_important: true,
+        tags: ["option1", "option2"]
+      }
 
       assert {:ok, %Headlines{} = headlines} = Posts.create_headlines(valid_attrs)
       assert headlines.header == "some header"
@@ -107,7 +152,18 @@ defmodule Rednews.PostsTest do
 
     test "update_headlines/2 with valid data updates the headlines" do
       headlines = headlines_fixture()
-      update_attrs = %{header: "some updated header", title: "some updated title", category: ["option1"], content: "some updated content", is_fake: false, additional: %{}, important: 43, is_very_important: false, tags: ["option1"]}
+
+      update_attrs = %{
+        header: "some updated header",
+        title: "some updated title",
+        category: ["option1"],
+        content: "some updated content",
+        is_fake: false,
+        additional: %{},
+        important: 43,
+        is_very_important: false,
+        tags: ["option1"]
+      }
 
       assert {:ok, %Headlines{} = headlines} = Posts.update_headlines(headlines, update_attrs)
       assert headlines.header == "some updated header"

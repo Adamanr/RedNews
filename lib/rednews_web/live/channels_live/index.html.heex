@@ -1,69 +1,112 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-  <div class="text-center mb-8">
-    <h1 class="text-4xl font-bold text-gray-900">Список каналов</h1>
-    <p class="mt-2 text-lg text-gray-600">Найдите интересные каналы по категориям</p>
+<div class="relative pb-10 mt-[14vh]">
+  <div class="max-w-7xl mx-auto">
+    <div class="absolute ms-8 text-xl font-bold text-gray-800 -top-10">
+      <h1><a href="/">Главная</a> > Каналы</h1>
+    </div>
   </div>
-
-
-
-  <div class="flex flex-wrap gap-2 justify-center mb-8">
-       
-    <.link patch={~p"/channels/new"}>
-      <.button class="bg-white text-purple-600 hover:bg-purple-50 flex items-center gap-2 shadow-lg">
-        <svg class="w-5 h-5" fill="currentColor" viewBox="-2 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg" transform="rotate(90)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M5.9 4.544 2.534 7.912 1.225 6.604a1.111 1.111 0 0 1 0-1.567l1.8-1.8a1.112 1.112 0 0 1 1.568 0zm7.926 11.565a.456.456 0 0 1-.099-.011l-3.419-.77a1.96 1.96 0 0 1-.77-.412v.001l-3.709-3.71-2.512-2.511 1.71-1.71 6.22 6.221-1.181 1.182a1.294 1.294 0 0 0 .406.213l1.508.339.95-.95-.34-1.508a1.278 1.278 0 0 0-.213-.405l-.345.345-6.222-6.22.874-.875L9.197 7.84l1.751 1.752 1.957 1.958a1.962 1.962 0 0 1 .412.77l.77 3.419c.05.22-.065.37-.26.37z"></path></g></svg>
-        Создать канал
-      </.button>
-    </.link>
-
-  </div>
-
-
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <%= for {_id, channel} <- @streams.channels do %>
-      <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
-        <div class="relative pb-48">
-          <%= if channel.logo do %>
-            <img src={channel.logo} alt={channel.name}
-              class="absolute h-full w-full object-cover"/>
-          <% else %>
-            <div class="absolute h-full w-full bg-gradient-to-br from-indigo-500 to-purple-600"/>
-          <% end %>
-        </div>
-        
-        <div class="p-6">
-          <div class="flex items-center justify-between mb-2">
-            <a href={~p"/channels/channel/#{channel}"} class="text-xl font-bold text-gray-900 truncate">
-              <%= channel.name %>
-            </a>
-            <%= if channel.is_verificated do %>
-              <svg class="w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+  <div class="bg-gradient-to-r from-sky-600 to-sky-200 w-full  text-white py-12 mb-8">
+    <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
+      <div class="relative h-full flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-6 md:mb-0">
+          <h1 class="text-4xl font-bold mb-2">Каналы</h1>
+          <p class="text-purple-100 w-1/2">
+            Каналы являются удобным форматом для распространения новостей, позволяющим пользователям выбирать и подписываться на интересующие их тематики. После подписки пользователи получают доступ к материалам, соответствующим выбранным темам. Этот формат также способствует разграничению официальных источников информации и непрофессиональных публикаций, что увеличивает уровень доверия к представляемым данным.
+          </p>
+          <br />
+          <.link patch={~p"/channels/new"}>
+            <.button class="bg-zinc-700 text-purple-600 hover:bg-purple-400 flex items-center gap-2 shadow-lg">
+              <svg
+                class="w-5 h-5"
+                fill="currentColor"
+                viewBox="-2 0 19 19"
+                xmlns="http://www.w3.org/2000/svg"
+                class="cf-icon-svg"
+                transform="rotate(90)"
+              >
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                  <path d="M5.9 4.544 2.534 7.912 1.225 6.604a1.111 1.111 0 0 1 0-1.567l1.8-1.8a1.112 1.112 0 0 1 1.568 0zm7.926 11.565a.456.456 0 0 1-.099-.011l-3.419-.77a1.96 1.96 0 0 1-.77-.412v.001l-3.709-3.71-2.512-2.511 1.71-1.71 6.22 6.221-1.181 1.182a1.294 1.294 0 0 0 .406.213l1.508.339.95-.95-.34-1.508a1.278 1.278 0 0 0-.213-.405l-.345.345-6.222-6.22.874-.875L9.197 7.84l1.751 1.752 1.957 1.958a1.962 1.962 0 0 1 .412.77l.77 3.419c.05.22-.065.37-.26.37z">
+                  </path>
+                </g>
               </svg>
-            <% end %>
-          </div>
-          
-          <p class="text-gray-600 text-sm mb-4 line-clamp-2"><%= channel.desc %></p>
-          
-          <div class="flex items-center justify-between">
-            <div class="flex flex-wrap gap-2">
-              <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">
-                <%= channel.category %>
+              Создать канал
+            </.button>
+          </.link>
+        </div>
+        <img
+          class="absolute w-96 right-24 bottom-0 rounded-lg shadow-lg"
+          src="https://static.wixstatic.com/media/7ac599_f72d33d43c9f46d7bf711ffaff3755af~mv2.gif"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-gray-50 py-12">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-4">Каналы</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <%= for {_id, channel} <- @streams.channels do %>
+          <div class="relative group h-72 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
+            <div class="relative aspect-w-16 aspect-h-9">
+              <%= if channel.logo do %>
+                <img
+                  src={channel.logo}
+                  alt={channel.name}
+                  class="object-cover w-full h-full transform transition-transform duration-300 group-hover:scale-40"
+                />
+              <% else %>
+                <div class="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                  <span class="text-white text-4xl font-bold uppercase">
+                    {String.at(channel.name, 0)}
+                  </span>
+                </div>
+              <% end %>
+            </div>
+
+            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 flex flex-col justify-end p-4">
+              <a
+                href={~p"/channels/channel/#{channel}"}
+                class="text-xl font-bold text-white opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300"
+              >
+                {channel.name}
+              </a>
+
+              <span class="text-sm text-gray-300 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 delay-100">
+                {channel.category}
               </span>
+
+              <%= if channel.is_verificated do %>
+                <div class="absolute top-4 right-4 bg-blue-500 text-white rounded-full px-3 py-1 text-xs font-semibold flex items-center space-x-1 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 delay-150">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  <span>Verified</span>
+                </div>
+              <% end %>
             </div>
           </div>
-        </div>
+        <% end %>
       </div>
-    <% end %>
+    </div>
   </div>
 </div>
-
-<.modal :if={@live_action in [:new, :edit]} id="channels-modal" show on_cancel={JS.patch(~p"/channels")}>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="channels-modal"
+  show
+  on_cancel={JS.patch(~p"/channels")}
+>
   <.live_component
     module={RednewsWeb.ChannelsLive.FormComponent}
     id={@channels.id || :new}
     title={@page_title}
     action={@live_action}
-    channels={@channels} 
+    channels={@channels}
     navigate={~p"/channels"}
   />
 </.modal>

@@ -4,9 +4,33 @@ defmodule RednewsWeb.ArticlesLiveTest do
   import Phoenix.LiveViewTest
   import Rednews.PostsFixtures
 
-  @create_attrs %{title: "some title", content: "some content", is_fake: true, likes: 42, category: "some category", tags: ["option1", "option2"], additional: %{}}
-  @update_attrs %{title: "some updated title", content: "some updated content", is_fake: false, likes: 43, category: "some updated category", tags: ["option1"], additional: %{}}
-  @invalid_attrs %{title: nil, content: nil, is_fake: false, likes: nil, category: nil, tags: [], additional: nil}
+  @create_attrs %{
+    title: "some title",
+    content: "some content",
+    is_fake: true,
+    likes: 42,
+    category: "some category",
+    tags: ["option1", "option2"],
+    additional: %{}
+  }
+  @update_attrs %{
+    title: "some updated title",
+    content: "some updated content",
+    is_fake: false,
+    likes: 43,
+    category: "some updated category",
+    tags: ["option1"],
+    additional: %{}
+  }
+  @invalid_attrs %{
+    title: nil,
+    content: nil,
+    is_fake: false,
+    likes: nil,
+    category: nil,
+    tags: [],
+    additional: nil
+  }
 
   defp create_articles(_) do
     articles = articles_fixture()

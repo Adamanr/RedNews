@@ -11,7 +11,7 @@ defmodule RednewsWeb.ChannelsLive.Index do
       socket
       |> assign(:popular_channels, Accounts.list_channel())
       |> assign(:selected_category, nil)
-      |> assign(:categories, Posts.list_categories)
+      |> assign(:categories, Posts.list_categories())
       |> stream(:channels, Accounts.list_channel())
 
     {:ok, socket}

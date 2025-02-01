@@ -4,9 +4,39 @@ defmodule RednewsWeb.HeadlinesLiveTest do
   import Phoenix.LiveViewTest
   import Rednews.PostsFixtures
 
-  @create_attrs %{header: "some header", title: "some title", category: ["option1", "option2"], content: "some content", is_fake: true, additional: %{}, important: 42, is_very_important: true, tags: ["option1", "option2"]}
-  @update_attrs %{header: "some updated header", title: "some updated title", category: ["option1"], content: "some updated content", is_fake: false, additional: %{}, important: 43, is_very_important: false, tags: ["option1"]}
-  @invalid_attrs %{header: nil, title: nil, category: [], content: nil, is_fake: false, additional: nil, important: nil, is_very_important: false, tags: []}
+  @create_attrs %{
+    header: "some header",
+    title: "some title",
+    category: ["option1", "option2"],
+    content: "some content",
+    is_fake: true,
+    additional: %{},
+    important: 42,
+    is_very_important: true,
+    tags: ["option1", "option2"]
+  }
+  @update_attrs %{
+    header: "some updated header",
+    title: "some updated title",
+    category: ["option1"],
+    content: "some updated content",
+    is_fake: false,
+    additional: %{},
+    important: 43,
+    is_very_important: false,
+    tags: ["option1"]
+  }
+  @invalid_attrs %{
+    header: nil,
+    title: nil,
+    category: [],
+    content: nil,
+    is_fake: false,
+    additional: nil,
+    important: nil,
+    is_very_important: false,
+    tags: []
+  }
 
   defp create_headlines(_) do
     headlines = headlines_fixture()

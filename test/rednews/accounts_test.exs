@@ -511,7 +511,17 @@ defmodule Rednews.AccountsTest do
 
     import Rednews.AccountsFixtures
 
-    @invalid_attrs %{links: nil, name: nil, header: nil, desc: nil, category: nil, is_verificated: nil, logo: nil, additional: nil, stars: nil}
+    @invalid_attrs %{
+      links: nil,
+      name: nil,
+      header: nil,
+      desc: nil,
+      category: nil,
+      is_verificated: nil,
+      logo: nil,
+      additional: nil,
+      stars: nil
+    }
 
     test "list_channel/0 returns all channel" do
       channels = channels_fixture()
@@ -524,7 +534,17 @@ defmodule Rednews.AccountsTest do
     end
 
     test "create_channels/1 with valid data creates a channels" do
-      valid_attrs = %{links: "some links", name: "some name", header: "some header", desc: "some desc", category: ["option1", "option2"], is_verificated: true, logo: "some logo", additional: %{}, stars: 42}
+      valid_attrs = %{
+        links: "some links",
+        name: "some name",
+        header: "some header",
+        desc: "some desc",
+        category: ["option1", "option2"],
+        is_verificated: true,
+        logo: "some logo",
+        additional: %{},
+        stars: 42
+      }
 
       assert {:ok, %Channels{} = channels} = Accounts.create_channels(valid_attrs)
       assert channels.links == "some links"
@@ -544,7 +564,18 @@ defmodule Rednews.AccountsTest do
 
     test "update_channels/2 with valid data updates the channels" do
       channels = channels_fixture()
-      update_attrs = %{links: "some updated links", name: "some updated name", header: "some updated header", desc: "some updated desc", category: ["option1"], is_verificated: false, logo: "some updated logo", additional: %{}, stars: 43}
+
+      update_attrs = %{
+        links: "some updated links",
+        name: "some updated name",
+        header: "some updated header",
+        desc: "some updated desc",
+        category: ["option1"],
+        is_verificated: false,
+        logo: "some updated logo",
+        additional: %{},
+        stars: 43
+      }
 
       assert {:ok, %Channels{} = channels} = Accounts.update_channels(channels, update_attrs)
       assert channels.links == "some updated links"

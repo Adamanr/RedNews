@@ -57,10 +57,10 @@ defmodule RednewsWeb.Router do
     live "/articles/article/:id", ArticlesLive.Show, :show
 
     live "/channels", ChannelsLive.Index, :index
-    live "/channels/channel/:id",ChannelsLive.Show, :show
+    live "/channels/channel/:id", ChannelsLive.Show, :show
 
     live "/news", HeadlinesLive.Index, :index
-    live "/news/headline/:id",HeadlinesLive.Show, :show
+    live "/news/headline/:id", HeadlinesLive.Show, :show
   end
 
   scope "/", RednewsWeb do
@@ -68,9 +68,6 @@ defmodule RednewsWeb.Router do
 
     live_session :admin,
       on_mount: [{RednewsWeb.UserAuth, :ensure_authenticated}] do
-
-
-
       live "/articles/new", ArticlesLive.Index, :new
       live "/articles/article/:id/edit", ArticlesLive.Index, :edit
       live "/articles/article/:id/show/edit", ArticlesLive.Show, :edit
@@ -106,7 +103,7 @@ defmodule RednewsWeb.Router do
 
     live_session :require_authenticated_user,
       on_mount: [{RednewsWeb.UserAuth, :ensure_authenticated}] do
-      live "/users/user/:id", UsersLive.Profile, :new
+      live "/users/user/:id", UsersLive.UserProfile, :new
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
     end

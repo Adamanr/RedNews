@@ -18,7 +18,7 @@ defmodule Rednews.Posts.Articles do
   def changeset(articles, attrs) do
     articles
     |> cast(attrs, [:title, :content, :category, :tags, :author])
-    |> validate_required([:title, :content, :category, :tags])
+    |> validate_required([:title, :content, :category])
     |> validate_length(:tags, min: 2)
   end
 end

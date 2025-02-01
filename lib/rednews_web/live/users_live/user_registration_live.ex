@@ -13,7 +13,10 @@ defmodule RednewsWeb.UserRegistrationLive do
           <:subtitle>
             <p class="text-sm text-gray-600 mt-2">
               Уже зарегистрированы?
-              <.link navigate={~p"/users/log_in"} class="font-semibold text-brand hover:underline">
+              <.link
+                navigate={~p"/users/log_in"}
+                class="font-semibold bg-zinc-600 text-brand hover:underline"
+              >
                 Войдите
               </.link>
               в свою учетную запись.
@@ -38,13 +41,34 @@ defmodule RednewsWeb.UserRegistrationLive do
             </.error>
 
             <.input field={@form[:email]} type="email" label="Email" required class="mb-4" />
-            <.input field={@form[:password]} type="password" label="Пароль" required class="mb-4" />
-            <.input field={@form[:avatar]} type="text" label="Ссылка на аватар" placeholder="https://example.com/avatar.png" class="mb-4" />
+            <.input
+              field={@form[:password]}
+              type="password"
+              label="Пароль"
+              required
+              class="mb-4"
+            />
+            <.input
+              field={@form[:avatar]}
+              type="text"
+              label="Ссылка на аватар"
+              placeholder="https://example.com/avatar.png"
+              class="mb-4"
+            />
             <.input field={@form[:login]} type="text" label="Логин" required class="mb-4" />
-            <.input field={@form[:username]} type="text" label="Имя пользователя" required class="mb-4" />
+            <.input
+              field={@form[:username]}
+              type="text"
+              label="Имя пользователя"
+              required
+              class="mb-4"
+            />
 
             <:actions>
-              <.button phx-disable-with="Создание учетной записи..." class="w-full bg-brand text-white py-2 px-4 rounded hover:bg-brand-dark">
+              <.button
+                phx-disable-with="Создание учетной записи..."
+                class="w-full bg-brand text-white py-2 px-4 rounded hover:bg-brand-dark"
+              >
                 Создать учетную запись
               </.button>
             </:actions>
@@ -53,9 +77,11 @@ defmodule RednewsWeb.UserRegistrationLive do
       </div>
 
       <div class="hidden lg:block">
-        <img src="https://static.wixstatic.com/media/7ac599_7bd42534546f42ba9c9eec6de6b837f5~mv2.jpg/v1/fill/w_710,h_710,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/7ac599_7bd42534546f42ba9c9eec6de6b837f5~mv2.jpg"
-            alt="Registration Illustration"
-            class="max-w-full h-screen ">
+        <img
+          src="https://static.wixstatic.com/media/7ac599_7bd42534546f42ba9c9eec6de6b837f5~mv2.jpg/v1/fill/w_710,h_710,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/7ac599_7bd42534546f42ba9c9eec6de6b837f5~mv2.jpg"
+          alt="Registration Illustration"
+          class="max-w-full h-screen "
+        />
       </div>
     </div>
     """
