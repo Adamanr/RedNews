@@ -8,23 +8,20 @@ defmodule RednewsWeb.ArticlesLive.Show do
 
   @impl true
   def mount(_params, session, socket) do
-    socket =
-      socket
-      |> assign_new(:current_user, fn ->
-        Accounts.get_user_by_session_token(session["user_token"])
-      end)
-
-    {:ok, socket}
+    user = Accounts.get_user_by_session_token(session["user_token"])
+    {:ok, socket |> assign(:current_user, user)}
   end
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
     %{current_user: current_user} = socket.assigns
 
+    article = Posts.get_articles!(id)
+
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:author, Accounts.get_user!(1))
+     |> assign(:author, Accounts.get_user!(article.author))
      |> assign(:comments, Posts.get_comments(id, "article"))
      |> assign(:me_like, Posts.me_like?(id, :article, current_user.id))
      |> assign(:likes, Posts.likes(id, :article))
@@ -41,14 +38,10 @@ defmodule RednewsWeb.ArticlesLive.Show do
       {:ok, _} ->
         Logger.info("User #{current_user.id} liked article #{article_id}")
 
-        socket =
-          socket
-          |> assign(
-            me_like: Posts.me_like?(article_id, :article, current_user.id),
-            likes: Posts.likes(article_id, :article)
-          )
-
-        {:noreply, socket}
+        {:noreply,
+         socket
+         |> assign(me_like: Posts.me_like?(article_id, :article, current_user.id))
+         |> assign(likes: Posts.likes(article_id, :article))}
 
       {:error, reason} ->
         Logger.error("Failed to like article #{article_id}: #{inspect(reason)}")

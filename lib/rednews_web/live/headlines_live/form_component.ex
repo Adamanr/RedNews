@@ -59,6 +59,11 @@ defmodule RednewsWeb.HeadlinesLive.FormComponent do
     """
   end
 
+  @impl true
+  def mount(socket) do
+    {:ok, socket}
+  end
+
   @moduledoc """
   LiveView module for handling headlines updates and validations.
   """

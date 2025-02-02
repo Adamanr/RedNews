@@ -47,10 +47,11 @@ defmodule RednewsWeb.ArticlesLive.FormComponent do
   """
 
   @impl true
-  def update(%{articles: articles} = assigns, socket) do
+  def update(%{articles: articles, current_user: current_user} = assigns, socket) do
     {:ok,
      socket
      |> assign(assigns)
+     |> assign(:current_user, current_user)
      |> assign_new(:form, fn -> to_form(Posts.change_articles(articles)) end)}
   end
 
@@ -62,7 +63,14 @@ defmodule RednewsWeb.ArticlesLive.FormComponent do
 
   @impl true
   def handle_event("save", %{"articles" => articles_params}, socket) do
-    articles_params = ensure_author(articles_params, socket.assigns.myself.cid)
+    author_id =
+      if socket.assigns[:current_user] do
+        socket.assigns.current_user.id
+      else
+        raise "User must be authenticated to save an article"
+      end
+
+    articles_params = ensure_author(articles_params, author_id)
 
     case socket.assigns.action do
       :edit -> save_and_notify(socket, :update, socket.assigns.articles, articles_params)

@@ -268,7 +268,7 @@
           </div>
         <% end %>
 
-        <%= if  Posts.me_author?(@headlines.author, @current_user.id) do %>
+        <%= if @me_author do %>
           <.link patch={~p"/news/headline/#{@headlines}/show/edit"} phx-click={JS.push_focus()}>
             <button class="w-full mt-5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold py-3 px-6 rounded-xl hover:from-purple-700 hover:to-indigo-700 transition duration-300 shadow-md hover:shadow-lg flex items-center justify-center">
               <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -352,6 +352,7 @@ defmodule Rednews.Accounts do
   end
 
   alias Rednews.Accounts.Channels
+  alias Rednews.Posts.Headlines
 
   @doc """
   Returns the list of channel.
@@ -524,8 +525,13 @@ defmodule Rednews.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_channels(%Channels{} = channels) do
-    Repo.delete(channels)
+
+  def delete_channels(%Channels{} = channel) do
+    Repo.transaction(fn ->
+      Repo.delete_all(from h in Headlines, where: h.author == ^channel.id)
+
+      Repo.delete(channel)
+    end)
   end
 
   @doc """

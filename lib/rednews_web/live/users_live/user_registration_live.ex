@@ -13,10 +13,7 @@ defmodule RednewsWeb.UserRegistrationLive do
           <:subtitle>
             <p class="text-sm text-gray-600 mt-2">
               Уже зарегистрированы?
-              <.link
-                navigate={~p"/users/log_in"}
-                class="font-semibold bg-zinc-600 text-brand hover:underline"
-              >
+              <.link navigate={~p"/users/log_in"} class="font-semibold  text-brand hover:underline">
                 Войдите
               </.link>
               в свою учетную запись.
