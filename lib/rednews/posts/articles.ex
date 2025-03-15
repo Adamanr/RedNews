@@ -5,11 +5,12 @@ defmodule Rednews.Posts.Articles do
   schema "articles" do
     field :title, :string
     field :content, :string
-    field :is_fake, :boolean
+    field :header, :string
     field :category, :string
     field :tags, {:array, :string}
     field :additional, :map
-    field :author, :id
+
+    belongs_to :user, Rednews.Accounts.User
 
     timestamps(type: :utc_datetime)
   end
@@ -17,8 +18,7 @@ defmodule Rednews.Posts.Articles do
   @doc false
   def changeset(articles, attrs) do
     articles
-    |> cast(attrs, [:title, :content, :category, :tags, :author])
-    |> validate_required([:title, :content, :category])
-    |> validate_length(:tags, min: 2)
+    |> cast(attrs, [:title, :content, :category, :header, :user_id, :additional])
+    |> validate_required([:title, :content, :category, :header, :user_id])
   end
 end

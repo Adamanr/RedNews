@@ -19,6 +19,39 @@ defmodule Rednews.Posts do
     Map.put(attrs, "tags", tags)
   end
 
+  @layout_categories [
+    {"Политика", %{name: :politic}},
+    {"Экономика", %{name: :economic}},
+    {"Общество", %{name: :social}},
+    {"Культура", %{name: :culture}},
+    {"Спорт", %{name: :sport}},
+    {"Наука и технологии", %{name: :science}},
+    {"Здоровье", %{name: :health}},
+    {"Образование", %{name: :education}},
+    {"Происшествия", %{name: :proisshestviya}},
+    {"Авто", %{name: :auto}},
+    {"Недвижимость", %{name: :nedvizhimost}},
+    {"Туризм и путешествия", %{name: :tourism}},
+    {"Экология", %{name: :ecology}},
+    {"Мода и стиль", %{name: :fashion}},
+    {"Кино и телевидение", %{name: :cinema}},
+    {"Музыка", %{name: :music}},
+    {"Игры и развлечения", %{name: :games}},
+    {"Бизнес", %{name: :business}},
+    {"Финансы", %{name: :finance}},
+    {"Мировые новости", %{name: :world_news}},
+    {"Региональные новости", %{name: :regional_news}},
+    {"Технологии", %{name: :technology}},
+    {"Криптовалюты", %{name: :cryptocurrency}},
+    {"Армия и оборона", %{name: :army}},
+    {"Сельское хозяйство", %{name: :agriculture}},
+    {"Энергетика", %{name: :energy}},
+    {"Транспорт", %{name: :transport}},
+    {"Погода", %{name: :weather}},
+    {"История", %{name: :history}},
+    {"Юмор", %{name: :humor}}
+  ]
+
   @categories [
     "Политика",
     "Экономика",
@@ -56,6 +89,7 @@ defmodule Rednews.Posts do
   Return categories list `{label, value}`.
   """
   def list_categories, do: @categories
+  def list_layout_categories, do: @layout_categories
 
   import Ecto.Query, warn: false
   alias Rednews.Accounts
@@ -120,6 +154,7 @@ defmodule Rednews.Posts do
   - `options`: The filtering option (default is `:default`).
     - `:default`: Fetches all articles.
     - `:category`: Filters articles by a specific category.
+    - `:date`: Filters articles by date.
     - `:tags`: Filters articles by specific tags.
   - `params`: A map of parameters for filtering (e.g., `%{category: "tech", tags: ["elixir"]}`).
 
@@ -135,6 +170,40 @@ defmodule Rednews.Posts do
         :default -> from(a in Articles)
         :category -> from(a in Articles, where: a.category == ^params[:category])
         :tags -> from(a in Articles, where: ^params[:tags] in a.tags)
+        :date ->
+          case params[:date] do
+            "today" ->
+              from(a in Articles, where: fragment("?::date = CURRENT_DATE", a.inserted_at))
+            "week" ->
+              from(a in Articles, where: fragment("? >= CURRENT_DATE - INTERVAL '7 days'", a.inserted_at))
+            "month" ->
+              from(a in Articles, where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", a.inserted_at))
+            _ ->
+              from(a in Articles)
+          end
+        :category_and_date ->
+          query = from(a in Articles)
+
+          query =
+            if params[:category] do
+              from(a in query, where: a.category == ^params[:category])
+            else
+              query
+            end
+
+          query =
+            case params[:date] do
+              "today" ->
+                from(a in query, where: fragment("?::date = CURRENT_DATE", a.inserted_at))
+              "week" ->
+                from(a in query, where: fragment("? >= CURRENT_DATE - INTERVAL '7 days'", a.inserted_at))
+              "month" ->
+                from(a in query, where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", a.inserted_at))
+              _ ->
+                query
+            end
+
+          query
         _ -> raise ArgumentError, "Unknown options: #{options}"
       end
 
@@ -200,7 +269,9 @@ defmodule Rednews.Posts do
 
   """
   def create_articles(attrs \\ %{}) do
+    IO.inspect(attrs, label: "create_articles")
     attrs = split_tag(attrs)
+    IO.inspect(attrs, label: "split_tag")
 
     %Articles{}
     |> Articles.changeset(attrs)
@@ -220,7 +291,9 @@ defmodule Rednews.Posts do
 
   """
   def update_articles(%Articles{} = articles, attrs) do
+    IO.inspect(attrs, label: "create_articles")
     attrs = split_tag(attrs)
+    IO.inspect(attrs, label: "split_tag")
 
     articles
     |> Articles.changeset(attrs)
@@ -253,19 +326,32 @@ defmodule Rednews.Posts do
 
   """
   def change_articles(%Articles{} = articles, attrs \\ %{}) do
+    IO.inspect(attrs, label: "create_articles")
+    attrs = split_tag(attrs)
+    IO.inspect(attrs, label: "split_tag")
+
+
     Articles.changeset(articles, attrs)
   end
 
   alias Rednews.Posts.Headlines
 
   @doc """
-  Returns the list of headlines.
+  Lists headlines based on the provided options and parameters.
 
-  ## Examples
+  ## Parameters
+  - `options`: The filtering option (default is `:default`).
+    - `:default`: Fetches all headlines.
+    - `:category`: Filters headlines by a specific category.
+    - `:date`: Filters headlines by date.
+    - `:tags`: Filters headlines by specific tags.
+  - `params`: A map of parameters for filtering (e.g., `%{category: "tech", tags: ["elixir"]}`).
 
-      iex> list_headlines()
-      [%Headlines{}, ...]
+  ## Returns
+  - A list of `Headlines` matching the specified criteria.
 
+  ## Raises
+  - `ArgumentError` if an unknown option is provided.
   """
   def list_headlines(options \\ :default, params \\ %{}) do
     query =
@@ -273,7 +359,41 @@ defmodule Rednews.Posts do
         :default -> from(h in Headlines)
         :category -> from(h in Headlines, where: h.category == ^params[:category])
         :tags -> from(h in Headlines, where: ^params[:tags] in h.tags)
-        :channel -> from(h in Headlines, where: h.author == ^params[:channel])
+        :channel -> from(h in Headlines, where: h.channel_id == ^params[:channel])
+        :date ->
+          case params[:date] do
+            "today" ->
+              from(h in Headlines, where: fragment("?::date = CURRENT_DATE", h.inserted_at))
+            "week" ->
+              from(h in Headlines, where: fragment("? >= CURRENT_DATE - INTERVAL '7 days'", h.inserted_at))
+            "month" ->
+              from(h in Headlines, where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", h.inserted_at))
+            _ ->
+              from(h in Headlines)
+          end
+        :category_and_date ->
+          query = from(h in Headlines)
+
+          query =
+            if params[:category] do
+              from(h in query, where: h.category == ^params[:category])
+            else
+              query
+            end
+
+          query =
+            case params[:date] do
+              "today" ->
+                from(h in query, where: fragment("?::date = CURRENT_DATE", h.inserted_at))
+              "week" ->
+                from(h in query, where: fragment("? >= CURRENT_DATE - INTERVAL '7 days'", h.inserted_at))
+              "month" ->
+                from(h in query, where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", h.inserted_at))
+              _ ->
+                query
+            end
+
+          query
         _ -> raise ArgumentError, "Unknown options: #{options}"
       end
 
@@ -361,9 +481,13 @@ defmodule Rednews.Posts do
 
   """
   def create_headlines(attrs \\ %{}) do
+    IO.inspect(attrs, label: "Attrs")
+
     attrs = split_tag(attrs)
 
     headlines = %Headlines{tags: attrs["tags"]}
+
+    IO.inspect(headlines, label: "Headlines")
 
     headlines
     |> Headlines.changeset(attrs)

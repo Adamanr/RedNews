@@ -11,7 +11,10 @@ defmodule Rednews.Accounts.Channels do
     field :is_verificated, :boolean
     field :logo, :string
     field :additional, :map
-    field :author, :id
+
+    has_many :headlines, Rednews.Posts.Headlines
+
+    belongs_to :user, Rednews.Accounts.User
 
     timestamps(type: :utc_datetime)
   end
@@ -19,7 +22,7 @@ defmodule Rednews.Accounts.Channels do
   @doc false
   def changeset(channels, attrs) do
     channels
-    |> cast(attrs, [:name, :desc, :logo, :header, :category, :links, :author])
-    |> validate_required([:name, :desc, :logo, :header, :category, :links, :author])
+    |> cast(attrs, [:name, :desc, :logo, :header, :category, :links, :user_id])
+    |> validate_required([:name, :logo, :desc, :header, :category, :links, :user_id])
   end
 end

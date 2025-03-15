@@ -17,6 +17,9 @@ defmodule Rednews.Accounts.User do
     field :role, :string, default: "user"
     field :preferences, :map
 
+    has_many :channels, Rednews.Accounts.Channels
+    has_many :articles, Rednews.Posts.Articles
+
     timestamps(type: :utc_datetime)
   end
 

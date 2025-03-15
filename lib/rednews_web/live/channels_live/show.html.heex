@@ -1,29 +1,25 @@
 <div class="min-h-screen bg-gray-50">
-  <div class="relative h-96 overflow-hidden">
-    <%= if @channels.header do %>
-      <img src={@channels.header} alt="Channel header" class="w-full h-full object-cover" />
-    <% else %>
-      <div class="w-full h-full bg-gradient-to-r from-purple-600 to-indigo-600"></div>
-    <% end %>
+  <header class="relative h-96 overflow-hidden">
+    <img src={@channel.header} alt="Channel header" class="w-full h-full object-cover" />
 
     <div class="absolute inset-0 bg-black/30 flex items-end p-8">
       <div class="max-w-7xl mx-auto w-full">
         <div class="flex items-center space-x-6">
           <div class="relative">
-            <%= if @channels.logo do %>
+            <%= if @channel.logo do %>
               <img
-                src={@channels.logo}
-                alt={@channels.name}
+                src={@channel.logo}
+                alt={@channel.name}
                 class="w-24 h-24 rounded-full border-4 border-white shadow-lg"
               />
             <% else %>
               <div class="w-24 h-24 rounded-full border-4 border-white shadow-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
                 <span class="text-white text-3xl font-bold uppercase">
-                  {String.at(@channels.name, 0)}
+                  {String.at(@channel.name, 0)}
                 </span>
               </div>
             <% end %>
-            <%= if @channels.is_verificated do %>
+            <%= if @channel.is_verificated do %>
               <div class="absolute -right-2 -bottom-2 bg-blue-500 rounded-full p-1">
                 <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
                   <path
@@ -37,9 +33,10 @@
           </div>
 
           <div class="flex-1">
-            <h1 class="text-4xl font-bold text-white mb-2">{@channels.name}</h1>
-            <div class="flex items-center space-x-4">
-              <div class="flex items-center text-white">
+            <h1 class="text-4xl font-bold text-white mb-2">{@channel.name}</h1>
+            <div class="flex items-center space-x-4 text-white">
+              <p class="text-gray-600 h-full items-center bg-white rounded-full px-2 mb-1 py-1">{@channel.category}</p>
+              <div class="flex items-center">
                 <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     stroke-linecap="round"
@@ -48,208 +45,180 @@
                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <span>{Calendar.strftime(@channels.inserted_at, "%d.%m.%Y")}</span>
+                <span>{Calendar.strftime(@channel.inserted_at, "%d.%m.%Y")}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </header>
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <div class="lg:col-span-2 space-y-8">
-        <div class="bg-white rounded-xl shadow-lg p-6">
-          <h2 class="text-2xl font-bold text-gray-900 mb-4">О канале</h2>
-          <div class={"prose max-w-none #{unless @show_full_desc, do: "line-clamp-3"}"}>
-            {@channels.desc}
-          </div>
-          <%= if String.length(@channels.desc) > 200 do %>
-            <button
-              class="mt-4 text-indigo-600 hover:text-indigo-700 font-medium"
-              phx-click="toggle-description"
+  <main class="max-w-7xl mx-auto md:px-4 sm:px-6 lg:px-8 py-8">
+    <div class="gap-8">
+      <aside class="space-y-8">
+        <div class="md:grid grid-cols-3 items-start md:space-x-5 h-full bg-white rounded-xl shadow-lg p-6">
+          <div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Автор</h2>
+            <a
+              href={"/users/user/#{@channel.user_id}"}
+              class="flex items-center hover:bg-gray-50 rounded-lg p-2 transition-colors"
             >
-              {if @show_full_desc, do: "Свернуть", else: "Читать далее"}
-            </button>
-          <% end %>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-lg p-6">
-          <h2 class="text-2xl font-bold text-gray-900 mb-4">Категории</h2>
-          <div class="flex flex-wrap gap-2">
-            <span class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">
-              {@channels.category}
-            </span>
-          </div>
-        </div>
-
-        <%= if @channels.additional do %>
-          <div class="bg-white rounded-xl shadow-lg p-6">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">Дополнительная информация</h2>
-            <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <%= for {key, value} <- @channels.additional do %>
-                <div>
-                  <dt class="text-sm font-medium text-gray-500">{key}</dt>
-                  <dd class="mt-1 text-gray-900">{value}</dd>
-                </div>
-              <% end %>
-            </dl>
-          </div>
-        <% end %>
-      </div>
-
-      <div class="space-y-8">
-        <div class="bg-white rounded-xl shadow-lg p-6">
-          <h2 class="text-2xl font-bold text-gray-900 mb-4">Автор</h2>
-          <a
-            href={"/users/user/#{@author.id}"}
-            class="flex items-center hover:bg-gray-50 rounded-lg p-2 transition-colors"
-          >
-            <div class="flex-shrink-0">
-              <img
-                src={@author.avatar}
-                class="w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-rose-500"
-              />
-            </div>
-            <div class="ml-4">
-              <h3 class="text-lg font-medium text-gray-900">{@author.username}</h3>
-              <p class="text-sm text-gray-500">
-                Каналов: {Accounts.count_user_channels(@author.id)}
-              </p>
-            </div>
-          </a>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-lg p-6">
-          <%= if @channels.author == @current_user.id do %>
-            <.link
-              patch={~p"/channels/channel/#{@channels}/show/edit"}
-              class="flex mb-3 items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-yellow-400 hover:bg-indigo-700 transition-colors"
-            >
-              {page_title(:edit)}
-              <svg class="w-6 h-6 ms-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+              <div class="flex-shrink-0">
+                <img
+                  src={@channel.user.avatar}
+                  class="w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-rose-500"
+                  alt="User avatar"
                 />
-              </svg>
-            </.link>
-            <.link
-              phx-click={JS.push("delete", value: %{id: @channels.id})}
-              data-confirm="Вы уверены? С удалением канала будут удалены все новости от канала"
-              class="flex mb-3 items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-rose-400 hover:bg-rose-700 transition-colors"
-            >
-              Delete
-              <svg
-                class="ms-3 w-4 h-4"
-                viewBox="0 -0.5 21 21"
-                version="1.1"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                fill="currentColor"
+              </div>
+              <div class="ml-4">
+                <h3 class="text-lg font-medium text-gray-900">{@channel.user.username}</h3>
+                <p class="text-sm text-gray-500">
+                  Каналов: {Accounts.count_user_channels(@channel.user_id)}
+                </p>
+              </div>
+            </a>
+          </div>
+
+          <div class="md:mt-0 my-4">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">О канале</h2>
+            <div class={"prose max-w-none #{unless @show_full_desc, do: "line-clamp-3"}"}>
+              {@channel.desc}
+            </div>
+            <%= if not is_nil(@channel.desc) and String.length(@channel.desc) > 200 do %>
+              <button
+                class="mt-4 text-indigo-600 hover:text-indigo-700 font-medium"
+                phx-click="toggle-description"
               >
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                <g id="SVGRepo_iconCarrier">
-                  <title>delete [#1487]</title>
+                {if @show_full_desc, do: "Свернуть", else: "Читать далее"}
+              </button>
+            <% end %>
+          </div>
 
-                  <desc>Created with Sketch.</desc>
-
-                  <defs></defs>
-
-                  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                    <g
-                      id="Dribbble-Light-Preview"
-                      transform="translate(-179.000000, -360.000000)"
-                      fill="currentColor"
-                    >
-                      <g id="icons" transform="translate(56.000000, 160.000000)">
-                        <path
-                          d="M130.35,216 L132.45,216 L132.45,208 L130.35,208 L130.35,216 Z M134.55,216 L136.65,216 L136.65,208 L134.55,208 L134.55,216 Z M128.25,218 L138.75,218 L138.75,206 L128.25,206 L128.25,218 Z M130.35,204 L136.65,204 L136.65,202 L130.35,202 L130.35,204 Z M138.75,204 L138.75,200 L128.25,200 L128.25,204 L123,204 L123,206 L126.15,206 L126.15,220 L140.85,220 L140.85,206 L144,206 L144,204 L138.75,204 Z"
-                          id="delete-[#1487]"
-                        >
-                        </path>
+          <div>
+            <%= if @channel.user_id == @current_user.id do %>
+              <.link
+                patch={~p"/channels/channel/#{@channel}/show/edit"}
+                class="flex mb-3 items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-yellow-400 hover:bg-indigo-700 transition-colors"
+              >
+                {page_title(:edit)}
+                <svg class="w-6 h-6 ms-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
+              </.link>
+              <.link
+                phx-click={JS.push("delete", value: %{id: @channel.id})}
+                data-confirm="Вы уверены? С удалением канала будут удалены все новости от канала"
+                class="flex mb-3 items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-rose-400 hover:bg-rose-700 transition-colors"
+              >
+                Delete
+                <svg
+                  class="ms-3 w-4 h-4"
+                  viewBox="0 -0.5 21 21"
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  fill="currentColor"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <title>delete [#1487]</title>
+                    <desc>Created with Sketch.</desc>
+                    <defs></defs>
+                    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                      <g
+                        id="Dribbble-Light-Preview"
+                        transform="translate(-179.000000, -360.000000)"
+                        fill="currentColor"
+                      >
+                        <g id="icons" transform="translate(56.000000, 160.000000)">
+                          <path
+                            d="M130.35,216 L132.45,216 L132.45,208 L130.35,208 L130.35,216 Z M134.55,216 L136.65,216 L136.65,208 L134.55,208 L134.55,216 Z M128.25,218 L138.75,218 L138.75,206 L128.25,206 L128.25,218 Z M130.35,204 L136.65,204 L136.65,202 L130.35,202 L130.35,204 Z M138.75,204 L138.75,200 L128.25,200 L128.25,204 L123,204 L123,206 L126.15,206 L126.15,220 L140.85,220 L140.85,206 L144,206 L144,204 L138.75,204 Z"
+                            id="delete-[#1487]"
+                          >
+                          </path>
+                        </g>
                       </g>
                     </g>
                   </g>
-                </g>
-              </svg>
-            </.link>
-          <% end %>
-          <%= if @channels.links do %>
-            <a
-              href={@channels.links}
-              class="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors"
-            >
-              Перейти на сайт
-              <svg
-                class="ml-2 -mr-1 h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+                </svg>
+              </.link>
+            <% end %>
+            <%= if @channel.links do %>
+              <a
+                href={@channel.links}
+                class="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                />
-              </svg>
-            </a>
+                Перейти на сайт
+                <svg
+                  class="ml-2 -mr-1 h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                  />
+                </svg>
+              </a>
+            <% end %>
+          </div>
+        </div>
+
+
+      </aside>
+      <section class="lg:col-span-2 mt-5 mb-10 space-y-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">Последние новости</h1>
+        <div class="grid gap-8">
+          <%= for headline <- @headlines do %>
+            <article class="relative group overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
+              <div
+                class="absolute inset-0 bg-cover bg-center transform group-hover:scale-105 transition-transform duration-300"
+                style={"background-image: url(#{headline.header})"}
+              >
+                <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+              </div>
+
+              <div class="relative p-6 flex flex-col justify-end">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-sm text-gray-300 bg-gray-800 bg-opacity-75 px-2 py-1 rounded">
+                    {headline.category}
+                  </span>
+                  <%= if headline.is_very_important do %>
+                    <span class="bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
+                      Важно
+                    </span>
+                  <% end %>
+                </div>
+
+                <a href={"/news/headline/#{headline.id}"} class="text-2xl font-bold text-white mb-2">
+                  {headline.title}
+                </a>
+                <p class="text-gray-200 mb-4">{String.slice(headline.content, 0, 200)}</p>
+
+                <div class="flex flex-wrap gap-2">
+                  <%= for tag <- headline.tags do %>
+                    <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded">
+                      {tag}
+                    </span>
+                  <% end %>
+                </div>
+              </div>
+            </article>
           <% end %>
         </div>
-      </div>
+      </section>
     </div>
-  </div>
-
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <h1 class="text-3xl font-bold text-gray-800 mb-4">Последние новости</h1>
-    <div class="grid  gap-8">
-      <%= for headline <- @headlines do %>
-        <div class="relative group overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
-          <div
-            class="absolute inset-0 bg-cover bg-center transform group-hover:scale-105 transition-transform duration-300"
-            style={"background-image: url(#{headline.header})"}
-          >
-            <div class="absolute inset-0 bg-black bg-opacity-50"></div>
-          </div>
-
-          <div class="relative p-6 h-96 flex flex-col justify-end">
-            <div class="flex justify-between items-center mb-2">
-              <span class="text-sm text-gray-300 bg-gray-800 bg-opacity-75 px-2 py-1 rounded">
-                {headline.category}
-              </span>
-              <%= if headline.is_very_important do %>
-                <span class="bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
-                  Важно
-                </span>
-              <% end %>
-            </div>
-
-            <a href={"/news/headline/#{headline.id}"} class="text-2xl font-bold text-white mb-2">
-              {headline.title}
-            </a>
-            <p class="text-gray-200 mb-4">{headline.content}</p>
-
-            <div class="flex flex-wrap gap-2 mb-4">
-              <%= for tag <- headline.tags do %>
-                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded">
-                  {tag}
-                </span>
-              <% end %>
-            </div>
-
-            <div class="text-sm text-gray-300">
-              Автор: {headline.author} | {headline.inserted_at}
-            </div>
-          </div>
-        </div>
-      <% end %>
-    </div>
-  </div>
+  </main>
 </div>
 
 <.modal
@@ -260,7 +229,7 @@
 >
   <.live_component
     module={RednewsWeb.ChannelsLive.FormComponent}
-    id={@channels.id}
+    id={@channel.id}
     title={@page_title}
     action={@live_action}
     channels={@channels}

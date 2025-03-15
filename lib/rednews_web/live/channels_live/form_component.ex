@@ -7,32 +7,43 @@ defmodule RednewsWeb.ChannelsLive.FormComponent do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
-      <.header>
-        Создание канала
-        <:subtitle>Создайте канал для публикации новостей</:subtitle>
-      </.header>
+    <div class="bg-white p-5 rounded-lg">
+      <p class="font-bold text-xl">Создание канала</p>
 
       <.simple_form
         for={@form}
         id="channels-form"
-        phx-target={@myself}
         phx-change="validate"
+        phx-target={@myself}
         phx-submit="save"
       >
         <.input field={@form[:name]} type="text" label="Название" />
-        <.input field={@form[:desc]} type="text" label="Описание" />
-        <.input field={@form[:logo]} type="text" label="Логотип (URL)" />
-        <.input field={@form[:header]} type="text" label="Фон (URL)" />
-        <.input
-          field={@form[:category]}
-          type="select"
-          label="Категория"
-          options={Posts.list_categories()}
-        />
-        <.input field={@form[:links]} type="text" label="Ссылка на сайт канала" />
+
+        <div class="hidden">
+          <.input field={@form[:user_id]} class="hidden w-0" value={assigns.current_user.id} type="text" label="Пользователь" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <.input field={@form[:logo]} type="text" label="Логотип (URL)" />
+          <.input field={@form[:header]} type="text" label="Фон (URL)" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <.input field={@form[:links]} type="text" label="Ссылка на сайт канала" />
+          <.input
+            field={@form[:category]}
+            type="select"
+            label="Категория"
+            options={Posts.list_categories()}
+          />
+        </div>
+        <.input field={@form[:desc]} type="textarea" label="Описание" />
+
         <:actions>
-          <.button class="bg-zinc-600" phx-disable-with="Saving...">Сохранить</.button>
+          <div class="flex place-items-end text-white font-bold w-full space-x-4">
+            <div class="flex-1"></div>
+            <.button class="bg-green-600" phx-disable-with="Saving...">Создать</.button>
+          </div>
         </:actions>
       </.simple_form>
     </div>
@@ -60,8 +71,6 @@ defmodule RednewsWeb.ChannelsLive.FormComponent do
   end
 
   defp save_channels(socket, :edit, channels_params) do
-    channels_params = Map.put(channels_params, "author", socket.assigns.myself.cid)
-
     case Accounts.update_channels(socket.assigns.channels, channels_params) do
       {:ok, channels} ->
         notify_parent({:saved, channels})
@@ -77,8 +86,6 @@ defmodule RednewsWeb.ChannelsLive.FormComponent do
   end
 
   defp save_channels(socket, :new, channels_params) do
-    channels_params = Map.put(channels_params, "author", socket.assigns.myself.cid)
-
     case Accounts.create_channels(channels_params) do
       {:ok, channels} ->
         notify_parent({:saved, channels})

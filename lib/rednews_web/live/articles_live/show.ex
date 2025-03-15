@@ -1,38 +1,40 @@
 defmodule RednewsWeb.ArticlesLive.Show do
   use RednewsWeb, :live_view
 
+  require Logger
+
   alias Rednews.Posts
   alias Rednews.Accounts
-
-  require Logger
+  alias Rednews.Repo
+  alias RednewsWeb.Helpers
 
   @impl true
   def mount(_params, session, socket) do
-    user = Accounts.get_user_by_session_token(session["user_token"])
-    {:ok, socket |> assign(:current_user, user)}
+    {:ok, socket
+      |> assign(:page_title, page_title(socket.assigns.live_action))
+      |> assign(:current_user, Helpers.get_current_user(session))}
   end
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
     %{current_user: current_user} = socket.assigns
 
-    article = Posts.get_articles!(id)
+    me_like = if not is_nil(current_user), do: Posts.me_like?(id, :article, current_user.id), else: false
 
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:author, Accounts.get_user!(article.author))
      |> assign(:comments, Posts.get_comments(id, "article"))
-     |> assign(:me_like, Posts.me_like?(id, :article, current_user.id))
+     |> assign(:me_like, me_like)
      |> assign(:likes, Posts.likes(id, :article))
-     |> assign(:articles, Posts.get_articles!(id))}
+     |> assign(:article, Posts.get_articles!(id) |> Repo.preload(:user))}
   end
 
   @impl true
   def handle_event("like_article", %{"id" => article_id}, socket) do
     %{current_user: current_user} = socket.assigns
 
-    {article_id, ""} = Integer.parse(article_id)
+    article_id = String.to_integer(article_id)
 
     case Posts.like(article_id, :article, current_user.id) do
       {:ok, _} ->

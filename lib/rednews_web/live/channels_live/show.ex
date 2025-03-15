@@ -1,22 +1,24 @@
 defmodule RednewsWeb.ChannelsLive.Show do
-  alias Rednews.Posts
   use RednewsWeb, :live_view
 
   require Logger
 
   alias Rednews.Accounts
+  alias Rednews.Posts
+  alias Rednews.Repo
+  alias RednewsWeb.Helpers
+  alias Rednews.Posts.Headlines
 
   @impl true
   def mount(%{"id" => id}, session, socket) do
-    channel = Accounts.get_channel!(id)
+    channel = Accounts.get_channel!(id) |> Repo.preload(:user)
 
     {:ok,
      socket
      |> assign(:page_title, channel.name)
-     |> assign(:channels, channel)
-     |> assign(:current_user, Accounts.get_user_by_session_token(session["user_token"]))
-     |> assign(:author, Accounts.get_user!(channel.author))
-     |> assign(:headlines, Posts.list_headlines(:channel, %{channel: id}))
+     |> assign(:channel, channel)
+     |> assign(:current_user, Helpers.get_current_user(session))
+     |> assign(:headlines, Posts.list_headlines(:channel, %{channel: String.to_integer(id)}))
      |> assign(:show_full_desc, false)}
   end
 

@@ -2,17 +2,24 @@ defmodule RednewsWeb.ArticlesLive.Index do
   use RednewsWeb, :live_view
 
   alias Rednews.Posts
+  alias Rednews.Repo
+  alias Rednews.Accounts
   alias Rednews.Posts.Articles
+  alias Rednews.Posts.Headlines
+  alias RednewsWeb.Helpers
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
+    articles = Posts.list_article() |> Repo.preload(:user)
+
     socket =
       socket
-      |> assign(:search_query, "")
-      |> assign(:selected_category, "all")
-      |> assign(:selected_tag, "all")
+      |> assign(:first_article, hd(articles))
+      |> assign(:current_user, Helpers.get_current_user(session))
       |> assign(:categories, Posts.list_categories())
-      |> stream(:article, Posts.list_article())
+      |> assign(:selected_category, "all")
+      |> assign(:selected_date, "all")
+      |> stream(:article, articles)
 
     {:ok, socket}
   end
@@ -22,30 +29,11 @@ defmodule RednewsWeb.ArticlesLive.Index do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
-  @doc """
-  Handles incoming messages, such as notifications from child components.
-
-  ## Parameters
-  - `{RednewsWeb.ArticlesLive.FormComponent, {:saved, articles}}`: A message indicating that an article was saved.
-  - `socket`: The current LiveView socket.
-
-  ## Returns
-  - Updates the socket by inserting the saved article into the stream.
-  """
   @impl true
   def handle_info({RednewsWeb.ArticlesLive.FormComponent, {:saved, articles}}, socket) do
     {:noreply, stream_insert(socket, :article, articles)}
   end
 
-  @doc """
-  Handles the "filtered" event for filtering articles based on category or tags.
-
-  ## Parameters
-  - `"filter"`: A JSON-encoded string containing filter options and parameters.
-
-  ## Returns
-  - Updates the socket with the filtered articles and resets the stream.
-  """
   @impl true
   def handle_event("filtred", %{"filter" => filter}, socket) do
     %{"options" => options, "params" => params} = Jason.decode!(filter)
@@ -55,26 +43,31 @@ defmodule RednewsWeb.ArticlesLive.Index do
         {"category", category} ->
           socket
           |> assign(:selected_category, category)
-          |> assign_articles(Posts.list_article(:category, %{category: category}))
+          |> assign_articles(Posts.list_article(:category_and_date, %{category: category}) |> Repo.preload(:user))
 
         {"tags", tags} ->
           socket
           |> assign(:selected_tags, tags)
-          |> assign_articles(Posts.list_article(:tags, %{tags: tags}))
+          |> assign_articles(Posts.list_article(:tags, %{tags: tags}) |> Repo.preload(:user))
+
+        {"date", date} ->
+          socket
+          |> assign(:selected_date, date)
+          |> assign_articles(Posts.list_article(:category_and_date, %{category: socket.assigns[:selected_category], date: date}) |> Repo.preload(:user))
 
         {_, "tags"} ->
           socket
           |> assign(:selected_tags, "all")
-          |> assign_articles(Posts.list_article())
+          |> assign_articles(Posts.list_article() |> Repo.preload(:user))
 
         {_, "category"} ->
           socket
           |> assign(:selected_category, "all")
-          |> assign_articles(Posts.list_article())
+          |> assign_articles(Posts.list_article() |> Repo.preload(:user))
 
         _ ->
           socket
-          |> assign_articles(Posts.list_article())
+          |> assign_articles(Posts.list_article() |> Repo.preload(:user))
       end
 
     {:noreply, stream(socket, :article, socket.assigns[:articles], reset: true)}

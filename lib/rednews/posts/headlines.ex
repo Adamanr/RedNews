@@ -11,7 +11,8 @@ defmodule Rednews.Posts.Headlines do
     field :additional, :map
     field :is_very_important, :boolean
     field :tags, {:array, :string}
-    field :author, :id
+
+    belongs_to :channel, Rednews.Accounts.Channels
 
     timestamps(type: :utc_datetime)
   end
@@ -19,7 +20,7 @@ defmodule Rednews.Posts.Headlines do
   @doc false
   def changeset(headlines, attrs) do
     headlines
-    |> cast(attrs, [:title, :content, :category, :header, :author])
-    |> validate_required([:title, :content, :category, :header, :author])
+    |> cast(attrs, [:title, :content, :category, :header, :channel_id])
+    |> validate_required([:title, :category, :header, :channel_id])
   end
 end

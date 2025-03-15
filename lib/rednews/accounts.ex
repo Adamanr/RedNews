@@ -355,16 +355,66 @@ defmodule Rednews.Accounts do
   alias Rednews.Posts.Headlines
 
   @doc """
-  Returns the list of channel.
+  Lists channels based on the provided options and parameters.
 
-  ## Examples
+  ## Parameters
+  - `options`: The filtering option (default is `:default`).
+    - `:default`: Fetches all channels.
+    - `:category`: Filters channels by a specific category.
+    - `:date`: Filters channels by date.
+    - `:tags`: Filters channels by specific tags.
+  - `params`: A map of parameters for filtering (e.g., `%{category: "tech", tags: ["elixir"]}`).
 
-      iex> list_channel()
-      [%Channels{}, ...]
+  ## Returns
+  - A list of `Channels` matching the specified criteria.
 
+  ## Raises
+  - `ArgumentError` if an unknown option is provided.
   """
-  def list_channel do
-    Repo.all(Channels)
+  def list_channels(options \\ :default, params \\ %{}) do
+    query =
+      case options do
+        :default -> from(c in Channels)
+        :category -> from(c in Channels, where: c.category == ^params[:category])
+        :tags -> from(c in Channels, where: ^params[:tags] in c.tags)
+        :date ->
+          case params[:date] do
+            "today" ->
+              from(c in Channels, where: fragment("?::date = CURRENT_DATE", c.inserted_at))
+            "week" ->
+              from(c in Channels, where: fragment("? >= CURRENT_DATE - INTERVAL '7 days'", c.inserted_at))
+            "month" ->
+              from(c in Channels, where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", c.inserted_at))
+            _ ->
+              from(c in Channels)
+          end
+        :category_and_date ->
+          query = from(c in Channels)
+
+          query =
+            if params[:category] do
+              from(c in query, where: c.category == ^params[:category])
+            else
+              query
+            end
+
+          query =
+            case params[:date] do
+              "today" ->
+                from(c in query, where: fragment("?::date = CURRENT_DATE", c.inserted_at))
+              "week" ->
+                from(c in query, where: fragment("? >= CURRENT_DATE - INTERVAL '7 days'", c.inserted_at))
+              "month" ->
+                from(c in query, where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", c.inserted_at))
+              _ ->
+                query
+            end
+
+          query
+        _ -> raise ArgumentError, "Unknown options: #{options}"
+      end
+
+    Repo.all(query)
   end
 
   @doc """
@@ -378,7 +428,7 @@ defmodule Rednews.Accounts do
   """
   def list_user_channels(user_id) do
     Channels
-    |> where([c], c.author == ^user_id)
+    |> where([c], c.user_id == ^user_id)
     |> select([c], %{name: c.name, id: c.id})
     |> Repo.all()
   end
@@ -457,7 +507,7 @@ defmodule Rednews.Accounts do
   - The total number of channels created by the user.
   """
   def count_user_channels(user_id) do
-    from(c in Channels, where: c.author == ^user_id)
+    from(c in Channels, where: c.user_id == ^user_id)
     |> Repo.aggregate(:count)
   end
 
@@ -475,7 +525,7 @@ defmodule Rednews.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_channels!(id), do: Repo.get!(Channels, id)
+  def get_channels!(id), do: Repo.get!(Channels, 1)
 
   @doc """
   Creates a channels.
@@ -490,6 +540,8 @@ defmodule Rednews.Accounts do
 
   """
   def create_channels(attrs \\ %{}) do
+    IO.inspect(attrs, label: "create_channels_attrs")
+
     %Channels{}
     |> Channels.changeset(attrs)
     |> Repo.insert()
@@ -528,7 +580,7 @@ defmodule Rednews.Accounts do
 
   def delete_channels(%Channels{} = channel) do
     Repo.transaction(fn ->
-      Repo.delete_all(from h in Headlines, where: h.author == ^channel.id)
+      Repo.delete_all(from h in Headlines, where: h.user_id == ^channel.id)
 
       Repo.delete(channel)
     end)

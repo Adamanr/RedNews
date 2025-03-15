@@ -7,15 +7,16 @@ defmodule Rednews.Repo.Migrations.CreateHeadlines do
       add :content, :text
       add :category, :string
       add :is_fake, :boolean, null: true
+      add :is_draft, :boolean, default: true
       add :additional, :map
       add :is_very_important, :boolean, null: true
       add :header, :string
       add :tags, {:array, :string}
-      add :author, references(:channels, on_delete: :nothing)
+      add :channel_id, references(:channels, on_delete: :nothing)
 
       timestamps(type: :utc_datetime)
     end
 
-    create index(:headlines, [:author])
+    create index(:headlines, [:channel_id])
   end
 end

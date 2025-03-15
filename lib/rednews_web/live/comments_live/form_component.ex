@@ -1,39 +1,44 @@
 defmodule RednewsWeb.CommentsLive.FormComponent do
-  alias Rednews.Accounts
   use RednewsWeb, :live_component
+
   alias Rednews.Posts
+  alias Rednews.Accounts
+  alias RednewsWeb.Helpers
 
   def render(assigns) do
     ~H"""
-    <div class="comments-section mt-8 bg-white rounded-2xl shadow-lg">
-      <div class="relative p-6">
+    <div class="comments-section ">
+      <div class="relative ">
         <h3 class="text-2xl font-bold text-gray-900 mb-6">Комментарии</h3>
+        <%= if not is_nil(@current_user) do %>
+          <.form for={@form} id="comment-form" phx-target={@myself} phx-submit="create_comment">
+              <.input
+                field={@form[:content]}
+                type="textarea"
+                placeholder="Оставьте свой комментарий..."
+                class="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 resize-none min-h-[120px]"
+                required
+              />
 
-        <.form for={@form} id="comment-form" phx-target={@myself} phx-submit="create_comment">
-          <.input
-            field={@form[:content]}
-            type="textarea"
-            placeholder="Оставьте свой комментарий..."
-            class="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 resize-none min-h-[120px]"
-            required
-          />
-          <div class="text-right mt-2 mb-4">
-            <.button
-              phx-disable-with="Отправка..."
-              class="bg-indigo-600 hover:bg-indigo-700 px-3 py-3 rounded-xl text-white font-semibold transition duration-200 flex items-center gap-2"
-            >
-              <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                />
-              </svg>
-              Отправить
-            </.button>
-          </div>
-        </.form>
+            <div class="text-right mt-2 mb-4">
+              <.button
+                phx-disable-with="Отправка..."
+                class="bg-indigo-600 hover:bg-indigo-700 px-3 py-3 rounded-xl text-white font-semibold transition duration-200 flex items-center gap-2"
+              >
+                <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                  />
+                </svg>
+                Отправить
+              </.button>
+            </div>
+          </.form>
+        <% end %>
+
 
         <%= if @reply && @reply != %{} do %>
           <div class="my-6 bg-indigo-50 rounded-xl p-4 border border-indigo-100">
@@ -73,91 +78,94 @@ defmodule RednewsWeb.CommentsLive.FormComponent do
           </div>
         <% end %>
 
-        <div id="comments-list" class="space-y-4">
-          <%= for item <- @comments, is_nil(item.comment.reply_id) do %>
-            <div id={"comment-#{item.comment.id}"} class="bg-gray-100 rounded-xl p-6">
-              <div class="flex items-start gap-4">
-                <img
-                  src={item.author.avatar || "/images/default-avatar.png"}
-                  class="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm"
-                  alt={item.author.username}
-                />
-                <div class="flex-1">
-                  <div class="flex items-center justify-between">
-                    <div>
-                      <h4 class="font-semibold text-gray-900">{item.author.username}</h4>
-                      <p class="text-sm text-gray-500 mt-1">
-                        {Calendar.strftime(item.comment.inserted_at, "%B %d, %Y at %I:%M %p")}
-                      </p>
-                    </div>
-                    <%= if @current_user && @current_user.id == item.comment.author do %>
-                      <div class="flex gap-2">
-                        <.button
-                          phx-click="reply_comment"
-                          phx-value-id={item.comment.id}
-                          phx-target={@myself}
-                          class="text-sm bg-indigo-100 text-indigo-700 hover:bg-indigo-400 rounded-lg transition duration-200"
-                        >
-                          <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none">
-                            <path
-                              d="M4.5 12L9.5 7M4.5 12L9.5 17M4.5 12L11 12M14.5 12C16.1667 12 19.5 13 19.5 17"
-                              stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                            />
-                          </svg>
-                        </.button>
-                        <.button
-                          phx-click="delete_comment"
-                          phx-value-id={item.comment.id}
-                          phx-target={@myself}
-                          class="text-sm bg-red-100 text-red-700 hover:bg-red-400 rounded-lg transition duration-200"
-                          data-confirm="Вы уверены, что хотите удалить этот комментарий?"
-                        >
-                          <svg
-                            class="w-5 h-5 text-white"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                            <g
-                              id="SVGRepo_tracerCarrier"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                            >
-                            </g>
-                            <g id="SVGRepo_iconCarrier">
-                              <path
-                                d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5"
-                                stroke="currentColor"
-                                stroke-width="1.5"
-                                stroke-linecap="round"
-                              >
-                              </path>
-
-                              <path
-                                d="M7 3.33782C8.47087 2.48697 10.1786 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 10.1786 2.48697 8.47087 3.33782 7"
-                                stroke="currentColor"
-                                stroke-width="1.5"
-                                stroke-linecap="round"
-                              >
-                              </path>
-                            </g>
-                          </svg>
-                        </.button>
+        <%= if length(@comments) == 0 do%>
+            <h1 class="text-xl text-gray-500">Тут пока пусто</h1>
+        <% else %>
+          <div id="comments-list" class="space-y-4">
+            <%= for item <- @comments, is_nil(item.comment.reply_id) do %>
+              <div id={"comment-#{item.comment.id}"} class="">
+                <div class="flex items-start gap-4 bg-white p-2 rounded-lg">
+                  <img
+                    src={item.author.avatar || "/images/default-avatar.png"}
+                    class="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm"
+                    alt={item.author.username}
+                  />
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <h4 class="font-semibold text-gray-900">{item.author.username}</h4>
+                        <p class="text-sm text-gray-500 mt-1">
+                          {Calendar.strftime(item.comment.inserted_at, "%B %d, %Y at %I:%M %p")}
+                        </p>
                       </div>
-                    <% end %>
+                      <%= if @current_user && @current_user.id == item.comment.author do %>
+                        <div class="flex gap-2">
+                          <.button
+                            phx-click="reply_comment"
+                            phx-value-id={item.comment.id}
+                            phx-target={@myself}
+                            class="text-sm bg-indigo-100 text-indigo-700 hover:bg-indigo-400 rounded-lg transition duration-200"
+                          >
+                            <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none">
+                              <path
+                                d="M4.5 12L9.5 7M4.5 12L9.5 17M4.5 12L11 12M14.5 12C16.1667 12 19.5 13 19.5 17"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                            </svg>
+                          </.button>
+                          <.button
+                            phx-click="delete_comment"
+                            phx-value-id={item.comment.id}
+                            phx-target={@myself}
+                            class="text-sm bg-red-100 text-red-700 hover:bg-red-400 rounded-lg transition duration-200"
+                            data-confirm="Вы уверены, что хотите удалить этот комментарий?"
+                          >
+                            <svg
+                              class="w-5 h-5 text-white"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                              <g
+                                id="SVGRepo_tracerCarrier"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              >
+                              </g>
+                              <g id="SVGRepo_iconCarrier">
+                                <path
+                                  d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5"
+                                  stroke="currentColor"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                >
+                                </path>
+
+                                <path
+                                  d="M7 3.33782C8.47087 2.48697 10.1786 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 10.1786 2.48697 8.47087 3.33782 7"
+                                  stroke="currentColor"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                >
+                                </path>
+                              </g>
+                            </svg>
+                          </.button>
+                        </div>
+                      <% end %>
+                    </div>
+                    <div class="mt-3 text-gray-700 prose prose-sm max-w-none">
+                      {raw(Helpers.to_html(item.comment.content))}
+                    </div>
                   </div>
-                  <div class="mt-3 text-gray-700 prose prose-sm max-w-none">
-                    {raw(Rednews.MarkdownHelper.to_html(item.comment.content))}
-                  </div>
+                </div>
+                <div class="border-black border-l-2 ms-3">
                   <%= for reply_item <- Posts.get_reply_comments(assigns.pub_id, assigns.pub_type, item.comment.id) do %>
-                    <div
-                      id={"comment-#{reply_item.comment.id}"}
-                      class="mt-4 ml-4 bg-white rounded-xl p-5 border border-gray-100"
-                    >
+                    <div id={"comment-#{reply_item.comment.id}"} class="mt-4 ml-4 bg-gray-300  p-2">
                       <div class="flex items-start gap-4">
                         <img
                           src={reply_item.author.avatar || "/images/default-avatar.png"}
@@ -222,7 +230,7 @@ defmodule RednewsWeb.CommentsLive.FormComponent do
                             <% end %>
                           </div>
                           <div class="mt-3 text-gray-700 prose prose-sm max-w-none">
-                            {raw(Rednews.MarkdownHelper.to_html(reply_item.comment.content))}
+                            {raw(Helpers.to_html(reply_item.comment.content))}
                           </div>
                         </div>
                       </div>
@@ -230,9 +238,9 @@ defmodule RednewsWeb.CommentsLive.FormComponent do
                   <% end %>
                 </div>
               </div>
-            </div>
-          <% end %>
-        </div>
+            <% end %>
+          </div>
+        <% end %>
       </div>
     </div>
     """

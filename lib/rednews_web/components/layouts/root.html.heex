@@ -5,20 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
     <link rel="icon" type="image/svg+xml" href="/images/logo.svg" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js">
+    </script>
     <.live_title default="Rednews">
       {assigns[:page_title]}
     </.live_title>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"} />
-    <script defer phx-track-static type="text/javascript" src={~p"/assets/sidebar.js"}>
-    </script>
   </head>
-  <body class="flex h-screen ">
+  <body class="h-screen dark:text-gray-300 dark:bg-zinc-900 bg-[#F6F8FA] overflow-y-hidden">
     <%= if @conn.request_path not in [~p"/users/register", ~p"/users/log_in"] do %>
-      <.sidebar current_user={@current_user} />
+      <div class="">
+        <.menu current_path={@conn.request_path} current_user={@current_user} />
+        <div class="flex">
+          <div class="flex-1 py-4 mx-auto h-[100vh] overflow-y-scroll">
+            <div class="mx-6 h-cover">
+              {@inner_content}
+            </div>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <div class="">
+        {@inner_content}
+      </div>
     <% end %>
-    <div class="flex-1 bg-gradient-to-br from-gray-50 to-purple-50 overflow-y-scroll h-full">
-      {@inner_content}
-    </div>
   </body>
 </html>

@@ -2,28 +2,25 @@ defmodule RednewsWeb.HeadlinesLive.Index do
   use RednewsWeb, :live_view
 
   alias Rednews.Posts
+  alias Rednews.Repo
+  alias Rednews.Accounts
+  alias RednewsWeb.Helpers
   alias Rednews.Posts.Headlines
 
   @impl true
-  def mount(_params, _session, socket) do
-    socket =
+  def mount(_params, session, socket) do
+    headlines = Posts.list_headlines() |> Repo.preload(:channel)
+
+    {:ok,
       socket
+      |> assign(:first_headline, Enum.at(headlines, 0))
+      |> assign(:current_user, Helpers.get_current_user(session))
       |> assign(:categories, Posts.list_categories())
       |> assign(:selected_category, "all")
-      |> stream(:headlines, Posts.list_headlines())
-
-    {:ok, socket}
+      |> assign(:selected_date, "all")
+      |> stream(:headlines, headlines)}
   end
 
-  @doc """
-  Handles the "filtered" event for filtering headlines based on category or tags.
-
-  ## Parameters
-  - `"filter"`: A JSON-encoded string containing filter options and parameters.
-
-  ## Returns
-  - Updates the socket with the filtered headlines and resets the stream.
-  """
   @impl true
   def handle_event("filtred", %{"filter" => filter}, socket) do
     %{"options" => options, "params" => params} = Jason.decode!(filter)
@@ -33,12 +30,17 @@ defmodule RednewsWeb.HeadlinesLive.Index do
         {"category", category} ->
           socket
           |> assign(:selected_category, category)
-          |> assign_headlines(Posts.list_headlines(:category, %{category: category}))
+          |> assign_headlines(Posts.list_headlines(:category_and_date, %{category: category, date: socket.assigns[:selected_date]}) |> Repo.preload(:channel))
 
         {"tags", tags} ->
           socket
           |> assign(:selected_tags, tags)
-          |> assign_headlines(Posts.list_headlines(:tags, %{tags: tags}))
+          |> assign_headlines(Posts.list_headlines(:tags, %{tags: tags}) |> Repo.preload(:channel))
+
+        {"date", date} ->
+          socket
+          |> assign(:selected_date, date)
+          |> assign_headlines(Posts.list_headlines(:category_and_date, %{category: socket.assigns[:selected_category], date: date}) |> Repo.preload(:channel))
 
         {_, "tags"} ->
           socket
@@ -48,6 +50,11 @@ defmodule RednewsWeb.HeadlinesLive.Index do
         {_, "category"} ->
           socket
           |> assign(:selected_category, "all")
+          |> assign_headlines(Posts.list_headlines())
+
+        {_, "date"} ->
+          socket
+          |> assign(:selected_date, "all")
           |> assign_headlines(Posts.list_headlines())
 
         _ ->
@@ -69,7 +76,7 @@ defmodule RednewsWeb.HeadlinesLive.Index do
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
-    |> assign(:page_title, "Edit Headlines")
+    |> assign(:page_title, "Добавить новость")
     |> assign(:headlines, Posts.get_headlines!(id))
   end
 

@@ -41,7 +41,7 @@ defmodule RednewsWeb.UserLoginLive do
           </:actions>
           <:actions>
             <.button phx-disable-with="Logging in..." class="bg-zinc-600 w-full">
-              Войти <span aria-hidden="true">→</span>
+              Войти
             </.button>
           </:actions>
         </.simple_form>

@@ -7,11 +7,8 @@ defmodule RednewsWeb.HeadlinesLive.FormComponent do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
-      <.header>
-        Рассказать о новости
-        <:subtitle>Расскажите всем о том, что произошло!</:subtitle>
-      </.header>
+    <div class="bg-white p-5 rounded-lg">
+      <p class="font-bold text-xl">Создание новости</p>
 
       <.simple_form
         for={@form}
@@ -21,38 +18,48 @@ defmodule RednewsWeb.HeadlinesLive.FormComponent do
         phx-submit="save"
       >
         <.input field={@form[:title]} type="text" label="Заголовок" />
-        <.input field={@form[:content]} type="textarea" label="Текст новости" />
-        <.input
-          field={@form[:category]}
-          type="select"
-          label="Категория"
-          options={Posts.list_categories()}
-        />
-        <%= if length(Accounts.list_user_channels(1)) == 0 do %>
-          <h1 class="text-rose-400 font-bold">
-            Для создания новости вам нужен канал!
-            <a class="text-sky-600" href="/channels/new"> Создать канал </a>
-          </h1>
-        <% else %>
+        <div class="grid grid-cols-2 gap-5">
           <.input
-            field={@form[:author]}
+            field={@form[:category]}
             type="select"
-            label="Автор"
-            options={Enum.map(Accounts.list_user_channels(assigns.myself.cid), &{&1.name, &1.id})}
+            label="Категория"
+            options={Posts.list_categories()}
           />
-        <% end %>
+          <.input
+            field={@form[:tags]}
+            type="text"
+            label="Тэги (через запятую)"
+            value={Enum.join(@headlines.tags || [], ", ")}
+            placeholder="Игры, Новости"
+          />
+        </div>
 
-        <.input field={@form[:header]} type="text" label="Картинка новости (URL)" />
-        <.input
-          field={@form[:tags]}
-          type="text"
-          label="Тэги (через запятую)"
-          value={Enum.join(@headlines.tags || [], ", ")}
-          placeholder="Игры, Новости"
-        />
+        <div class="grid grid-cols-2 gap-5">
+          <%= if length(Accounts.list_user_channels(assigns.current_user.id)) == 0 do %>
+            <h1 class="text-rose-400 font-bold">
+              Для создания новости вам нужен канал!
+              <a class="text-sky-600" href="/channels/new"> Создать канал </a>
+            </h1>
+          <% else %>
+            <.input
+              field={@form[:channel_id]}
+              type="select"
+              label="Автор"
+              options={Enum.map(Accounts.list_user_channels(assigns.current_user.id), &{&1.name, &1.id})}
+            />
+          <% end %>
+
+          <.input field={@form[:header]} type="text" label="Картинка новости (URL)" />
+        </div>
+
+        <.input field={@form[:content]} type="textarea" label="Текст новости" />
 
         <:actions>
-          <.button class="bg-zinc-700" phx-disable-with="Saving...">Опубликовать</.button>
+          <div class="flex place-items-end text-white font-bold w-full space-x-4">
+            <div class="flex-1"></div>
+            <.button class="bg-gray-600" disabled>В Черновик</.button>
+            <.button class="bg-green-600" phx-disable-with="Saving...">Опубликовать</.button>
+          </div>
         </:actions>
       </.simple_form>
     </div>

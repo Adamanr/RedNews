@@ -44,11 +44,16 @@ defmodule RednewsWeb.UsersLive.UserProfile do
               <% end %>
             </div>
           </div>
-          <div>
-            <a class="bg-sky-600 p-2 font-bold text-white rounded-lg" href="/users/settings">
-              Изменить
-            </a>
-          </div>
+          <%= if @user.id == @current_user.id do %>
+            <div>
+              <.link href="/users/log_out" method="DELETE">
+                <p class="border-2 rounded-md text-center px-2 py-1 border-black">Выйти</p>
+              </.link>
+              <.link href="/users/settings">
+                <p class="border-2 rounded-md mt-4 text-center px-2 py-1 border-black">Изменить</p>
+              </.link>
+            </div>
+          <% end %>
         </div>
       </div>
 
@@ -95,13 +100,11 @@ defmodule RednewsWeb.UsersLive.UserProfile do
     {user_id, ""} = Integer.parse(user_id)
 
     user = Accounts.get_user!(user_id)
-    articles = Posts.list_user_articles(user_id)
     channels = Accounts.list_user_channels(user_id)
 
     socket =
       socket
       |> assign(:user, user)
-      |> assign(:articles, articles)
       |> assign(:channels, channels)
       |> assign(:page_title, "#{user.username}'s Profile")
       |> assign(:current_tab, "overview")

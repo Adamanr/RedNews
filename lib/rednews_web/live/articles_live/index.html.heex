@@ -1,235 +1,111 @@
-<div class="relative pb-10 mt-[8vh]">
-  <div class="max-w-7xl mx-auto">
-    <div class="absolute ms-8 text-xl font-bold text-gray-800 -top-10">
-      <h1><a href="/">Главная</a> > Статьи</h1>
-    </div>
+<div class="flex">
+  <div class="md:block hidden">
+    <.sidebar
+      current_user={@current_user}
+      categories={@categories}
+      selected_category={@selected_category}
+      selected_date={@selected_date}
+    />
   </div>
-
-  <div class="bg-gradient-to-r from-purple-600 w-full to-blue-600 text-white py-12 mb-8">
-    <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
-      <div class="relative h-full flex flex-col md:flex-row justify-between items-center">
-        <div class="mb-6 md:mb-0">
-          <h1 class="text-4xl font-bold mb-2">Статьи</h1>
-          <p class="text-purple-100 w-full lg:w-1/2">
-            Привлекательный и занимательный формат публикаций – это метод представления информации, который захватывает внимание читателей благодаря своей простоте, легкости усвоения и уникальности. Этот формат помогает быстро и действенно передавать основные мысли, одновременно поддерживая заинтересованность аудитории. Он может включать комбинацию текста с визуальными элементами, интерактивными составляющими или структурированным содержанием, делая процесс чтения не только информативным, но и увлекательным.
-          </p>
-          <br />
-          <.link patch={~p"/articles/new"}>
-            <.button class="bg-zinc-700 text-purple-600 hover:bg-purple-400 flex items-center gap-2 shadow-lg">
-              <svg
-                class="w-5 h-5"
-                fill="currentColor"
-                viewBox="-2 0 19 19"
-                xmlns="http://www.w3.org/2000/svg"
-                class="cf-icon-svg"
-                transform="rotate(90)"
-              >
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                <g id="SVGRepo_iconCarrier">
-                  <path d="M5.9 4.544 2.534 7.912 1.225 6.604a1.111 1.111 0 0 1 0-1.567l1.8-1.8a1.112 1.112 0 0 1 1.568 0zm7.926 11.565a.456.456 0 0 1-.099-.011l-3.419-.77a1.96 1.96 0 0 1-.77-.412v.001l-3.709-3.71-2.512-2.511 1.71-1.71 6.22 6.221-1.181 1.182a1.294 1.294 0 0 0 .406.213l1.508.339.95-.95-.34-1.508a1.278 1.278 0 0 0-.213-.405l-.345.345-6.222-6.22.874-.875L9.197 7.84l1.751 1.752 1.957 1.958a1.962 1.962 0 0 1 .412.77l.77 3.419c.05.22-.065.37-.26.37z">
-                  </path>
-                </g>
-              </svg>
-              Написать статью
-            </.button>
-          </.link>
-        </div>
-        <img
-          class="hidden lg:block absolute w-96 right-24 bottom-0 rounded-lg shadow-lg"
-          src="https://i.pinimg.com/736x/51/73/31/517331508a9aac1218149b1cf0f78b9f.jpg"
-        />
-      </div>
-    </div>
-  </div>
-
-  <div class="max-w-7xl px-4 md:px-0 mx-auto ">
-    <div class="bg-white rounded-xl shadow-sm p-4 mb-8">
-      <div class="flex flex-col md:flex-row gap-4 items-center">
-        <div
-          class="categories-list flex-1 flex overflow-x-scroll gap-2"
-          style="scroll-padding: 0 20px;"
-        >
-          <button
-            phx-click="filtred"
-            phx-value-filter={Jason.encode!(%{options: "", params: "category"})}
-            class={"px-4 py-2 mb-4 rounded-full text-sm whitespace-nowrap font-medium transition-all duration-200
-                  #{if @selected_category == "all",
-                      do: "bg-purple-600 text-white ring-2 ring-purple-200",
-                      else: "bg-gray-50 text-gray-600 hover:bg-purple-50 hover:text-purple-600"}"}
-          >
-            Все
-          </button>
-          <%= for {category, _} <- @categories do %>
-            <button
-              phx-click="filtred"
-              phx-value-filter={Jason.encode!(%{options: "category", params: category})}
-              class={"px-4 py-2 mb-4 rounded-full text-sm whitespace-nowrap font-medium transition-all duration-200
-                      #{if @selected_category == category,
-                          do: "bg-purple-600 text-white ring-2 ring-purple-200",
-                          else: "bg-gray-50 text-gray-600 hover:bg-purple-50 hover:text-purple-600"}"}
-            >
-              {category}
-            </button>
-          <% end %>
-        </div>
-
-        <form phx-change="search" class="w-full md:w-72">
-          <div class="relative">
-            <input
-              type="text"
-              name="search"
-              value={@search_query}
-              placeholder="Поиск..."
-              class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
-              phx-debounce="300"
-            />
-            <svg
-              class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+  <div class="w-full">
+    <%= if length(@streams.article.inserts) > 0 do %>
+      <div class="relative">
+        <%= if @selected_category == "all" do %>
+          <div class="md:grid grid-cols-5  mt-4">
+            <div class={"relative h-[35em] w-full #{if length(@streams.article.inserts) > 1, do: "col-span-3", else: "col-span-5" }"}>
+              <img
+                class="h-full object-cover w-full rounded-3xl shadow-lg"
+                src={@first_article.header}
               />
-            </svg>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <%= if @selected_tag != "all" do %>
-      <button
-        phx-click="list_article_by_tags"
-        phx-value-tag="all"
-        class="px-3 py-1 mb-5 text-xl rounded-full  font-medium bg-gray-100 text-gray-600"
-      >
-        (x) Убрать тэг
-      </button>
-    <% end %>
-
-    <div
-      id="articles"
-      phx-update="stream"
-      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-    >
-      <%= for {id, article} <- @streams.article do %>
-        <div
-          id={id}
-          class={"group bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden
-          #{if  get_in(article.additional || %{}, ["comments_count"]) >= 5,
-            do: "md:col-span-2 lg:col-span-3", else: ""}"}
-        >
-          <div class="relative md:flex">
-            <div class="bg-gradient-to-br from-purple-100 w-full to-blue-100 p-6">
-              <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-5 transition-opacity duration-200">
-              </div>
-              <%= if article.is_fake do %>
-                <span class="absolute top-4 right-4 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-600">
-                  Fake News
-                </span>
-              <% end %>
-
-              <div class="relative z-10">
-                <div class="flex items-center gap-3 mb-4">
-                  <div class="w-12 h-12 rounded-xl bg-white shadow-md flex items-center justify-center">
-                    <span class="text-xl font-bold text-purple-600">
-                      {String.first(article.title)}
-                    </span>
-                  </div>
-                  <span class="px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-600">
-                    Рекомендация
-                  </span>
-                  <span class="px-3 py-1 rounded-full text-xs font-medium bg-white/80 text-purple-600">
-                    {article.category}
-                  </span>
+              <div class="absolute bottom-0 top-0 h-full w-full bg-gradient-to-t rounded-xl from-black/80 to-white/20"></div>
+              <div class="absolute bottom-5 left-5 font-bold" style="font-family: 'Merriweather Sans', sans-serif;">
+                <div class="flex text-white text-md space-x-2">
+                  <img src={@first_article.user.avatar} class="w-5 h-5 rounded-md" />
+                  <p class="">{@first_article.user.username }</p>
+                  <p class="rounded-md"> · </p>
+                  <p class="">{@first_article.category}</p>
                 </div>
-
-                <h3 class="font-bold text-xl text-gray-900 mb-2 group-hover:text-purple-600 transition-colors duration-200">
-                  <a href={"/articles/article/#{article.id}"}>{article.title}</a>
-                </h3>
-                <p class="text-gray-600 line-clamp-3">
-                  {raw(
-                    Rednews.MarkdownHelper.to_html("#{String.slice(article.content, 0..255)}...")
-                  )}
-                </p>
-
-                <div class="flex flex-wrap gap-2 mt-5 mb-4">
-                  <%= for tag <- article.tags || [] do %>
-                    <button
-                      phx-click="filtred"
-                      phx-value-filter={Jason.encode!(%{options: "tags", params: tag})}
-                      class="px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600"
-                    >
-                      #{tag}
-                    </button>
-                  <% end %>
-                </div>
+                <.link href={"/articles/article/#{@first_article.id}"}>
+                  <h1 class="text-2xl leading-8 text-white">{@first_article.title}</h1>
+                </.link>
               </div>
             </div>
 
-            <%= if !is_nil(article.additional) do %>
-              <div class="md:w-1/3 bg-gradient-to-br from-purple-100 to-blue-100 p-8 flex items-center justify-center">
-                <div class="text-center">
-                  <div class="relative text-4xl font-bold text-purple-600 mb-2">{0}</div>
-                  <%= if !is_nil(article.additional) && Map.has_key?(article.additional, "image" ) do %>
-                    <img
-                      class="absolute right-0 top-0 bottom-0 opacity-30 w-full h-full object-cover"
-                      src={Map.fetch!(article.additional, "image")}
-                    />
-                  <% end %>
-                </div>
+            <%= if length(@streams.article.inserts) > 1 do %>
+              <div class="flex col-span-2 h-[35em] w-full md:ps-5 md:mt-0 mt-5 space-y-4 flex-col">
+                <%= for {id, _, article, _} <- Enum.slice(Enum.reverse(@streams.article.inserts), 1,4) do %>
+                  <div class="bg-white dark:bg-zinc-800 w-full flex rounded-lg shadow-lg space-x-4 h-1/3">
+                    <img class="w-[10em] rounded-lg  object-cover" src={article.header} />
+                    <div class="py-4 px-4 space-y-4">
+                      <p class="px-2 py-1 border rounded-md w-fit mb-2 border-black">{article.category}</p>
+                      <a href={"/articles/article/#{article.id}"} class="text-xl">
+                        {article.title}
+                      </a>
+                      <p class="text-xs dark:text-gray-200 text-gray-600">
+                        <%= if String.length(article.title) > 40 do %>
+                          {String.slice(article.content, 0, 100)}
+                        <% else %>
+                          {String.slice(article.content, 0, 150)}
+                        <% end %>
+                      </p>
+                    </div>
+                  </div>
+                <% end %>
               </div>
             <% end %>
           </div>
+        <% end %>
+        <div class="mt-5">
+          <h1 class="text-2xl mb-5 font-bold">{if @selected_category == "all", do: "Все статьи", else: "Статьи #{Helpers.convert_date_to_print(@selected_date)} по категории - #{Helpers.convert_category_to_print(@selected_category)}"}</h1>
+          <%= for {_, article} <- @streams.article do %>
+            <div class="md:flex font-['Martian_Mono'] w-full bg-white p-4 rounded-2xl">
+              <img class="h-[22vh] w-[30em] me-5 rounded-md object-cover" src={article.header} />
 
-          <div class="px-6 py-4 border-t border-gray-100 bg-gray-50">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-4">
-                <span class="text-sm text-gray-500">
-                  {Calendar.strftime(article.inserted_at, "%B %d, %Y")}
-                </span>
-              </div>
+              <div class="relative md:mt-0 mt-5 w-full leading-6">
+                <div class="flex items-center  text-md text-black space-x-2">
+                  <img src={article.user.avatar} class="w-7 h-7 rounded-full" />
+                  <p class="">{article.user.username }</p>
+                  <p class="rounded-md"> · </p>
+                  <p class="">{article.category}</p>
+                </div>
 
-              <div class="flex items-center gap-2">
-                <.link
-                  patch={~p"/articles/article/#{article}/edit"}
-                  class="text-sm font-medium text-blue-600 hover:text-blue-700"
-                >
-                  Edit
+                <.link href={"/articles/article/#{article.id}"}>
+                  <h1 class="text-2xl py-2">
+                    {article.title}
+                  </h1>
                 </.link>
-                <span class="text-gray-300">|</span>
-                <.link
-                  phx-click={JS.push("delete", value: %{id: article.id}) |> hide("##{id}")}
-                  data-confirm="Are you sure?"
-                  class="text-sm font-medium text-red-600 hover:text-red-700"
-                >
-                  Delete
-                </.link>
-                <.link
-                  navigate={~p"/articles/article/#{article}"}
-                  class="inline-flex items-center gap-1 text-sm font-medium text-purple-600 hover:text-purple-700"
-                >
-                  View
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </.link>
+                <p class="text-gray-600">
+                  {if not is_nil(article.additional),
+                    do: String.slice(article.content, 0, 200),
+                    else: String.slice(article.content, 0, 300)}..
+                </p>
+                <div class="md:hidden block h-[10vh]"></div>
+                <div class="absolute md:mt-0 mt-10 text-gray-600 font-light w-full space-x-4 text-md  bottom-0 flex pt-4">
+                  <div class="flex w-fit space-x-2">
+                    <img src="/images/calendar.svg" class="w-6 h-6" />
+                    <p class="items-center">{article.inserted_at}</p>
+                  </div>
+                  <div class="flex items-cetner w-fit space-x-2">
+                    <img src="/images/views.svg" class="w-6 h-6" />
+                    <p class="items-center">Время чтения: {Helpers.calculate_reading_time(article.content)}</p>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+            <hr class="border-gray-500 border max-w-4xl mx-auto my-7" />
+          <% end %>
         </div>
-      <% end %>
-    </div>
+        <div class="h-[5vh]"></div>
+      </div>
+    <% else %>
+      <div class="max-w-4xl mx-auto mt-2 bg-white rounded-2xl pb-8 text-2xl  text-center font-bold">
+        <img class="rounded-2xl h-[55vh] w-full" src="https://i.pinimg.com/originals/4d/c8/2c/4dc82c5997a8a4b8ab7968ec1c67c678.gif">
+        <h1 class="py-8">В категории "{Helpers.convert_category_to_print(@selected_category)}" {if is_nil(@selected_date), do: "", else: Helpers.convert_date_to_print(@selected_date)} статей нет 🥴</h1>
+        <.link href="/articles/new" class="text-rose-600 border-rose-600 border-2 px-4 py-2 rounded-md hover:bg-rose-400 hover:text-white hover:border-0 mt-6 font-bold  text-xl">
+          Я напишу!
+        </.link>
+      </div>
+    <% end %>
   </div>
 </div>
 
@@ -245,6 +121,7 @@
     title={@page_title}
     action={@live_action}
     articles={@articles}
+    current_user={@current_user}
     navigate={~p"/articles"}
   />
 </.modal>

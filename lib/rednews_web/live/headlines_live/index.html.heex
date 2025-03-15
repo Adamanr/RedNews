@@ -1,278 +1,107 @@
-<div class="relative pb-10 mt-[8vh]">
-  <div class="max-w-7xl mx-auto">
-    <div class="absolute ms-8 text-xl font-bold text-gray-800 -top-10">
-      <h1><a href="/">Главная</a> > Новости</h1>
-    </div>
+<div class="flex">
+  <div class="hidden md:block">
+    <.sidebar
+      current_user={@current_user}
+      categories={@categories}
+      selected_category={@selected_category}
+      selected_date={@selected_date}
+    />
   </div>
-  <div class="bg-gradient-to-r from-red-600 to-rose-400 w-full  text-white py-12 mb-8">
-    <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
-      <div class="relative h-full flex flex-col md:flex-row justify-between items-center">
-        <div class="mb-6 md:mb-0">
-          <h1 class="text-4xl font-bold mb-2">Новости</h1>
-          <p class="text-purple-100 w-1/2">
-            Захватывающий и актуальный формат подачи информации, новости представляют собой оперативный способ донесения событий, происходящих в мире. Они фокусируются на последних событиях, тенденциях и изменениях, предоставляя читателям возможность оставаться в курсе текущих дел. Новости могут охватывать широкий спектр тем: от политики и экономики до культуры и спорта. Ключевая особенность новостей заключается в их своевременности и объективности, что делает этот формат незаменимым для тех, кто стремится быть в курсе всего нового и важного.
-          </p>
-          <br />
-          <.link patch={~p"/news/new"}>
-            <.button class="bg-zinc-700 text-purple-600 hover:bg-purple-400 flex items-center gap-2 shadow-lg">
-              <svg
-                class="w-5 h-5"
-                fill="currentColor"
-                viewBox="-2 0 19 19"
-                xmlns="http://www.w3.org/2000/svg"
-                class="cf-icon-svg"
-                transform="rotate(90)"
-              >
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                <g id="SVGRepo_iconCarrier">
-                  <path d="M5.9 4.544 2.534 7.912 1.225 6.604a1.111 1.111 0 0 1 0-1.567l1.8-1.8a1.112 1.112 0 0 1 1.568 0zm7.926 11.565a.456.456 0 0 1-.099-.011l-3.419-.77a1.96 1.96 0 0 1-.77-.412v.001l-3.709-3.71-2.512-2.511 1.71-1.71 6.22 6.221-1.181 1.182a1.294 1.294 0 0 0 .406.213l1.508.339.95-.95-.34-1.508a1.278 1.278 0 0 0-.213-.405l-.345.345-6.222-6.22.874-.875L9.197 7.84l1.751 1.752 1.957 1.958a1.962 1.962 0 0 1 .412.77l.77 3.419c.05.22-.065.37-.26.37z">
-                  </path>
-                </g>
-              </svg>
-              Рассказать новость
-            </.button>
-          </.link>
-        </div>
-        <img
-          class="absolute w-96 right-24 bottom-0 rounded-lg shadow-lg"
-          src="https://static.wixstatic.com/media/7ac599_84c8143a3e2a4a48a20280ef1492d68d~mv2.jpg/v1/fill/w_645,h_710,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/7ac599_84c8143a3e2a4a48a20280ef1492d68d~mv2.jpg"
-        />
-      </div>
-    </div>
-  </div>
-
-  <div class="max-w-7xl mx-auto mt-10 px-4 pb-12">
-    <div
-      class="mt-10 flex mb-5 gap-4 overflow-x-auto text-black pb-2"
-      id="categories-filter"
-      phx-update="ignore"
-    >
-      <button
-        phx-click="filtred"
-        phx-value-filter={Jason.encode!(%{options: "", params: "category"})}
-        class={"#{if @selected_category == "all", do: ~c'text-black border-b-2 border-black', else: ~c'text-black hover:text-gray-200'} px-3 py-2 text-sm font-medium transition-colors"}
-      >
-        Все
-      </button>
-      <%= for {category, _} <- @categories do %>
-        <button
-          phx-click="filtred"
-          phx-value-filter={Jason.encode!(%{options: "category", params: category})}
-          class={"#{if @selected_category == category, do: ~c'text-red-600 border-b-2 border-red-600', else: ~c'text-gray-400 hover:text-gray-600'} px-3 whitespace-nowrap py-2 text-sm font-medium transition-colors"}
-        >
-          {category}
-        </button>
-      <% end %>
-    </div>
-
-    <%= for {id, headlines} <- @streams.headlines do %>
-      <%= if headlines.is_very_important && !headlines.is_fake && (@selected_category == "all" || @selected_category == headlines.category) do %>
-        <div
-          id={"breaking-#{id}"}
-          class="mb-8 bg-red-50 border border-red-100 rounded-xl overflow-hidden"
-        >
-          <div class="p-6">
-            <div class="flex items-center gap-2 mb-4">
-              <span class="animate-pulse bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">
-                ЭКСТРЕННАЯ НОВОСТЬ
-              </span>
-              <%= if headlines.is_fake do %>
-                <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
-                  ФЕЙК
-                </span>
-              <% end %>
-            </div>
-            <h2
-              class="text-2xl font-bold text-zinc-900 mb-4 hover:text-red-600 cursor-pointer"
-              phx-click={JS.navigate(~p"/news/headline/#{headlines}")}
-            >
-              {headlines.title}
-            </h2>
-            <p class="text-zinc-600 mb-4 text-lg">
-              {String.slice(headlines.content, 0..700) <> "..."}
-            </p>
-
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-4">
-                <span class="text-zinc-500">{headlines.category}</span>
-                <%= if length(headlines.tags) != 0 do %>
-                  <div class="flex gap-2">
-                    <%= for tag <- headlines.tags do %>
-                      <span class="text-red-600 text-sm">#{String.trim(tag)}</span>
-                    <% end %>
+  <div class="w-full">
+    <%= if length(@streams.headlines.inserts) > 0 do %>
+      <section class="relative h-cover">
+        <div class="md:grid grid-cols-4 gap-5">
+          <main class="col-span-4 space-y-14 pb-24">
+          <%= if @selected_category == "all"  do %>
+            <article>
+              <h1 class="text-2xl mb-3 font-bold">Новость дня</h1>
+              <div class="bg-white rounded-3xl h-fit">
+                <img
+                  src={@first_headline.header}
+                  class="w-full h-[55vh] object-cover rounded-3xl"
+                  alt="Header image"
+                />
+                <div class="p-4">
+                  <div class="flex justify-between items-center">
+                    <h1 class="bg-rose-400 text-white px-4 py-1 rounded-full font-black text-xl" style="font-family:'Montserrat Alternates', sans-serif;">
+                      {@first_headline.category}
+                    </h1>
+                    <p>1</p>
                   </div>
-                <% end %>
-              </div>
-            </div>
-          </div>
-        </div>
-      <% end %>
-    <% end %>
-
-    <div class="grid grid-cols-12 gap-8">
-      <div class="col-span-12 lg:col-span-8">
-        <div class="space-y-12" id="headlines-grid" phx-update="stream">
-          <%= for {id, headlines} <- @streams.headlines do %>
-            <article
-              id={id}
-              class="relative z-10 group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
-            >
-              <img
-                src={headlines.header || "/images/placeholder.jpg"}
-                alt={headlines.title}
-                class="absolute  w-full z-0 opacity-20 h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-              />
-              <div class="z-20 sticky">
-                <div class="relative h-[70px] overflow-hidden">
-                  <div class="p-8 z-10">
-                    <span class={[
-                      "px-4 py-2 rounded-full text-sm font-medium backdrop-blur-md shadow-lg",
-                      case headlines.category do
-                        "politics" -> "bg-blue-600/90 text-white"
-                        "technology" -> "bg-violet-600/90 text-white"
-                        "science" -> "bg-emerald-600/90 text-white"
-                        "sports" -> "bg-orange-600/90 text-white"
-                        _ -> "bg-gray-900/90 text-white"
-                      end
-                    ]}>
-                      {String.capitalize(headlines.category)}
-                    </span>
-                  </div>
-
-                  <div class="absolute flex gap-5 top-4 right-4 z-10">
-                    <%= if headlines.is_very_important do %>
-                      <div
-                        class=""
-                        title="Новость не прошла проверку на правдивость"
-                      >
-                        <div class="flex items-center gap-1.5 px-3 py-2 rounded-full animate-pulse bg-white/90 backdrop-blur-md text-rose-600 shadow-lg">
-                          <svg
-                            class="w-4 h-4 text-rose-400"
-                            viewBox="0 -0.5 21 21"
-                            version="1.1"
-                            xmlns="http://www.w3.org/2000/svg"
-                            xmlns:xlink="http://www.w3.org/1999/xlink"
-                            fill="currentColor"
-                          >
-                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                            <g
-                              id="SVGRepo_tracerCarrier"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                            >
-                            </g>
-                            <g id="SVGRepo_iconCarrier">
-                              <title>important_message [#1448]</title>
-
-                              <desc>Created with Sketch.</desc>
-
-                              <defs></defs>
-
-                              <g
-                                id="Page-1"
-                                stroke="none"
-                                stroke-width="1"
-                                fill="none"
-                                fill-rule="evenodd"
-                              >
-                                <g
-                                  id="Dribbble-Light-Preview"
-                                  transform="translate(-139.000000, -520.000000)"
-                                  fill="currentColor"
-                                >
-                                  <g id="icons" transform="translate(56.000000, 160.000000)">
-                                    <path
-                                      d="M94.55,365.007 L94.55,372.007 C94.55,372.559 94.0796,373.007 93.5,373.007 C92.9204,373.007 92.45,372.559 92.45,372.007 L92.45,365.007 C92.45,364.455 92.9204,364.007 93.5,364.007 C94.0796,364.007 94.55,364.455 94.55,365.007 L94.55,365.007 Z M94.55,375.007 C94.55,375.559 94.0796,376.007 93.5,376.007 C92.9204,376.007 92.45,375.559 92.45,375.007 C92.45,374.455 92.9204,374.007 93.5,374.007 C94.0796,374.007 94.55,374.455 94.55,375.007 L94.55,375.007 Z M101.9,377 C101.9,377.552 101.4296,378 100.85,378 L86.15,378 C85.5704,378 85.1,377.552 85.1,377 L85.1,363 C85.1,362.448 85.5704,362 86.15,362 L100.85,362 C101.4296,362 101.9,362.448 101.9,363 L101.9,377 Z M101.9,360 L85.1,360 C83.93975,360 83,360.899 83,362.003 L83,362.007 L83,378.007 C83,379.112 83.93975,380 85.1,380 L101.9,380 C103.06025,380 104,379.108 104,378.003 L104,362.007 C104,360.902 102.95,360 101.9,360 L101.9,360 Z"
-                                      id="important_message-[#1448]"
-                                    >
-                                    </path>
-                                  </g>
-                                </g>
-                              </g>
-                            </g>
-                          </svg>
-                          <span class="text-sm font-medium">ОЧЕНЬ ВАЖНО</span>
-                        </div>
-                      </div>
-                    <% end %>
-
-                    <%= if headlines.is_fake do %>
-                      <div
-                        class=""
-                        title="Новость не прошла проверку на правдивость"
-                      >
-                        <div class="flex items-center gap-1.5 px-3 py-2 rounded-full bg-white/90 backdrop-blur-md text-amber-600 shadow-lg">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-4 w-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                            />
-                          </svg>
-                          <span class="text-sm font-medium">ФЕЙК</span>
-                        </div>
-                      </div>
-                    <% end %>
-                  </div>
-                </div>
-
-                <div class="z-20 p-8">
-                  <h2
-                    class="text-2xl z-40 font-bold text-gray-900 mb-4 group-hover:text-indigo-600 transition-colors duration-200 cursor-pointer"
-                    phx-click={JS.navigate(~p"/news/headline/#{headlines}")}
-                  >
-                    {headlines.title}
-                  </h2>
-
-                  <p class="text-gray-600 text-lg leading-relaxed mb-6 line-clamp-3">
-                    {headlines.content}
-                  </p>
-
-                  <div class="flex items-center justify-between">
-                    <%= if length(headlines.tags) != 0 do %>
-                      <div class="flex flex-wrap gap-2">
-                        <%= for tag <- headlines.tags do %>
-                          <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors duration-200">
-                            #{String.trim(tag)}
-                          </span>
-                        <% end %>
-                      </div>
-                    <% end %>
-                  </div>
+                  <.link href={"/news/headline/#{@first_headline.id}"}>
+                    <p class="pt-3 text-2xl">
+                      {@first_headline.title}
+                    </p>
+                  </.link>
                 </div>
               </div>
             </article>
           <% end %>
-        </div>
-      </div>
 
-      <div class="col-span-12 lg:col-span-4">
-        <div class="bg-white rounded-xl shadow-sm p-6">
-          <h3 class="text-lg font-bold text-zinc-900 mb-4">Популярные тэги</h3>
-          <div class="flex flex-wrap gap-2">
-            <%= for {_id, headlines} <- @streams.headlines do %>
-              <%= if length(headlines.tags) != 0  && headlines.tags != "" do %>
-                <%= for tag <- headlines.tags do %>
-                  <span class="bg-zinc-100 hover:bg-zinc-200 text-zinc-600 px-3 py-1 rounded-full text-sm cursor-pointer">
-                    #{String.trim(tag)}
-                  </span>
+            <section>
+              <h1 class="text-2xl mb-5 font-bold  pb-5">{if @selected_category == "all", do: "Все новости", else: "Новости #{Helpers.convert_date_to_print(@selected_date)} по категории - #{Helpers.convert_category_to_print(@selected_category) }"}</h1>
+              <div class="md:grid grid-cols-3 gap-2">
+                <%= for {id, headlines} <- @streams.headlines do %>
+                  <article
+                    id={id}
+                    class="relative h-[40vh] group bg-gradient-to-t from-black to-zinc-800/50 rounded-md overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
+                  >
+                    <img
+                      src={headlines.header || "/images/placeholder.jpg"}
+                      alt={headlines.title}
+                      class="absolute w-full h-full object-cover opacity-40 z-0 transform group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <div class="absolute w-full bottom-0 px-6 z-20">
+                      <h2
+                        class="text-2xl font-bold text-white mb-4 cursor-pointer group-hover:text-white transition-colors duration-200"
+                        phx-click={JS.navigate(~p"/news/headline/#{headlines}")}
+                      >
+                        {headlines.title}
+                      </h2>
+                      <div class="md:flex w-full items-center pb-4">
+                        <div class="flex flex-1 items-center space-x-4">
+                          <img
+                            class="h-7 w-7 rounded-md"
+                            src={headlines.channel.header}
+                            alt="Channel logo"
+                          />
+                          <p class="text-xl text-zinc-200 font-['Merge_One']">{headlines.channel.name}</p>
+                        </div>
+                        <span class="text-zinc-200 font-['Montserrat_Alternates'] font-bold text-sm">
+                          {String.capitalize(headlines.category)}
+                        </span>
+                      </div>
+                    </div>
+                  </article>
                 <% end %>
-              <% end %>
-            <% end %>
-          </div>
+              </div>
+            </section>
+          </main>
         </div>
-      </div>
-    </div>
+      </section>
+    <% else %>
+      <%= if @selected_category == "all" do %>
+        <div class="max-w-4xl mx-auto mt-2 bg-white rounded-2xl pb-8 text-2xl text-center font-bold">
+          <img class="rounded-2xl h-[55vh] w-full" src="https://i.pinimg.com/originals/3d/2d/41/3d2d416c53e6d0b2d6b157edf1e4b1db.gif" alt="No news">
+          <h1 class="py-8">В настоящее время новостей нет 😵‍💫</h1>
+          <.link href="/news/new" class="text-sky-600 border-sky-600 border-2 px-4 py-2 rounded-md hover:bg-sky-400 hover:text-white hover:border-0 mt-6 font-bold text-xl">
+            Но я знаю новость!
+          </.link>
+        </div>
+      <% else %>
+        <div class="max-w-4xl mx-auto mt-2 bg-white rounded-2xl pb-8 text-2xl text-center font-bold">
+          <img class="rounded-2xl h-[55vh] w-full" src="https://i.pinimg.com/originals/3d/2d/41/3d2d416c53e6d0b2d6b157edf1e4b1db.gif" alt="No news">
+          <h1 class="py-8">В категории "{Helpers.convert_category_to_print(@selected_category)}" {if is_nil(@selected_date), do: "", else: Helpers.convert_date_to_print(@selected_date)} новостей нет ☕️</h1>
+          <.link href="/news/new" class="text-sky-600 border-sky-600 border-2 px-4 py-2 rounded-md hover:bg-sky-400 hover:text-white hover:border-0 mt-6 font-bold text-xl">
+            Но я знаю новость!
+          </.link>
+        </div>
+      <% end %>
+    <% end %>
   </div>
 </div>
+
+<.flash_group flash={@flash} />
 
 <.modal
   :if={@live_action in [:new, :edit]}
@@ -286,6 +115,7 @@
     title={@page_title}
     action={@live_action}
     headlines={@headlines}
+    current_user={@current_user}
     navigate={~p"/news"}
   />
 </.modal>

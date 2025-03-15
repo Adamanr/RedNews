@@ -1,29 +1,31 @@
 defmodule RednewsWeb.HeadlinesLive.Show do
   use RednewsWeb, :live_view
 
+  require Logger
+
+  alias Rednews.Repo
   alias Rednews.Posts
   alias Rednews.Accounts
-
-  require Logger
+  alias RednewsWeb.Helpers
 
   @impl true
   def mount(_params, session, socket) do
     {:ok,
      socket
-     |> assign(:current_user, Accounts.get_user_by_session_token(session["user_token"]))}
+     |> assign(:current_user, Helpers.get_current_user(session))}
   end
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
-    headline = Posts.get_headlines!(id)
+    headline = Posts.get_headlines!(id) |> Repo.preload(:channel)
+    me_like = if not is_nil(socket.assigns.current_user), do: Posts.me_like?(id, :headline, socket.assigns.current_user.id), else: false
 
     {:noreply,
      socket
-     |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:me_like, Posts.me_like?(id, :headline, socket.assigns.current_user.id))
+     |> assign(:page_title, headline.title)
      |> assign(:likes, Posts.likes(id, :headline))
-     |> assign(:me_author, Posts.me_author?(socket.assigns.current_user.id, headline.author))
-     |> assign(:headlines, headline)}
+     |> assign(:me_like, me_like)
+     |> assign(:headline, headline)}
   end
 
   @impl true

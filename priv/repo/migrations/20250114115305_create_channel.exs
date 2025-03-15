@@ -11,11 +11,11 @@ defmodule Rednews.Repo.Migrations.CreateChannel do
       add :additional, :map
       add :category, :string
       add :links, :string
-      add :author, references(:users, on_delete: :nothing)
+      add :user_id, references(:users, on_delete: :nothing)
 
       timestamps(type: :utc_datetime)
     end
 
-    create index(:channels, [:author])
+    create index(:channels, [:user_id])
   end
 end
