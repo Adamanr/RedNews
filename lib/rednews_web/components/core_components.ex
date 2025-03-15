@@ -510,7 +510,7 @@ defmodule RednewsWeb.CoreComponents do
   def menu(assigns) do
     ~H"""
       <div class="h-20 flex bg-white font-[Marmelad:Regular]">
-        <.link href="/" class="flex w-[11.5vw] md:text-3xl hidden md:block font-black px-6 px-2 h-full items-center space-x-3">RedNews</.link>
+        <.link href="/" class="flex w-[11.5vw] md:text-3xl md:flex hidden md:block font-black px-6 px-2 h-full items-center space-x-3">RedNews</.link>
         <div class="flex-1 px-6 md:text-xl text-md flex h-full items-center gap-6">
           <div class="h-full">
             <.link href="/news" class={"flex px-2 h-full  items-center space-x-3 #{if @current_path == "/news", do: "border-b-2 border-gray-800", else: "bg-white"}"}>
@@ -748,7 +748,7 @@ defmodule RednewsWeb.CoreComponents do
 
   def sidebar(assigns) do
     ~H"""
-    <div class="w-[12vw] mb-20 h-full flex flex-col space-y-8 px-4 py-2 z-30">
+    <div class="w-[12vw] mb-20 h-full flex flex-col space-y-8 pe-4 py-2 z-30">
       <div class="p-5 rounded-xl bg-white ">
         <h1 class="font-bold">Дата</h1>
         <ul class="mt-4 text-gray-600 space-y-2">

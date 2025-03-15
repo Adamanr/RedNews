@@ -71,8 +71,6 @@ defmodule RednewsWeb.ArticlesLive.FormComponent do
 
     @impl true
     def handle_event("save", %{"articles" => articles_params}, socket) do
-      IO.inspect(articles_params, label: "articles_params")
-
       case socket.assigns.action do
         :edit -> save_and_notify(socket, :update, socket.assigns.articles, articles_params)
         :new -> save_and_notify(socket, :create, articles_params)
@@ -86,7 +84,6 @@ defmodule RednewsWeb.ArticlesLive.FormComponent do
       args =
         if action == :update, do: [articles_or_params, articles_params], else: [articles_or_params]
 
-      IO.inspect(args, label: "args")
       case apply(save_fn, args) do
         {:ok, articles} ->
           notify_parent({:saved, articles})

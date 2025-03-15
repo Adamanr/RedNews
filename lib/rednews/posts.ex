@@ -269,9 +269,7 @@ defmodule Rednews.Posts do
 
   """
   def create_articles(attrs \\ %{}) do
-    IO.inspect(attrs, label: "create_articles")
     attrs = split_tag(attrs)
-    IO.inspect(attrs, label: "split_tag")
 
     %Articles{}
     |> Articles.changeset(attrs)
@@ -291,9 +289,7 @@ defmodule Rednews.Posts do
 
   """
   def update_articles(%Articles{} = articles, attrs) do
-    IO.inspect(attrs, label: "create_articles")
     attrs = split_tag(attrs)
-    IO.inspect(attrs, label: "split_tag")
 
     articles
     |> Articles.changeset(attrs)
@@ -326,9 +322,7 @@ defmodule Rednews.Posts do
 
   """
   def change_articles(%Articles{} = articles, attrs \\ %{}) do
-    IO.inspect(attrs, label: "create_articles")
     attrs = split_tag(attrs)
-    IO.inspect(attrs, label: "split_tag")
 
 
     Articles.changeset(articles, attrs)
@@ -481,13 +475,9 @@ defmodule Rednews.Posts do
 
   """
   def create_headlines(attrs \\ %{}) do
-    IO.inspect(attrs, label: "Attrs")
-
     attrs = split_tag(attrs)
 
     headlines = %Headlines{tags: attrs["tags"]}
-
-    IO.inspect(headlines, label: "Headlines")
 
     headlines
     |> Headlines.changeset(attrs)

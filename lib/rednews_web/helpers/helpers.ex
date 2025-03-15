@@ -41,7 +41,6 @@ defmodule RednewsWeb.Helpers do
     nil
   """
   def get_current_user(session) do
-    IO.inspect(session, label: "Current User Session")
     if not is_nil(session["user_token"]) do
       Accounts.get_user_by_session_token(session["user_token"])
     else

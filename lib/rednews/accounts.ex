@@ -540,8 +540,6 @@ defmodule Rednews.Accounts do
 
   """
   def create_channels(attrs \\ %{}) do
-    IO.inspect(attrs, label: "create_channels_attrs")
-
     %Channels{}
     |> Channels.changeset(attrs)
     |> Repo.insert()
