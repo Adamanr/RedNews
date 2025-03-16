@@ -9,16 +9,16 @@ defmodule RednewsWeb.CommentsLive.FormComponent do
     ~H"""
     <div class="comments-section ">
       <div class="relative ">
-        <h3 class="text-2xl font-bold text-gray-900 mb-6">Комментарии</h3>
+        <h3 class="text-2xl font-bold text-gray-900 mb-6">{gettext("Comments")}</h3>
         <%= if not is_nil(@current_user) do %>
           <.form for={@form} id="comment-form" phx-target={@myself} phx-submit="create_comment">
-              <.input
-                field={@form[:content]}
-                type="textarea"
-                placeholder="Оставьте свой комментарий..."
-                class="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 resize-none min-h-[120px]"
-                required
-              />
+            <.input
+              field={@form[:content]}
+              type="textarea"
+              placeholder={gettext("Leave your comment")}
+              class="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 resize-none min-h-[120px]"
+              required
+            />
 
             <div class="text-right mt-2 mb-4">
               <.button
@@ -33,12 +33,11 @@ defmodule RednewsWeb.CommentsLive.FormComponent do
                     d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
                   />
                 </svg>
-                Отправить
+                {gettext("Send")}
               </.button>
             </div>
           </.form>
         <% end %>
-
 
         <%= if @reply && @reply != %{} do %>
           <div class="my-6 bg-indigo-50 rounded-xl p-4 border border-indigo-100">
@@ -78,8 +77,8 @@ defmodule RednewsWeb.CommentsLive.FormComponent do
           </div>
         <% end %>
 
-        <%= if length(@comments) == 0 do%>
-            <h1 class="text-xl text-gray-500">Тут пока пусто</h1>
+        <%= if length(@comments) == 0 do %>
+          <h1 class="text-xl text-gray-500">Тут пока пусто</h1>
         <% else %>
           <div id="comments-list" class="space-y-4">
             <%= for item <- @comments, is_nil(item.comment.reply_id) do %>

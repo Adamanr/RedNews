@@ -3,7 +3,6 @@ defmodule RednewsWeb.HeadlinesLive.Index do
 
   alias Rednews.Posts
   alias Rednews.Repo
-  alias Rednews.Accounts
   alias RednewsWeb.Helpers
   alias Rednews.Posts.Headlines
 
@@ -12,13 +11,13 @@ defmodule RednewsWeb.HeadlinesLive.Index do
     headlines = Posts.list_headlines() |> Repo.preload(:channel)
 
     {:ok,
-      socket
-      |> assign(:first_headline, Enum.at(headlines, 0))
-      |> assign(:current_user, Helpers.get_current_user(session))
-      |> assign(:categories, Posts.list_categories())
-      |> assign(:selected_category, "all")
-      |> assign(:selected_date, "all")
-      |> stream(:headlines, headlines)}
+     socket
+     |> assign(:first_headline, Enum.at(headlines, 0))
+     |> assign(:current_user, Helpers.get_current_user(session))
+     |> assign(:categories, Posts.list_categories())
+     |> assign(:selected_category, "all")
+     |> assign(:selected_date, "all")
+     |> stream(:headlines, headlines)}
   end
 
   @impl true
@@ -30,32 +29,44 @@ defmodule RednewsWeb.HeadlinesLive.Index do
         {"category", category} ->
           socket
           |> assign(:selected_category, category)
-          |> assign_headlines(Posts.list_headlines(:category_and_date, %{category: category, date: socket.assigns[:selected_date]}) |> Repo.preload(:channel))
+          |> assign_headlines(
+            Posts.list_headlines(:category_and_date, %{category: category})
+            |> Repo.preload(:channel)
+          )
 
         {"tags", tags} ->
           socket
           |> assign(:selected_tags, tags)
-          |> assign_headlines(Posts.list_headlines(:tags, %{tags: tags}) |> Repo.preload(:channel))
+          |> assign_headlines(
+            Posts.list_headlines(:tags, %{tags: tags})
+            |> Repo.preload(:channel)
+          )
 
         {"date", date} ->
           socket
           |> assign(:selected_date, date)
-          |> assign_headlines(Posts.list_headlines(:category_and_date, %{category: socket.assigns[:selected_category], date: date}) |> Repo.preload(:channel))
+          |> assign_headlines(
+            Posts.list_headlines(:category_and_date, %{
+              category: socket.assigns[:selected_category],
+              date: date
+            })
+            |> Repo.preload(:channel)
+          )
 
         {_, "tags"} ->
           socket
           |> assign(:selected_tags, "all")
-          |> assign_headlines(Posts.list_headlines())
+          |> assign_headlines(Posts.list_headlines() |> Repo.preload(:channel))
 
         {_, "category"} ->
           socket
           |> assign(:selected_category, "all")
-          |> assign_headlines(Posts.list_headlines())
+          |> assign_headlines(Posts.list_headlines() |> Repo.preload(:channel))
 
         {_, "date"} ->
           socket
           |> assign(:selected_date, "all")
-          |> assign_headlines(Posts.list_headlines())
+          |> assign_headlines(Posts.list_headlines() |> Repo.preload(:channel))
 
         _ ->
           socket

@@ -20,69 +20,67 @@ defmodule Rednews.Posts do
   end
 
   @layout_categories [
-    {"Политика", %{name: :politic}},
-    {"Экономика", %{name: :economic}},
-    {"Общество", %{name: :social}},
-    {"Культура", %{name: :culture}},
-    {"Спорт", %{name: :sport}},
-    {"Наука и технологии", %{name: :science}},
-    {"Здоровье", %{name: :health}},
-    {"Образование", %{name: :education}},
-    {"Происшествия", %{name: :proisshestviya}},
-    {"Авто", %{name: :auto}},
-    {"Недвижимость", %{name: :nedvizhimost}},
-    {"Туризм и путешествия", %{name: :tourism}},
-    {"Экология", %{name: :ecology}},
-    {"Мода и стиль", %{name: :fashion}},
-    {"Кино и телевидение", %{name: :cinema}},
-    {"Музыка", %{name: :music}},
-    {"Игры и развлечения", %{name: :games}},
-    {"Бизнес", %{name: :business}},
-    {"Финансы", %{name: :finance}},
-    {"Мировые новости", %{name: :world_news}},
-    {"Региональные новости", %{name: :regional_news}},
-    {"Технологии", %{name: :technology}},
-    {"Криптовалюты", %{name: :cryptocurrency}},
-    {"Армия и оборона", %{name: :army}},
-    {"Сельское хозяйство", %{name: :agriculture}},
-    {"Энергетика", %{name: :energy}},
-    {"Транспорт", %{name: :transport}},
-    {"Погода", %{name: :weather}},
-    {"История", %{name: :history}},
-    {"Юмор", %{name: :humor}}
+    {"Politics", %{name: :politics}},
+    {"Economy", %{name: :economy}},
+    {"Society", %{name: :society}},
+    {"Culture", %{name: :culture}},
+    {"Sports", %{name: :sports}},
+    {"Science and Technology", %{name: :science_and_technology}},
+    {"Health", %{name: :health}},
+    {"Education", %{name: :education}},
+    {"Incidents", %{name: :incidents}},
+    {"Auto", %{name: :auto}},
+    {"Real Estate", %{name: :nedvizhimost}},
+    {"Tourism and Travel", %{name: :tourism}},
+    {"Ecology", %{name: :ecology}},
+    {"Fashion and Style", %{name: :fashion_and_style}},
+    {"Cinema and Television", %{name: :cinema_and_television}},
+    {"Music", %{name: :music}},
+    {"Games and Entertainment", %{name: :games_and_entertainment}},
+    {"Business", %{name: :business}},
+    {"Finance", %{name: :finance}},
+    {"World News", %{name: :world_news}},
+    {"Regional News", %{name: :regional_news}},
+    {"Technology", %{name: :technology}},
+    {"Cryptocurrencies", %{name: :cryptocurrencies}},
+    {"Agriculture", %{name: :agriculture}},
+    {"Energy", %{name: :energy}},
+    {"Transport", %{name: :transport}},
+    {"Weather", %{name: :weather}},
+    {"History", %{name: :history}},
+    {"Humor", %{name: :humor}}
   ]
 
   @categories [
-    "Политика",
-    "Экономика",
-    "Общество",
-    "Культура",
-    "Спорт",
-    "Наука и технологии",
-    "Здоровье",
-    "Образование",
-    "Происшествия",
-    "Авто",
-    "Недвижимость",
-    "Туризм и путешествия",
-    "Экология",
-    "Мода и стиль",
-    "Кино и телевидение",
-    "Музыка",
-    "Игры и развлечения",
-    "Бизнес",
-    "Финансы",
-    "Мировые новости",
-    "Региональные новости",
-    "Технологии",
-    "Криптовалюты",
-    "Армия и оборона",
-    "Сельское хозяйство",
-    "Энергетика",
-    "Транспорт",
-    "Погода",
-    "История",
-    "Юмор"
+    "Politics",
+    "Economy",
+    "Society",
+    "Culture",
+    "Sports",
+    "Science and Technology",
+    "Health",
+    "Education",
+    "Incidents",
+    "Auto",
+    "Real Estate",
+    "Tourism and Travel",
+    "Ecology",
+    "Fashion and Style",
+    "Cinema and Television",
+    "Music",
+    "Games and Entertainment",
+    "Business",
+    "Finance",
+    "World News",
+    "Regional News",
+    "Technology",
+    "Cryptocurrencies",
+    "Agriculture",
+    "Energy",
+    "Transport",
+    "Weather",
+    "History",
+    "Humor"
   ]
 
   @doc """
@@ -167,20 +165,34 @@ defmodule Rednews.Posts do
   def list_article(options \\ :default, params \\ %{}) do
     query =
       case options do
-        :default -> from(a in Articles)
-        :category -> from(a in Articles, where: a.category == ^params[:category])
-        :tags -> from(a in Articles, where: ^params[:tags] in a.tags)
+        :default ->
+          from(a in Articles)
+
+        :category ->
+          from(a in Articles, where: a.category == ^params[:category])
+
+        :tags ->
+          from(a in Articles, where: ^params[:tags] in a.tags)
+
         :date ->
           case params[:date] do
             "today" ->
               from(a in Articles, where: fragment("?::date = CURRENT_DATE", a.inserted_at))
+
             "week" ->
-              from(a in Articles, where: fragment("? >= CURRENT_DATE - INTERVAL '7 days'", a.inserted_at))
+              from(a in Articles,
+                where: fragment("? >= CURRENT_DATE - INTERVAL '7 days'", a.inserted_at)
+              )
+
             "month" ->
-              from(a in Articles, where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", a.inserted_at))
+              from(a in Articles,
+                where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", a.inserted_at)
+              )
+
             _ ->
               from(a in Articles)
           end
+
         :category_and_date ->
           query = from(a in Articles)
 
@@ -195,16 +207,25 @@ defmodule Rednews.Posts do
             case params[:date] do
               "today" ->
                 from(a in query, where: fragment("?::date = CURRENT_DATE", a.inserted_at))
+
               "week" ->
-                from(a in query, where: fragment("? >= CURRENT_DATE - INTERVAL '7 days'", a.inserted_at))
+                from(a in query,
+                  where: fragment("? >= CURRENT_DATE - INTERVAL '7 days'", a.inserted_at)
+                )
+
               "month" ->
-                from(a in query, where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", a.inserted_at))
+                from(a in query,
+                  where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", a.inserted_at)
+                )
+
               _ ->
                 query
             end
 
           query
-        _ -> raise ArgumentError, "Unknown options: #{options}"
+
+        _ ->
+          raise ArgumentError, "Unknown options: #{options}"
       end
 
     Repo.all(query)
@@ -324,7 +345,6 @@ defmodule Rednews.Posts do
   def change_articles(%Articles{} = articles, attrs \\ %{}) do
     attrs = split_tag(attrs)
 
-
     Articles.changeset(articles, attrs)
   end
 
@@ -350,21 +370,37 @@ defmodule Rednews.Posts do
   def list_headlines(options \\ :default, params \\ %{}) do
     query =
       case options do
-        :default -> from(h in Headlines)
-        :category -> from(h in Headlines, where: h.category == ^params[:category])
-        :tags -> from(h in Headlines, where: ^params[:tags] in h.tags)
-        :channel -> from(h in Headlines, where: h.channel_id == ^params[:channel])
+        :default ->
+          from(h in Headlines)
+
+        :category ->
+          from(h in Headlines, where: h.category == ^params[:category])
+
+        :tags ->
+          from(h in Headlines, where: ^params[:tags] in h.tags)
+
+        :channel ->
+          from(h in Headlines, where: h.channel_id == ^params[:channel])
+
         :date ->
           case params[:date] do
             "today" ->
               from(h in Headlines, where: fragment("?::date = CURRENT_DATE", h.inserted_at))
+
             "week" ->
-              from(h in Headlines, where: fragment("? >= CURRENT_DATE - INTERVAL '7 days'", h.inserted_at))
+              from(h in Headlines,
+                where: fragment("? >= CURRENT_DATE - INTERVAL '7 days'", h.inserted_at)
+              )
+
             "month" ->
-              from(h in Headlines, where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", h.inserted_at))
+              from(h in Headlines,
+                where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", h.inserted_at)
+              )
+
             _ ->
               from(h in Headlines)
           end
+
         :category_and_date ->
           query = from(h in Headlines)
 
@@ -379,16 +415,25 @@ defmodule Rednews.Posts do
             case params[:date] do
               "today" ->
                 from(h in query, where: fragment("?::date = CURRENT_DATE", h.inserted_at))
+
               "week" ->
-                from(h in query, where: fragment("? >= CURRENT_DATE - INTERVAL '7 days'", h.inserted_at))
+                from(h in query,
+                  where: fragment("? >= CURRENT_DATE - INTERVAL '7 days'", h.inserted_at)
+                )
+
               "month" ->
-                from(h in query, where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", h.inserted_at))
+                from(h in query,
+                  where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", h.inserted_at)
+                )
+
               _ ->
                 query
             end
 
           query
-        _ -> raise ArgumentError, "Unknown options: #{options}"
+
+        _ ->
+          raise ArgumentError, "Unknown options: #{options}"
       end
 
     Repo.all(query)

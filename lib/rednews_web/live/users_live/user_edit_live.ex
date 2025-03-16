@@ -1,4 +1,4 @@
-defmodule RednewsWeb.UserSettingsLive do
+defmodule RednewsWeb.UserEditLive do
   use RednewsWeb, :live_view
 
   alias Rednews.Accounts
@@ -6,7 +6,7 @@ defmodule RednewsWeb.UserSettingsLive do
   def render(assigns) do
     ~H"""
     <.header class="text-center mt-5">
-      Account Settings
+      Edit account params
       <:subtitle>Manage your account email address and password settings</:subtitle>
     </.header>
 
@@ -124,7 +124,7 @@ defmodule RednewsWeb.UserSettingsLive do
         Accounts.deliver_user_update_email_instructions(
           applied_user,
           user.email,
-          &url(~p"/users/settings/confirm_email/#{&1}")
+          &url(~p"/users/edit/confirm_email/#{&1}")
         )
 
         info = "A link to confirm your email change has been sent to the new address."

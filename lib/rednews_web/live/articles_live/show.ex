@@ -4,22 +4,23 @@ defmodule RednewsWeb.ArticlesLive.Show do
   require Logger
 
   alias Rednews.Posts
-  alias Rednews.Accounts
   alias Rednews.Repo
   alias RednewsWeb.Helpers
 
   @impl true
   def mount(_params, session, socket) do
-    {:ok, socket
-      |> assign(:page_title, page_title(socket.assigns.live_action))
-      |> assign(:current_user, Helpers.get_current_user(session))}
+    {:ok,
+     socket
+     |> assign(:page_title, page_title(socket.assigns.live_action))
+     |> assign(:current_user, Helpers.get_current_user(session))}
   end
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
     %{current_user: current_user} = socket.assigns
 
-    me_like = if not is_nil(current_user), do: Posts.me_like?(id, :article, current_user.id), else: false
+    me_like =
+      if not is_nil(current_user), do: Posts.me_like?(id, :article, current_user.id), else: false
 
     {:noreply,
      socket

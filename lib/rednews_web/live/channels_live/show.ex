@@ -7,7 +7,6 @@ defmodule RednewsWeb.ChannelsLive.Show do
   alias Rednews.Posts
   alias Rednews.Repo
   alias RednewsWeb.Helpers
-  alias Rednews.Posts.Headlines
 
   @impl true
   def mount(%{"id" => id}, session, socket) do

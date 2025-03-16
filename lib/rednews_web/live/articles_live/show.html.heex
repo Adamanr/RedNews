@@ -1,7 +1,10 @@
 <div class="mb-20">
   <article class="rounded-xl mt-2">
     <div class="relative mx-auto max-w-7xl">
-      <img class="active:z-30 active:h-[85vh] active:max-w-full active:object-cover w-full h-[70vh] object-cover rounded-2xl " src={@article.header} />
+      <img
+        class="active:z-30 active:h-[85vh] active:max-w-full active:object-cover w-full h-[70vh] object-cover rounded-2xl "
+        src={@article.header}
+      />
 
       <div class="absolute bottom-5 left-5" style="font-family:'Merge One', sans-serif;">
         <%= if @me_like do %>
@@ -10,7 +13,7 @@
             phx-value-id={@article.id}
             class="px-3 items-center space-x-2 flex py-1 rounded-full bg-white "
           >
-            <p class="text-xl text-rose-500 font-bold">Мне нравится</p>
+            <p class="text-xl text-rose-500 font-bold">{gettext("I like")}</p>
             <svg
               class="w-6 h-6 text-rose-400 fill-rose-400"
               fill="none"
@@ -31,7 +34,7 @@
             phx-value-id={@article.id}
             class="px-3 items-center space-x-2 flex py-1 rounded-full bg-white"
           >
-            <p class="text-xl font-bold">Нравится?</p>
+            <p class="text-xl font-bold">{gettext("You like?")}</p>
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
@@ -45,7 +48,6 @@
       </div>
     </div>
 
-
     <div class="p-5 max-w-7xl mx-auto bg-white rounded-lg mt-5">
       <h1 class="pb-10 text-3xl font-bold">{@article.title}</h1>
       <div class="prose prose-lg leading-7 h-full w-full ">
@@ -54,12 +56,15 @@
     </div>
 
     <div class="max-w-7xl gap-5 mt-5 mx-auto md:grid grid-cols-2">
-      <div class="h-fit w-full bg-white p-5 rounded-md" style="font-family:'Merge One', sans-serif;">
+      <div
+        class="h-fit w-full bg-white p-5 rounded-md"
+        style="font-family:'Merge One', sans-serif;"
+      >
         <div class="flex space-y-3 flex-col ">
-          <h3 class="text-2xl font-bold text-gray-900">Доп. информация</h3>
+          <h3 class="text-2xl font-bold text-gray-900">{gettext("Additional information")}</h3>
 
           <div class="flex space-x-5 items-center ">
-            <h1>Автор:</h1>
+            <h1>{gettext("Author")}:</h1>
             <.link href={"/users/user/#{@article.user_id}"} class="flex">
               <img src={@article.user.avatar} class="w-10 h-10 rounded-lg self-center" />
               <p class="py-2 ps-2">{@article.user.username}</p>
@@ -67,19 +72,19 @@
           </div>
           <%= if not is_nil(@article.tags) do %>
             <div class="flex space-x-5 items-center ">
-              <h1>Тэги:</h1>
+              <h1>{gettext("Tags")}:</h1>
               <%= for tag <- @article.tags  do %>
                 <p>#{tag}</p>
               <% end %>
             </div>
           <% end %>
           <div class="flex space-x-5 items-center ">
-            <h1>Категория:</h1>
-            <p>{@article.category}</p>
+            <h1>{gettext("Category")}:</h1>
+            <p>{Gettext.gettext(RednewsWeb.Gettext, @article.category)}</p>
           </div>
           <%= if not is_nil(@article.additional) do %>
             <div class="items-center w-1/2">
-              <h1 class="mb-4">Дополнительные параметры:</h1>
+              <h1 class="mb-4">{gettext("Additional parameters")}</h1>
               <%= for {k, v} <- @article.additional do %>
                 <div class="flex items-center">
                   <p class="whitespace-nowrap">{k}:</p>
@@ -89,7 +94,7 @@
             </div>
           <% end %>
           <%= if not is_nil(@current_user) and @article.user_id == @current_user.id do %>
-            <h3 class="text-2xl font-bold py-2 text-gray-900">Действия</h3>
+            <h3 class="text-2xl font-bold py-2 text-gray-900">{gettext("Actions")}</h3>
 
             <div class="flex space-x-2">
               <.link
@@ -97,49 +102,15 @@
                 data-confirm="Are you sure?"
                 class="inline-flex w-1/2 items-center text-cetner gap-2 bg-gray-400 text-white px-4 py-2 rounded-md text-xl font-medium hover:bg-rose-400 transition-colors"
               >
-                <svg
-                  class="w-5 h-5"
-                  viewBox="0 -0.5 21 21"
-                  version="1.1"
-                  xmlns="http://www.w3.org/2000/svg"
-                  xmlns:xlink="http://www.w3.org/1999/xlink"
-                  fill="currentColor"
-                >
-                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                  <g id="SVGRepo_iconCarrier">
-                    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                      <g
-                        id="Dribbble-Light-Preview"
-                        transform="translate(-179.000000, -360.000000)"
-                        fill="currentColor"
-                      >
-                        <g id="icons" transform="translate(56.000000, 160.000000)">
-                          <path
-                            d="M130.35,216 L132.45,216 L132.45,208 L130.35,208 L130.35,216 Z M134.55,216 L136.65,216 L136.65,208 L134.55,208 L134.55,216 Z M128.25,218 L138.75,218 L138.75,206 L128.25,206 L128.25,218 Z M130.35,204 L136.65,204 L136.65,202 L130.35,202 L130.35,204 Z M138.75,204 L138.75,200 L128.25,200 L128.25,204 L123,204 L123,206 L126.15,206 L126.15,220 L140.85,220 L140.85,206 L144,206 L144,204 L138.75,204 Z"
-                            id="delete-[#1487]"
-                          >
-                          </path>
-                        </g>
-                      </g>
-                    </g>
-                  </g>
-                </svg>
-                Delete
+                <img src="/images/trash.svg" class="h-5 w-5" />
+                {gettext("Delete")}
               </.link>
               <.link
                 patch={~p"/articles/article/#{@article}/show/edit"}
                 class="inline-flex w-1/2 items-center gap-2 bg-gray-400 text-white px-4 py-2 rounded-md text-xl font-medium hover:bg-amber-400 transition-colors"
               >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                  />
-                </svg>
-                {page_title(:edit)}
+                <img src="/images/edit.svg" class="h-5 w-5" />
+                {gettext("Edit")}
               </.link>
             </div>
           <% end %>

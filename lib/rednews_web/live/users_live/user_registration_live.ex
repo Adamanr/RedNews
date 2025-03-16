@@ -7,16 +7,15 @@ defmodule RednewsWeb.UserRegistrationLive do
   def render(assigns) do
     ~H"""
     <div class="relative flex items-center justify-center min-h-screen bg-[#bdbdbd]">
-      <div class="mx-auto max-w-md px-5 bg-opacity-50 py-8 bg-white shadow-md rounded-lg flex-shrink-0">
+      <div class="w-[25vw] mx-auto max-w-md px-5 bg-opacity-50 py-8 bg-white shadow-md rounded-lg flex-shrink-0">
         <.header class=" mb-6">
-          <h1 class="text-3xl font-bold">Регистрация</h1>
+          <h1 class="text-3xl font-bold">{gettext("Registration")}</h1>
           <:subtitle>
             <p class="text-sm text-gray-600 mt-2">
-              Уже зарегистрированы?
+              {gettext("Already registered?")}
               <.link navigate={~p"/users/log_in"} class="font-semibold  text-brand hover:underline">
-                Войдите
+                {gettext("Log in to your account")}
               </.link>
-              в свою учетную запись.
             </p>
           </:subtitle>
         </.header>
@@ -33,7 +32,7 @@ defmodule RednewsWeb.UserRegistrationLive do
           >
             <.error :if={@check_errors}>
               <div class="text-red-600 text-sm font-medium mb-4">
-                Упс, что-то пошло не так! Проверьте ошибки ниже.
+                {gettext("Oops, something went wrong! Check the errors below")}
               </div>
             </.error>
 
@@ -41,32 +40,32 @@ defmodule RednewsWeb.UserRegistrationLive do
             <.input
               field={@form[:password]}
               type="password"
-              label="Пароль"
+              label={gettext("Password")}
               required
               class="mb-4"
             />
             <.input
               field={@form[:avatar]}
               type="text"
-              label="Ссылка на аватар"
-              placeholder="https://example.com/avatar.png"
+              label={gettext("Avatar URL")}
+              placeholder={gettext("https://example.com/avatar.png")}
               class="mb-4"
             />
             <.input field={@form[:login]} type="text" label="Логин" required class="mb-4" />
             <.input
               field={@form[:username]}
               type="text"
-              label="Имя пользователя"
+              label={gettext("Username")}
               required
               class="mb-4"
             />
 
             <:actions>
               <.button
-                phx-disable-with="Создание учетной записи..."
+                phx-disable-with={gettext("Creating an account")}
                 class="w-full bg-brand text-white py-2 px-4 rounded hover:bg-brand-dark"
               >
-                Создать учетную запись
+                {gettext("Create Account")}
               </.button>
             </:actions>
           </.simple_form>

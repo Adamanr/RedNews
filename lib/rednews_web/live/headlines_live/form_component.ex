@@ -3,12 +3,13 @@ defmodule RednewsWeb.HeadlinesLive.FormComponent do
 
   alias Rednews.Posts
   alias Rednews.Accounts
+  alias RednewsWeb.Helpers
 
   @impl true
   def render(assigns) do
     ~H"""
     <div class="bg-white p-5 rounded-lg">
-      <p class="font-bold text-xl">Создание новости</p>
+      <p class="font-bold text-xl">{gettext("Create news")}</p>
 
       <.simple_form
         for={@form}
@@ -17,48 +18,49 @@ defmodule RednewsWeb.HeadlinesLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:title]} type="text" label="Заголовок" />
+        <.input field={@form[:title]} type="text" label={gettext("Title")} />
         <div class="grid grid-cols-2 gap-5">
           <.input
             field={@form[:category]}
             type="select"
-            label="Категория"
-            options={Posts.list_categories()}
+            label={gettext("Category")}
+            options={Helpers.translate_options(Posts.list_categories())}
           />
           <.input
             field={@form[:tags]}
             type="text"
-            label="Тэги (через запятую)"
+            label={gettext("Tags (Example: Games,News)")}
             value={Enum.join(@headlines.tags || [], ", ")}
-            placeholder="Игры, Новости"
+            placeholder={gettext("Games,News")}
           />
         </div>
 
         <div class="grid grid-cols-2 gap-5">
           <%= if length(Accounts.list_user_channels(assigns.current_user.id)) == 0 do %>
             <h1 class="text-rose-400 font-bold">
-              Для создания новости вам нужен канал!
-              <a class="text-sky-600" href="/channels/new"> Создать канал </a>
+              {gettext("To create news, you need a channel!")}
+              <a class="text-sky-600" href="/channels/new">{gettext("Create channel")}</a>
             </h1>
           <% else %>
             <.input
               field={@form[:channel_id]}
               type="select"
-              label="Автор"
-              options={Enum.map(Accounts.list_user_channels(assigns.current_user.id), &{&1.name, &1.id})}
+              label={gettext("Author")}
+              options={
+                Enum.map(Accounts.list_user_channels(assigns.current_user.id), &{&1.name, &1.id})
+              }
             />
           <% end %>
 
-          <.input field={@form[:header]} type="text" label="Картинка новости (URL)" />
+          <.input field={@form[:header]} type="text" label={gettext("News image URL")} />
         </div>
 
-        <.input field={@form[:content]} type="textarea" label="Текст новости" />
+        <.input field={@form[:content]} type="textarea" label={gettext("News text")} />
 
         <:actions>
           <div class="flex place-items-end text-white font-bold w-full space-x-4">
             <div class="flex-1"></div>
-            <.button class="bg-gray-600" disabled>В Черновик</.button>
-            <.button class="bg-green-600" phx-disable-with="Saving...">Опубликовать</.button>
+            <.button class="bg-green-600" phx-disable-with="Saving...">{gettext("Publish")}</.button>
           </div>
         </:actions>
       </.simple_form>

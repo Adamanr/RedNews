@@ -41,6 +41,10 @@ config :esbuild,
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
 
+config :rednews, RednewsWeb.Gettext,
+  default_locale: "en",
+  locales: ~w(en ru)
+
 # Configure tailwind (the version is required)
 config :tailwind,
   version: "3.4.3",

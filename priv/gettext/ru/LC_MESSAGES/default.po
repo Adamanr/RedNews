@@ -1,0 +1,410 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new messages manually only if they're dynamic
+## messages that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here has no
+## effect: edit them in PO (.po) files instead.
+#
+msgid ""
+msgstr ""
+
+#: lib/rednews_web/components/core_components.ex:694
+#, elixir-autogen, elixir-format
+msgid "Actions"
+msgstr "Действия"
+
+#: lib/rednews_web/components/core_components.ex:227
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr "Пытаюсь восстановить соединение"
+
+#: lib/rednews_web/components/core_components.ex:218
+#, elixir-autogen, elixir-format
+msgid "Error!"
+msgstr "Ошибка!"
+
+#: lib/rednews_web/components/core_components.ex:239
+#, elixir-autogen, elixir-format
+msgid "Hang in there while we get back on track"
+msgstr "Подождите, мы скоро восстановим работу"
+
+#: lib/rednews_web/components/core_components.ex:234
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr "Что-то пошло не так!"
+
+#: lib/rednews_web/components/core_components.ex:217
+#, elixir-autogen, elixir-format
+msgid "Success!"
+msgstr "Успех!"
+
+#: lib/rednews_web/components/core_components.ex:222
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr "Нет подключения к интернету"
+
+#: lib/rednews_web/components/core_components.ex:79
+#: lib/rednews_web/components/core_components.ex:161
+#, elixir-autogen, elixir-format
+msgid "close"
+msgstr "закрыть"
+
+msgid "News"
+msgstr "Новости"
+
+msgid "Articles"
+msgstr "Статьи"
+
+msgid "Channels"
+msgstr "Каналы"
+
+msgid "All Channels"
+msgstr "Все каналы"
+
+msgid "Date"
+msgstr "Дата"
+
+msgid "Today"
+msgstr "За сегодня"
+
+msgid "Week"
+msgstr "За неделю"
+
+msgid "Month"
+msgstr "За месяц"
+
+msgid "All"
+msgstr "Все"
+
+msgid "All news"
+msgstr "Все новости"
+
+msgid "All articles"
+msgstr "Все статьи"
+
+msgid "All channels"
+msgstr "Все каналы"
+
+msgid "News of the day"
+msgstr "Новость дня"
+
+msgid "Author"
+msgstr "Автор"
+
+msgid "About channel"
+msgstr "О канале"
+
+msgid "Edit"
+msgstr "Редактировать"
+
+msgid "Delete"
+msgstr "Удалить"
+
+msgid "Go to link"
+msgstr "Перейти по ссылке"
+
+msgid "Latest news"
+msgstr "Последние новости"
+
+msgid "Additional information"
+msgstr "Дополнительная информация"
+
+msgid "Comments"
+msgstr "Комментарии"
+
+msgid "Send"
+msgstr "Отправить"
+
+msgid "I like"
+msgstr "Мне нравится"
+
+msgid "You like?"
+msgstr "Вам нравится?"
+
+msgid "Tags"
+msgstr "Теги"
+
+msgid "Category"
+msgstr "Категория"
+
+msgid "Politics"
+msgstr "Политика"
+
+msgid "Economy"
+msgstr "Экономика"
+
+msgid "Society"
+msgstr "Общество"
+
+msgid "Culture"
+msgstr "Культура"
+
+msgid "Sports"
+msgstr "Спорт"
+
+msgid "Science and Technology"
+msgstr "Наука и технологии"
+
+msgid "Health"
+msgstr "Здоровье"
+
+msgid "Education"
+msgstr "Образование"
+
+msgid "Incidents"
+msgstr "Происшествия"
+
+msgid "Auto"
+msgstr "Авто"
+
+msgid "Real Estate"
+msgstr "Недвижимость"
+
+msgid "Tourism and Travel"
+msgstr "Туризм и путешествия"
+
+msgid "Ecology"
+msgstr "Экология"
+
+msgid "Fashion and Style"
+msgstr "Мода и стиль"
+
+msgid "Cinema and Television"
+msgstr "Кино и телевидение"
+
+msgid "Music"
+msgstr "Музыка"
+
+msgid "Games and Entertainment"
+msgstr "Игры и развлечения"
+
+msgid "Business"
+msgstr "Бизнес"
+
+msgid "Finance"
+msgstr "Финансы"
+
+msgid "World News"
+msgstr "Мировые новости"
+
+msgid "Regional News"
+msgstr "Региональные новости"
+
+msgid "Technology"
+msgstr "Технологии"
+
+msgid "Cryptocurrencies"
+msgstr "Криптовалюты"
+
+msgid "Army and Defense"
+msgstr "Армия и оборона"
+
+msgid "Agriculture"
+msgstr "Сельское хозяйство"
+
+msgid "Energy"
+msgstr "Энергетика"
+
+msgid "Transport"
+msgstr "Транспорт"
+
+msgid "Weather"
+msgstr "Погода"
+
+msgid "History"
+msgstr "История"
+
+msgid "Humor"
+msgstr "Юмор"
+
+msgid "I will write!"
+msgstr "Я напишу!"
+
+msgid "I know the news!"
+msgstr "Я знаю новости!"
+
+msgid "I will create!"
+msgstr "Я создам!"
+
+msgid "Reading time: %{time} min"
+msgstr "Время чтения: %{time} мин"
+
+msgid "There are no articles in the %{category} category for %{date}"
+msgstr "В категории %{category} %{date} статей нет"
+
+msgid "Articles %{date} by category - %{category}"
+msgstr "Статьи %{date} по категории - %{category}"
+
+msgid "There are no news in the %{category} category for %{date}"
+msgstr "В категории %{category} %{date} новостей нет"
+
+msgid "News %{date} by category - %{category}"
+msgstr "Новости %{date} по категории - %{category}"
+
+msgid "There are no channels in the %{category} category for %{date}"
+msgstr "В категории %{category} %{date} каналов нет"
+
+msgid "Channels %{date} by category - %{category}"
+msgstr "Каналы %{date} по категории - %{category}"
+
+msgid "Verified: Fake news"
+msgstr "Проверено: Фейковая новость"
+
+msgid "Reliable information"
+msgstr "Достоверная информация"
+
+msgid "No verification conducted"
+msgstr "Проверка не проводилась"
+
+msgid "Relevance"
+msgstr "Актуальность"
+
+msgid "Important"
+msgstr "Важно"
+
+msgid "Importance"
+msgstr "Важность"
+
+msgid "Not important"
+msgstr "Не важно"
+
+msgid "Not defined"
+msgstr "Не определено"
+
+msgid "Leave your comment"
+msgstr "Оставьте свой комментарий"
+
+msgid "Creator"
+msgstr "Создатель"
+
+msgid "Collapse"
+msgstr "Свернуть"
+
+msgid "Expand"
+msgstr "Развернуть"
+
+msgid "Log out"
+msgstr "Выйти"
+
+msgid "Login"
+msgstr "Войти"
+
+msgid "Create"
+msgstr "Создать"
+
+msgid "Select what you want to create"
+msgstr "Выберите что хотите создать"
+
+msgid "Create news"
+msgstr "Создать новость"
+
+msgid "Create channel"
+msgstr "Создать канал"
+
+msgid "Create article"
+msgstr "Создать статью"
+
+msgid "There is not what you want to do?"
+msgstr "Нет того, что вы хотите сделать?"
+
+msgid "Check if this is in the project's Github issue"
+msgstr "Проверьте, есть ли это в issue  Github проекта"
+
+msgid "Posts"
+msgstr "Посты"
+
+msgid "Authorization"
+msgstr "Авторизация"
+
+msgid "Registration"
+msgstr "Регистрация"
+
+msgid "Not registered yet?"
+msgstr "Ещё не зарегистрированы?"
+
+msgid "Register"
+msgstr "Зарегистрируйтесь"
+
+msgid "Email"
+msgstr "Почта"
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "Remember me"
+msgstr "Запомнить меня"
+
+msgid "Forgot password?"
+msgstr "Забыли пароль?"
+
+msgid "Already registered?"
+msgstr "Уже зарегистрированы?"
+
+msgid "Log in to your account"
+msgstr "Войдите в свою учетную запись"
+
+msgid "Oops, something went wrong! Check the errors below"
+msgstr "Упс, что-то пошло не так! Проверьте ошибки ниже"
+
+msgid "Avatar URL"
+msgstr "Ссылка на аватар"
+
+msgid "Username"
+msgstr "Имя пользователя"
+
+msgid "Create Account"
+msgstr "Создать учетную запись"
+
+msgid "Creating an account"
+msgstr "Создание учетной записи"
+
+msgid "Logo URL"
+msgstr "Ссылка на логотип"
+
+msgid "Background URL"
+msgstr "Ссылка на фон"
+
+msgid "Tags (Example: Games,News)"
+msgstr "Теги (Пример: Игры, Новости)"
+
+msgid "To create news, you need a channel!"
+msgstr "Для создания новости вам нужен канал!"
+
+msgid "News image URL"
+msgstr "Ссылка на картинку новости"
+
+msgid "Channel image URL"
+msgstr "Ссылка на картинку канала"
+
+msgid "News text"
+msgstr "Текст новости"
+
+msgid "Publish"
+msgstr "Опубликовать"
+
+msgid "Games,News"
+msgstr "Игры,Новости"
+
+msgid "Title"
+msgstr "Заголовок"
+
+msgid "Articles text"
+msgstr "Текст статьи"
+
+msgid "Article image URL"
+msgstr "Ссылка на картинку статьи"
+
+msgid "Name"
+msgstr "Название"
+
+msgid "Channel Link"
+msgstr "Ссылка на канал"
+
+msgid "Description"
+msgstr "Описание"
+
+msgid "Categories"
+msgstr "Категории"

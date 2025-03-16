@@ -18,7 +18,6 @@ defmodule RednewsWeb.CoreComponents do
 
   use Gettext, backend: RednewsWeb.Gettext
 
-  alias RednewsWeb.Components.TableContent
   alias Phoenix.LiveView.JS
 
   @doc """
@@ -501,129 +500,171 @@ defmodule RednewsWeb.CoreComponents do
     """
   end
 
+  def create_modal(assigns) do
+    ~H"""
+    <button type="button" id="openModalButton" class="me-5 ms-2">
+      <img src="/images/add.svg" class="h-11 w-11 text-black" />
+    </button>
+
+    <div
+      class="fixed antialiased inset-0 bg-stone-800 bg-opacity-75 flex justify-center items-center opacity-0 pointer-events-none transition-opacity duration-300 ease-out z-[9999]"
+      id="exampleModalWeb3"
+      aria-hidden="true"
+    >
+      <div class="bg-white rounded-lg w-9/12 sm:w-7/12 md:w-5/12 lg:w-3/12 scale-95 transition-transform duration-300 ease-out">
+        <div class="border-b border-stone-200 p-4 flex justify-between items-start">
+          <div class="flex flex-col">
+            <h1 class="text-lg text-stone-800 font-semibold">{gettext("Create")}</h1>
+            <p class="font-sans text-base text-stone-500">
+              {gettext("Select what you want to create")}
+            </p>
+          </div>
+          <button
+            type="button"
+            id="closeModalButton"
+            aria-label="Close"
+            class="text-stone-500 hover:text-stone-800"
+          >
+            &times;
+          </button>
+        </div>
+
+        <div class="p-4 text-stone-500">
+          <p class="font-sans text-base text-stone-800 dark:text-white mb-2 font-semibold">
+            {gettext("Posts")}
+          </p>
+          <div class="space-y-10 ">
+            <.link href="/news/new" class="mb-5">
+              <button class="inline-flex space-x-4 w-full gap-2 items-center justify-center border align-middle select-none font-sans font-medium text-center duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed focus:shadow-none text-sm py-2 px-4 shadow-sm hover:shadow-md bg-stone-200 hover:bg-stone-100 relative bg-gradient-to-b from-white to-white border-stone-200 text-stone-700 rounded-lg hover:bg-gradient-to-b hover:from-stone-50 hover:to-stone-50 hover:border-stone-200 after:absolute after:inset-0 after:rounded-[inherit] after:box-shadow after:shadow-[inset_0_1px_0px_rgba(255,255,255,0.35),inset_0_-1px_0px_rgba(0,0,0,0.20)] after:pointer-events-none transition">
+                <img alt="metamask" src="/images/news.svg" class="h-5 w-5" />
+                <p class="font-sans text-base text-inherit font-semibold">
+                  {gettext("Create news")}
+                </p>
+              </button>
+            </.link>
+            <br />
+            <.link href="/articles/new" class="mt-4">
+              <button class="inline-flex mt-3 space-x-4 w-full gap-2 items-center justify-center border align-middle select-none font-sans font-medium text-center duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed focus:shadow-none text-sm py-2 px-4 shadow-sm hover:shadow-md bg-stone-200 hover:bg-stone-100 relative bg-gradient-to-b from-white to-white border-stone-200 text-stone-700 rounded-lg hover:bg-gradient-to-b hover:from-stone-50 hover:to-stone-50 hover:border-stone-200 after:absolute after:inset-0 after:rounded-[inherit] after:box-shadow after:shadow-[inset_0_1px_0px_rgba(255,255,255,0.35),inset_0_-1px_0px_rgba(0,0,0,0.20)] after:pointer-events-none transition">
+                <img alt="coinbase" src="/images/articles.svg" class="h-6 w-6 rounded" />
+                <p class="font-sans text-base text-inherit font-semibold">
+                  {gettext("Create article")}
+                </p>
+              </button>
+            </.link>
+          </div>
+          <p class="font-sans text-base text-stone-800 dark:text-white mb-2 mt-6 font-semibold">
+            Каналы
+          </p>
+          <.link href="/channels/new">
+            <button class="inline-flex space-x-4  w-full gap-2 items-center justify-center border align-middle select-none font-sans font-medium text-center duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed focus:shadow-none text-sm py-2 px-4 shadow-sm hover:shadow-md bg-stone-200 hover:bg-stone-100 relative bg-gradient-to-b from-white to-white border-stone-200 text-stone-700 rounded-lg hover:bg-gradient-to-b hover:from-stone-50 hover:to-stone-50 hover:border-stone-200 after:absolute after:inset-0 after:rounded-[inherit] after:box-shadow after:shadow-[inset_0_1px_0px_rgba(255,255,255,0.35),inset_0_-1px_0px_rgba(0,0,0,0.20)] after:pointer-events-none transition">
+              <img alt="trustwallet" src="/images/channels.svg" class=" h-6 w-6 rounded" />
+              <p class="font-sans text-base text-inherit font-semibold">
+                {gettext("Create channel")}
+              </p>
+            </button>
+          </.link>
+        </div>
+
+        <div class="border-t border-stone-200 p-4 flex flex-col items-center gap-2">
+          <small class="font-sans antialiased text-sm text-stone-800 text-center">
+            {gettext("There is not what you want to do?")}
+          </small>
+          <.link href="https://github.com/Adamanr/RedNews/issues">
+            <button class="inline-flex gap-2 items-center justify-center border align-middle select-none font-sans font-medium text-center duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed focus:shadow-none text-sm py-2 px-4 shadow-sm hover:shadow-md bg-stone-200 hover:bg-stone-100 relative bg-gradient-to-b from-white to-white border-stone-200 text-stone-700 rounded-lg hover:bg-gradient-to-b hover:from-stone-50 hover:to-stone-50 hover:border-stone-200 after:absolute after:inset-0 after:rounded-[inherit] after:box-shadow after:shadow-[inset_0_1px_0px_rgba(255,255,255,0.35),inset_0_-1px_0px_rgba(0,0,0,0.20)] after:pointer-events-none transition">
+              {gettext("Check if this is in the project's Github issue")} =)
+            </button>
+          </.link>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const modal = document.getElementById("exampleModalWeb3");
+      const openModalButton = document.getElementById("openModalButton");
+      const closeModalButton = document.getElementById("closeModalButton");
+
+      openModalButton.addEventListener("click", () => {
+        modal.classList.remove("opacity-0", "pointer-events-none");
+        modal.classList.add("opacity-100");
+      });
+
+      closeModalButton.addEventListener("click", () => {
+        modal.classList.add("opacity-0", "pointer-events-none");
+        modal.classList.remove("opacity-100");
+      });
+    </script>
+    """
+  end
+
   @doc """
   Menu components
   """
   attr :current_path, :any, required: false
+  attr :locale, :string, required: false
   attr :current_user, :any, required: true
 
   def menu(assigns) do
     ~H"""
-      <div class="h-20 flex bg-white font-[Marmelad:Regular]">
-        <.link href="/" class="flex w-[11.5vw] md:text-3xl md:flex hidden md:block font-black px-6 px-2 h-full items-center space-x-3">RedNews</.link>
-        <div class="flex-1 px-6 md:text-xl text-md flex h-full items-center gap-6">
-          <div class="h-full">
-            <.link href="/news" class={"flex px-2 h-full  items-center space-x-3 #{if @current_path == "/news", do: "border-b-2 border-gray-800", else: "bg-white"}"}>
-              <img class="h-5 w-5 text-black" src={"/images/news.svg"}>
-              <h1 class="">Новости</h1>
-            </.link>
-          </div>
-          <.link href="/articles" class={"flex px-2 h-full  items-center space-x-3 #{if @current_path == "/articles", do: "border-b-2 border-gray-800", else: "bg-white"}"}>
-            <div class="flex px-2  h-full items-center space-x-3">
-              <img class="h-5 w-5 text-black" src={"/images/articles.svg"}>
-              <h1 class="">Статьи</h1>
-            </div>
-          </.link>
-          <.link href="/channels" class={"flex px-2 h-full  items-center space-x-3 #{if @current_path == "/channels", do: "border-b-2 border-gray-800", else: "bg-white"}"}>
-            <div class="flex px-2  h-full items-center space-x-3">
-              <img class="h-5 w-5 text-black" src={"/images/channels.svg"}>
-              <h1 class="">Каналы</h1>
-            </div>
+    <div class="h-20 flex bg-white font-[Marmelad:Regular]">
+      <.link
+        href="/"
+        class="flex w-[11.5vw] md:text-3xl md:flex hidden md:block font-black px-6 px-2 h-full items-center space-x-3"
+      >
+        RedNews
+      </.link>
+
+      <div class="flex-1 px-6 md:text-xl text-md flex h-full items-center gap-6">
+        <div class="h-full">
+          <.link
+            href="/news"
+            class={"flex px-2 h-full  items-center space-x-3 #{if @current_path == "/news", do: "border-b-2 border-gray-800", else: "bg-white"}"}
+          >
+            <img class="h-5 w-5 text-black" src="/images/news.svg" />
+            <h1 class="">{gettext("News")}</h1>
           </.link>
         </div>
+        <.link
+          href="/articles"
+          class={"flex px-2 h-full  items-center space-x-3 #{if @current_path == "/articles", do: "border-b-2 border-gray-800", else: "bg-white"}"}
+        >
+          <div class="flex px-2  h-full items-center space-x-3">
+            <img class="h-5 w-5 text-black" src="/images/articles.svg" />
+            <h1 class="">{gettext("Articles")}</h1>
+          </div>
+        </.link>
+        <.link
+          href="/channels"
+          class={"flex px-2 h-full  items-center space-x-3 #{if @current_path == "/channels", do: "border-b-2 border-gray-800", else: "bg-white"}"}
+        >
+          <div class="flex px-2  h-full items-center space-x-3">
+            <img class="h-5 w-5 text-black" src="/images/channels.svg" />
+            <h1 class="">{gettext("Channels")}</h1>
+          </div>
+        </.link>
+      </div>
 
-        <%= if not is_nil(@current_user) do %>
-          <.link href={"/users/user/#{@current_user.id}"}>
-            <div class="flex px-2  h-full items-center">
-              <img src={@current_user.avatar} class="items-center rounded-md h-10 w-10 ">
-            </div>
+      <.create_modal />
+
+      <%= if not is_nil(@current_user) do %>
+        <.link href={"/users/user/#{@current_user.id}"}>
+          <div class="flex px-2  h-full items-center">
+            <img src={@current_user.avatar} class="items-center rounded-md h-10 w-10 " />
+          </div>
+        </.link>
+      <% end %>
+
+      <div class="flex items-center me-4">
+        <%= if @locale == "en" do %>
+          <.link href="/change_locale/ru  ">
+            <img src="/images/usa.svg" class="h-14 w-14 text-black" />
+          </.link>
+        <% else %>
+          <.link href="/change_locale/en">
+            <img src="/images/russia.svg" class="h-14 w-14 text-black" />
           </.link>
         <% end %>
-
-        <button
-            type="button"
-            id="openModalButton"
-            class="me-5 ms-2"
-          >
-            <img src={"/images/add.svg"} class="h-11 w-11 text-black">
-        </button>
-
-        <div
-          class="fixed antialiased inset-0 bg-stone-800 bg-opacity-75 flex justify-center items-center opacity-0 pointer-events-none transition-opacity duration-300 ease-out z-[9999]"
-          id="exampleModalWeb3"
-          aria-hidden="true"
-        >
-          <div class="bg-white rounded-lg w-9/12 sm:w-7/12 md:w-5/12 lg:w-3/12 scale-95 transition-transform duration-300 ease-out">
-            <div class="border-b border-stone-200 p-4 flex justify-between items-start">
-              <div class="flex flex-col">
-                <h1 class="text-lg text-stone-800 font-semibold">Создать</h1>
-                <p class="font-sans text-base text-stone-500">Выберите что хотите создать</p>
-              </div>
-              <button
-                type="button"
-                id="closeModalButton"
-                aria-label="Close"
-                class="text-stone-500 hover:text-stone-800"
-              >
-                &times;
-              </button>
-            </div>
-
-            <div class="p-4 text-stone-500">
-              <p class="font-sans text-base text-stone-800 dark:text-white mb-2 font-semibold">Посты</p>
-              <div class="space-y-10 ">
-                <.link href="/news/new" class="mb-5">
-                  <button class="inline-flex space-x-4 w-full gap-2 items-center justify-center border align-middle select-none font-sans font-medium text-center duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed focus:shadow-none text-sm py-2 px-4 shadow-sm hover:shadow-md bg-stone-200 hover:bg-stone-100 relative bg-gradient-to-b from-white to-white border-stone-200 text-stone-700 rounded-lg hover:bg-gradient-to-b hover:from-stone-50 hover:to-stone-50 hover:border-stone-200 after:absolute after:inset-0 after:rounded-[inherit] after:box-shadow after:shadow-[inset_0_1px_0px_rgba(255,255,255,0.35),inset_0_-1px_0px_rgba(0,0,0,0.20)] after:pointer-events-none transition">
-                    <img alt="metamask" src={"/images/news.svg"} class="h-5 w-5">
-                    <p class="font-sans text-base text-inherit font-semibold">Создать новость</p>
-                  </button>
-                </.link>
-                <br>
-                <.link href="/articles/new" class="mt-4">
-                  <button class="inline-flex mt-3 space-x-4 w-full gap-2 items-center justify-center border align-middle select-none font-sans font-medium text-center duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed focus:shadow-none text-sm py-2 px-4 shadow-sm hover:shadow-md bg-stone-200 hover:bg-stone-100 relative bg-gradient-to-b from-white to-white border-stone-200 text-stone-700 rounded-lg hover:bg-gradient-to-b hover:from-stone-50 hover:to-stone-50 hover:border-stone-200 after:absolute after:inset-0 after:rounded-[inherit] after:box-shadow after:shadow-[inset_0_1px_0px_rgba(255,255,255,0.35),inset_0_-1px_0px_rgba(0,0,0,0.20)] after:pointer-events-none transition">
-                    <img alt="coinbase" src={"/images/articles.svg"} class="h-6 w-6 rounded">
-                    <p class="font-sans text-base text-inherit font-semibold">Создать статью</p>
-                  </button>
-                </.link>
-              </div>
-              <p class="font-sans text-base text-stone-800 dark:text-white mb-2 mt-6 font-semibold">Каналы</p>
-              <.link href="/channels/new">
-                <button class="inline-flex space-x-4  w-full gap-2 items-center justify-center border align-middle select-none font-sans font-medium text-center duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed focus:shadow-none text-sm py-2 px-4 shadow-sm hover:shadow-md bg-stone-200 hover:bg-stone-100 relative bg-gradient-to-b from-white to-white border-stone-200 text-stone-700 rounded-lg hover:bg-gradient-to-b hover:from-stone-50 hover:to-stone-50 hover:border-stone-200 after:absolute after:inset-0 after:rounded-[inherit] after:box-shadow after:shadow-[inset_0_1px_0px_rgba(255,255,255,0.35),inset_0_-1px_0px_rgba(0,0,0,0.20)] after:pointer-events-none transition">
-                  <img alt="trustwallet" src={"/images/channels.svg"} class=" h-6 w-6 rounded">
-                  <p class="font-sans text-base text-inherit font-semibold">Создать канал</p>
-                </button>
-              </.link>
-            </div>
-
-            <div class="border-t border-stone-200 p-4 flex flex-col items-center gap-2">
-              <small class="font-sans antialiased text-sm text-stone-800 text-center">
-                Нет того, что вы хотите сделать?
-              </small>
-              <.link href="https://github.com/Adamanr/RedNews/issues">
-                <button class="inline-flex gap-2 items-center justify-center border align-middle select-none font-sans font-medium text-center duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed focus:shadow-none text-sm py-2 px-4 shadow-sm hover:shadow-md bg-stone-200 hover:bg-stone-100 relative bg-gradient-to-b from-white to-white border-stone-200 text-stone-700 rounded-lg hover:bg-gradient-to-b hover:from-stone-50 hover:to-stone-50 hover:border-stone-200 after:absolute after:inset-0 after:rounded-[inherit] after:box-shadow after:shadow-[inset_0_1px_0px_rgba(255,255,255,0.35),inset_0_-1px_0px_rgba(0,0,0,0.20)] after:pointer-events-none transition">
-                Проверьте, есть ли это в issue GitHub проекта =)
-                </button>
-              </.link>
-            </div>
-          </div>
-        </div>
-
-        <script>
-          const modal = document.getElementById("exampleModalWeb3");
-          const openModalButton = document.getElementById("openModalButton");
-          const closeModalButton = document.getElementById("closeModalButton");
-
-          openModalButton.addEventListener("click", () => {
-            modal.classList.remove("opacity-0", "pointer-events-none");
-            modal.classList.add("opacity-100");
-          });
-
-          closeModalButton.addEventListener("click", () => {
-            modal.classList.add("opacity-0", "pointer-events-none");
-            modal.classList.remove("opacity-100");
-          });
-        </script>
       </div>
+    </div>
     """
   end
 
@@ -652,8 +693,7 @@ defmodule RednewsWeb.CoreComponents do
     """
   end
 
-
-  @doc ~S"""
+  @doc """
   Renders a table with generic styling.
 
   ## Examples
@@ -750,59 +790,59 @@ defmodule RednewsWeb.CoreComponents do
     ~H"""
     <div class="w-[12vw] mb-20 h-full flex flex-col space-y-8 pe-4 py-2 z-30">
       <div class="p-5 rounded-xl bg-white ">
-        <h1 class="font-bold">Дата</h1>
+        <h1 class="font-bold">{gettext("Date")}</h1>
         <ul class="mt-4 text-gray-600 space-y-2">
           <li
             phx-click="filtred"
             phx-value-filter={Jason.encode!(%{"options" => "date", "params" => "all"})}
             class={"#{if @selected_date == "all", do: "underline underline-offset-4"}"}
           >
-            Все
+            {gettext("All")}
           </li>
           <li
             phx-click="filtred"
             phx-value-filter={Jason.encode!(%{"options" => "date", "params" => "today"})}
             class={"#{if @selected_date == "today", do: "underline underline-offset-4"}"}
           >
-            За сегодня
+            {gettext("Today")}
           </li>
           <li
             phx-click="filtred"
             phx-value-filter={Jason.encode!(%{"options" => "date", "params" => "week"})}
             class={"#{if @selected_date == "week", do: "underline underline-offset-4"}"}
           >
-            За неделю
+            {gettext("Week")}
           </li>
           <li
             phx-click="filtred"
             phx-value-filter={Jason.encode!(%{"options" => "date", "params" => "month"})}
             class={"#{if @selected_date == "month", do: "underline underline-offset-4"}"}
           >
-            За месяц
+            {gettext("Month")}
           </li>
         </ul>
       </div>
       <div class="p-5 rounded-xl  bg-white ">
-        <h1 class="font-bold">Лента</h1>
+        <h1 class="font-bold">{gettext("Categories")}</h1>
         <ul class="mt-4  space-y-2">
           <li
             class="text-gray-600 cursor-pointer hover:text-gray-800"
             phx-click="filtred"
-            phx-value-filter={Jason.encode!(%{options: "category", params: nil })}
+            phx-value-filter={Jason.encode!(%{options: "category", params: nil})}
           >
-            Все
+            {gettext("All")}
           </li>
           <%= for {item, value} <- Posts.list_layout_categories do %>
             <li
-                class={
+              class={
                       "text-gray-600 cursor-pointer hover:text-gray-800 " <>
                       if(value == @selected_category, do: "underline underline-offset-4", else: "")
                     }
-                phx-click="filtred"
-                phx-value-filter={Jason.encode!(%{options: "category", params: item})}
-              >
-                <%= item  %>
-              </li>
+              phx-click="filtred"
+              phx-value-filter={Jason.encode!(%{options: "category", params: item})}
+            >
+              {Gettext.gettext(RednewsWeb.Gettext, item)}
+            </li>
           <% end %>
         </ul>
       </div>

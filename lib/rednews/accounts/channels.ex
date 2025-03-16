@@ -12,7 +12,7 @@ defmodule Rednews.Accounts.Channels do
     field :logo, :string
     field :additional, :map
 
-    has_many :headlines, Rednews.Posts.Headlines
+    has_many :headlines, Rednews.Posts.Headlines, foreign_key: :channel_id
 
     belongs_to :user, Rednews.Accounts.User
 

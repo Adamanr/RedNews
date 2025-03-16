@@ -1,51 +1,117 @@
 <section class="h-full">
   <div class="w-full h-full relative">
-    <img src={@headline.header} class="active:absolute active:z-30 active:h-[85vh] active:object-cover w-full h-[70vh] object-cover rounded-2xl" alt="Header image">
+    <img
+      src={@headline.header}
+      class="active:absolute active:z-30 active:h-[85vh] active:object-cover w-full h-[70vh] object-cover rounded-2xl"
+      alt="Header image"
+    />
     <div class="absolute max-w-7xl top-[50vh] px-10 left-0 right-0 mx-auto z-20 h-full">
       <div class="md:flex items-center mb-2">
         <%= if not is_nil(@current_user) do %>
           <div class="bg-white md:w-fit w-full md:ms-10 px-4 rounded-2xl">
             <%= if @me_like do %>
-              <button phx-click="unlike" phx-value-id={@headline.id} class="h-[4vh] py-1 space-x-2 items-center px-2 flex rounded-full text-xs font-medium text-gray-600">
-                <p class="text-xl text-green-600">Мне нравится</p>
-                <svg class="w-8 h-8 text-green-600 stroke-2" viewBox="0 0 48 48" id="a" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><defs><style>.b{fill:currentColor;}.c{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;}</style></defs><path class="c" d="m15.1964,18.1715c.4585-10.2163,19.8765-16.9631,27.1509,2.1572,6.5658,18.8645-16.4267,22.4577-29.7546,17.4099C2.7102,35.0782.0321,21.5536,15.1961,18.1712l.0004.0003Z"></path><path class="c" d="m11.7517,29.9387s6.3228,6.2353,13.0533,1.1628"></path><circle class="b" cx="20.6394" cy="16.3881" r=".7496"></circle><circle class="b" cx="28.7099" cy="17.6042" r=".7496"></circle></g></svg>
+              <button
+                phx-click="unlike"
+                phx-value-id={@headline.id}
+                class="h-[4vh] py-1 space-x-2 items-center px-2 flex rounded-full text-xs font-medium text-gray-600"
+              >
+                <p class="text-xl text-green-600">{gettext("I like")}</p>
+                <svg
+                  class="w-8 h-8 text-green-600 stroke-2"
+                  viewBox="0 0 48 48"
+                  id="a"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                  </g>
+                  <g id="SVGRepo_iconCarrier">
+                    <defs>
+                      <style>
+                        .b{fill:currentColor;}.c{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;}
+                      </style>
+                    </defs>
+                    <path
+                      class="c"
+                      d="m15.1964,18.1715c.4585-10.2163,19.8765-16.9631,27.1509,2.1572,6.5658,18.8645-16.4267,22.4577-29.7546,17.4099C2.7102,35.0782.0321,21.5536,15.1961,18.1712l.0004.0003Z"
+                    >
+                    </path>
+                    <path class="c" d="m11.7517,29.9387s6.3228,6.2353,13.0533,1.1628"></path>
+                    <circle class="b" cx="20.6394" cy="16.3881" r=".7496"></circle>
+                    <circle class="b" cx="28.7099" cy="17.6042" r=".7496"></circle>
+                  </g>
+                </svg>
               </button>
             <% else %>
-              <button phx-click="like" phx-value-id={@headline.id} class="h-[4vh] py-1 w-full space-x-2 items-center px-2 flex rounded-full text-xs font-medium text-gray-600">
-                <p class="text-xl text-rose-600">Нравится?</p>
+              <button
+                phx-click="like"
+                phx-value-id={@headline.id}
+                class="h-[4vh] py-1 w-full space-x-2 items-center px-2 flex rounded-full text-xs font-medium text-gray-600"
+              >
+                <p class="text-xl text-rose-600">{gettext("You like?")}</p>
                 <svg class="w-8 h-8 text-rose-600 stroke-2" viewBox="0 0 41 34" fill="none">
-                  <path d="M11.6945 10.9887C12.153 0.772357 31.571 -5.97444 38.8454 13.1459C45.4112 32.0104 22.4187 35.6036 9.09076 30.5558C-0.791741 27.8954 -3.46954 14.3711 11.6945 10.9887Z" stroke="currentColor"/>
-                  <path d="M20.6733 27.542C20.6733 27.542 16.1798 19.8827 8.36578 23.0404" stroke="currentColor"/>
-                  <path d="M17.3869 9.20517C17.3869 9.34302 17.2751 9.45477 17.1373 9.45477C16.9994 9.45477 16.8877 9.34301 16.8877 9.20517C16.8877 9.06732 16.9994 8.95557 17.1373 8.95557C17.2751 8.95557 17.3869 9.06732 17.3869 9.20517Z" fill="currentColor"/>
-                  <path d="M25.4577 10.4215C25.4577 10.5593 25.3459 10.6711 25.2081 10.6711C25.0702 10.6711 24.9585 10.5593 24.9585 10.4215C24.9585 10.2836 25.0702 10.1719 25.2081 10.1719C25.3459 10.1719 25.4577 10.2836 25.4577 10.4215Z" fill="currentColor"/>
+                  <path
+                    d="M11.6945 10.9887C12.153 0.772357 31.571 -5.97444 38.8454 13.1459C45.4112 32.0104 22.4187 35.6036 9.09076 30.5558C-0.791741 27.8954 -3.46954 14.3711 11.6945 10.9887Z"
+                    stroke="currentColor"
+                  />
+                  <path
+                    d="M20.6733 27.542C20.6733 27.542 16.1798 19.8827 8.36578 23.0404"
+                    stroke="currentColor"
+                  />
+                  <path
+                    d="M17.3869 9.20517C17.3869 9.34302 17.2751 9.45477 17.1373 9.45477C16.9994 9.45477 16.8877 9.34301 16.8877 9.20517C16.8877 9.06732 16.9994 8.95557 17.1373 8.95557C17.2751 8.95557 17.3869 9.06732 17.3869 9.20517Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M25.4577 10.4215C25.4577 10.5593 25.3459 10.6711 25.2081 10.6711C25.0702 10.6711 24.9585 10.5593 24.9585 10.4215C24.9585 10.2836 25.0702 10.1719 25.2081 10.1719C25.3459 10.1719 25.4577 10.2836 25.4577 10.4215Z"
+                    fill="currentColor"
+                  />
                 </svg>
               </button>
             <% end %>
           </div>
         <% end %>
-        <h1 class="text-xl h-[4vh] items-center text-center flex rounded-2xl font-['Montserrat_Alternates'] font-bold text-white md:ms-2 md:mt-0 mt-2 px-4 bg-[#EE5A5A] md:w-fit">{@headline.category}</h1>
+        <h1 class="text-xl h-[4vh] items-center text-center flex rounded-2xl font-['Montserrat_Alternates'] font-bold text-white md:ms-2 md:mt-0 mt-2 px-4 bg-[#EE5A5A] md:w-fit">
+          {Gettext.gettext(RednewsWeb.Gettext, @headline.category)}
+        </h1>
         <div class="text-xl py-1 rounded-2xl font-['Montserrat_Alternates'] font-bold text-white md:mt-0 mt-1 md:mx-2 w-full md:w-fit">
           <%= case @headline.is_fake do %>
             <% true -> %>
               <div class="h-[4vh] flex items-center rounded-2xl py-1 px-2 text-red-700">
                 <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  />
                 </svg>
-                <span class="font-medium">Проверено: Фейковая новость</span>
+                <span class="font-medium">{gettext("Verified: Fake news")}</span>
               </div>
             <% false -> %>
               <div class="h-[4vh] flex items-center py-1 px-2 rounded-2xl text-green-700">
                 <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
-                <span class="font-medium">Достоверная информация</span>
+                <span class="font-medium">{gettext("Reliable information")}</span>
               </div>
             <% nil -> %>
               <div class="h-[4vh] flex items-center py-1 px-2 text-white bg-gray-600 rounded-2xl">
                 <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
-                <span class="font-medium">Проверка не проводилась</span>
+                <span class="font-medium">{gettext("No verification conducted")}</span>
               </div>
           <% end %>
         </div>
@@ -59,67 +125,110 @@
       </article>
 
       <div class="md:grid grid-cols-2 mt-5 gap-5 max-w-7xl mx-auto">
-        <section class="h-fit bg-white p-5 rounded-md" style="font-family:'Merge One', sans-serif;">
+        <section
+          class="h-fit bg-white p-5 rounded-md"
+          style="font-family:'Merge One', sans-serif;"
+        >
           <div class="flex space-y-3 flex-col">
-            <h3 class="text-2xl font-bold text-gray-900">Доп. информация</h3>
+            <h3 class="text-2xl font-bold text-gray-900">{gettext("Additional information")}</h3>
             <div class="flex space-x-2 items-center">
-              <h1>Автор:</h1>
+              <h1>{gettext("Author")}</h1>
               <.link href={"/users/user/#{@headline.channel_id}"} class="flex">
-                <img src={@headline.channel.logo} class="w-7 h-7 rounded-lg self-center" alt="Channel logo">
+                <img
+                  src={@headline.channel.logo}
+                  class="w-7 h-7 rounded-lg self-center"
+                  alt="Channel logo"
+                />
                 <p class="ps-2">{@headline.channel.name}</p>
               </.link>
             </div>
             <div class="flex">
-              <span class="pe-2">Актуальность:</span>
+              <span class="pe-2">{gettext("Relevance")}</span>
               <%= case @headline.is_very_important do %>
                 <% true -> %>
                   <div class="flex items-center text-green-700">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    <svg
+                      class="w-5 h-5 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                      />
                     </svg>
-                    <span class="font-medium">Актуально</span>
+                    <span class="font-medium">{gettext("Important")}</span>
                   </div>
                 <% false -> %>
                   <div class="flex items-center text-gray-600">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    <svg
+                      class="w-5 h-5 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
-                    <span class="font-medium">Не актуально</span>
+                    <span class="font-medium">{gettext("Not important")}</span>
                   </div>
                 <% nil -> %>
                   <div class="flex items-center text-gray-500">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    <svg
+                      class="w-5 h-5 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
-                    <span class="font-medium">Не определено</span>
+                    <span class="font-medium">{gettext("Not defined")}</span>
                   </div>
               <% end %>
             </div>
             <%= if not is_nil(@headline.tags) do %>
               <div class="md:flex space-x-5 items-center">
-                <h1>Тэги:</h1>
+                <h1>{gettext("Tags")}</h1>
                 <%= for tag <- @headline.tags do %>
                   <p>#{tag}</p>
                 <% end %>
               </div>
             <% end %>
             <div class="md:flex space-x-5 items-center">
-              <h1>Категория:</h1>
-              <p>{@headline.category}</p>
+              <h1>{gettext("Category")}:</h1>
+              <p>{Gettext.gettext(RednewsWeb.Gettext, @headline.category)}</p>
             </div>
             <div class="flex space-x-2 items-center">
               <div class="flex justify-between items-center mb-2">
-                <span class="text-gray-600">Важность</span>
+                <span class="text-gray-600">{gettext("Importance")}:</span>
               </div>
               <div class="relative w-full bg-gray-200 rounded-full h-2">
-                <div title="Тест" class="bg-blue-600 h-2 rounded-full" style={"width: #{if @likes, do: @likes * 10, else: 0}%"}>
+                <div
+                  title="Тест"
+                  class="bg-blue-600 h-2 rounded-full"
+                  style={"width: #{if @likes, do: @likes * 10, else: 0}%"}
+                >
                 </div>
-                <p class="absolute right-0 -top-6 text-gray-600">{if @likes, do: @likes * 10, else: 0}%</p>
+                <p class="absolute right-0 -top-6 text-gray-600">
+                  {if @likes, do: @likes * 10, else: 0}%
+                </p>
               </div>
             </div>
             <%= if not is_nil(@headline.additional) do %>
               <div class="items-center w-1/2">
-                <h1 class="mb-4">Дополнительные параметры:</h1>
+                <h1 class="mb-4">{gettext("Additional parameters")}:</h1>
                 <%= for {k, v} <- @headline.additional do %>
                   <div class="flex items-center">
                     <p class="whitespace-nowrap">{k}:</p>
@@ -129,26 +238,35 @@
               </div>
             <% end %>
             <%= if not is_nil(@current_user) and @headline.channel.user_id == @current_user.id do %>
-              <h3 class="text-2xl font-bold py-2 text-gray-900">Действия</h3>
+              <h3 class="text-2xl font-bold py-2 text-gray-900">{gettext("Actions")}</h3>
               <div class="flex text-white space-x-2">
-                <.link phx-click={JS.push("delete", value: %{id: @headline.id})} data-confirm="Are you sure?" class="w-1/2 inline-flex items-center text-cetner gap-2 bg-gray-400 text-white px-4 py-2 rounded-md text-xl font-medium hover:bg-rose-400 transition-colors">
-                  <svg class="w-5 h-5" viewBox="0 -0.5 21 21" fill="currentColor">
-                    <path d="M130.35,216 L132.45,216 L132.45,208 L130.35,208 L130.35,216 Z M134.55,216 L136.65,216 L136.65,208 L134.55,208 L134.55,216 Z M128.25,218 L138.75,218 L138.75,206 L128.25,206 L128.25,218 Z M130.35,204 L136.65,204 L136.65,202 L130.35,202 L130.35,204 Z M138.75,204 L138.75,200 L128.25,200 L128.25,204 L123,204 L123,206 L126.15,206 L126.15,220 L140.85,220 L140.85,206 L144,206 L144,204 L138.75,204 Z"/>
-                  </svg>
-                  Delete
+                <.link
+                  phx-click={JS.push("delete", value: %{id: @headline.id})}
+                  data-confirm="Are you sure?"
+                  class="w-1/2 inline-flex items-center text-cetner gap-2 bg-gray-400 text-white px-4 py-2 rounded-md text-xl font-medium hover:bg-rose-400 transition-colors"
+                >
+                  <img src="/images/trash.svg" class="h-5 w-5" />
+                  {gettext("Delete")}
                 </.link>
-                <.link patch={~p"/news/headline/#{@headline}/show/edit"} class="w-1/2 inline-flex items-center gap-2 bg-gray-400 text-white px-4 py-2 rounded-md text-xl font-medium hover:bg-amber-400 transition-colors">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                  </svg>
-                  {page_title(:edit)}
+                <.link
+                  patch={~p"/news/headline/#{@headline}/show/edit"}
+                  class="w-1/2 inline-flex items-center gap-2 bg-gray-400 text-white px-4 py-2 rounded-md text-xl font-medium hover:bg-amber-400 transition-colors"
+                >
+                  <img src="/images/edit.svg" class="h-5 w-5" />
+                  {gettext("Edit")}
                 </.link>
               </div>
             <% end %>
           </div>
         </section>
         <section class="bg-white p-5 rounded-md">
-          <.live_component module={RednewsWeb.CommentsLive.FormComponent} id="comments" pub_type="headline" pub_id={@headline.id} current_user={@current_user}/>
+          <.live_component
+            module={RednewsWeb.CommentsLive.FormComponent}
+            id="comments"
+            pub_type="headline"
+            pub_id={@headline.id}
+            current_user={@current_user}
+          />
         </section>
       </div>
 
@@ -156,7 +274,6 @@
     </div>
   </div>
 </section>
-
 
 <.modal
   :if={@live_action == :edit}

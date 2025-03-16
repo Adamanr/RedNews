@@ -3,10 +3,9 @@ defmodule RednewsWeb.ArticlesLive.Index do
 
   alias Rednews.Posts
   alias Rednews.Repo
-  alias Rednews.Accounts
   alias Rednews.Posts.Articles
-  alias Rednews.Posts.Headlines
   alias RednewsWeb.Helpers
+  use Gettext, backend: RednewsWeb.Gettext
 
   @impl true
   def mount(_params, session, socket) do
@@ -43,7 +42,10 @@ defmodule RednewsWeb.ArticlesLive.Index do
         {"category", category} ->
           socket
           |> assign(:selected_category, category)
-          |> assign_articles(Posts.list_article(:category_and_date, %{category: category}) |> Repo.preload(:user))
+          |> assign_articles(
+            Posts.list_article(:category_and_date, %{category: category})
+            |> Repo.preload(:user)
+          )
 
         {"tags", tags} ->
           socket
@@ -53,7 +55,13 @@ defmodule RednewsWeb.ArticlesLive.Index do
         {"date", date} ->
           socket
           |> assign(:selected_date, date)
-          |> assign_articles(Posts.list_article(:category_and_date, %{category: socket.assigns[:selected_category], date: date}) |> Repo.preload(:user))
+          |> assign_articles(
+            Posts.list_article(:category_and_date, %{
+              category: socket.assigns[:selected_category],
+              date: date
+            })
+            |> Repo.preload(:user)
+          )
 
         {_, "tags"} ->
           socket

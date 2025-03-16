@@ -17,7 +17,11 @@
   <body class="h-screen dark:text-gray-300 dark:bg-zinc-900 bg-[#F6F8FA] overflow-y-hidden">
     <%= if @conn.request_path not in [~p"/users/register", ~p"/users/log_in"] do %>
       <div class="">
-        <.menu current_path={@conn.request_path} current_user={@current_user} />
+        <.menu
+          current_path={@conn.request_path}
+          locale={@conn.assigns.locale}
+          current_user={@current_user}
+        />
         <div class="flex">
           <div class="flex-1 py-4 mx-auto h-[100vh] overflow-y-scroll">
             <div class="mx-6 h-cover">

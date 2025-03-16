@@ -1,52 +1,52 @@
-# Новостной портал - <span style="color:#FF0000">Red</span>News 📰
+# News Portal - <span style="color:#FF0000">Red</span>News 📰
 
-**RedNews** — это современный онлайн-портал, предназначенный для публикации новостей, статей и управления ими. Этот инструмент позволяет вам создавать и публиковать статьи, делиться последними новостями, а также быть в курсе новых публикаций. Используя функционал Новостного портала, вы получаете следующие возможности:
+**RedNews** is a modern online portal designed for publishing and managing news and articles. This tool allows you to create and publish articles, share the latest news, and stay updated with new publications. By using the News Portal's functionality, you gain the following features:
 
-- **Публиковать статьи и новости**: Вы можете добавлять новые материалы, указывая заголовок, содержание, категорию и теги, что делает процесс создания контента удобным и быстрым 📝
-- **Создавать каналы**: Для удобства организации контента у вас есть возможность создавать тематические каналы, которые помогут структурировать информацию и упростят управление 📂
-- **Фильтровать и сортировать**: Благодаря встроенным фильтрам по категориям, тегам и датам публикации, вы легко найдете нужный материал за считанные секунды 🔍
-- **Взаимодействовать с контентом**: Портал предоставляет функции лайков, благодаря которым пользователи могут выражать свое мнение и взаимодействовать с опубликованными материалами ❤️
+- **Publish articles and news**: You can add new content by specifying the title, content, category, and tags, making the content creation process convenient and fast 📝
+- **Create channels**: To organize content efficiently, you can create thematic channels that help structure information and simplify management 📂
+- **Filter and sort**: With built-in filters by categories, tags, and publication dates, you can easily find the desired material in just a few seconds 🔍
+- **Interact with content**: The portal provides like functionality, allowing users to express their opinions and engage with published content ❤️
 
 ![ 📸](priv/static/images/rednews.jpg)
 
-## Технологии 💻
+## Technologies 💻
 
-- **Язык**: Elixir 🧪
-- **База данных**: PostgreSQL 🗄️
-- **Библиотеки**:
+- **Language**: Elixir 🧪
+- **Database**: PostgreSQL 🗄️
+- **Libraries**:
   - Ecto {3.10} 📚
   - Phoenix {1.7} 📚
   - Tailwind {0.2} 📚
   - ExDoc {0.36} 📚
 - **ORM**: Ecto 🛠️
-- **Шаблонизатор**: HEEx 📝
+- **Templating Engine**: HEEx 📝
 
-## Установка и запуск 🚀
+## Installation and Launch 🚀
 
-### 1. Установите зависимости
+### 1. Install Dependencies
 
-Убедитесь, что у вас установлены:
+Ensure you have the following installed:
 
-- Elixir (версия 1.18.1) 🧪
-- PostgreSQL (версия 15) 🗄️
-- Node.js (версия 16 или выше) 📦
+- Elixir (version 1.18.1) 🧪
+- PostgreSQL (version 15) 🗄️
+- Node.js (version 16 or higher) 📦
 
-### 2. Клонируйте репозиторий
+### 2. Clone the Repository
 
 ```bash
 git clone https://github.com/adamanq/rednews.git
 cd rednews
 ```
 
-### 3. Установите зависимости проекта
+### 3. Install Project Dependencies
 
 ```bash
 mix deps.get
 ```
 
-### 4. Настройте базу данных
+### 4. Set Up the Database
 
-Создайте базу данных и настройте подключение в файле `config/dev.exs`:
+Create the database and configure the connection in the `config/dev.exs` file:
 
 ```elixir
 config :rednews, Rednews.Repo,
@@ -58,46 +58,46 @@ config :rednews, Rednews.Repo,
   pool_size: 10
 ```
 
-Создайте и выполните миграции:
+Create and run migrations:
 
 ```bash
 mix ecto.create
 mix ecto.migrate
 ```
 
-### 5. Запустите приложение
+### 5. Run the Application
 
 ```bash
 mix phx.server
 ```
 
-Приложение будет доступно по адресу: [http://localhost:4000](http://localhost:4000). 🌐
+The application will be available at: [http://localhost:4000](http://localhost:4000). 🌐
 
-## Если вы хотите запустить в контейнере 📦
+## If You Want to Run in a Container 📦
 
-> ❗️❗️ На данный момент стабильность работы приложения в контейнере оставляет желать лучшего, поэтому рекомендуется воспользоваться стандартным методом сборки ❗️❗️
+> ❗️❗️ Currently, the stability of the application in a container leaves much to be desired, so it is recommended to use the standard build method ❗️❗️
 
-### 6. Соберите образ портала
+### 6. Build the Portal Image
 
 ```bash
 docker build .
 ```
 
-### 7. Запустите группу контейнеров из приложения и бд
+### 7. Run the Container Group for the Application and Database
 
 ```bash
 docker-compose up --build
 ```
 
-### 8. Установите зависимости проекта
+### 8. Install Project Dependencies
 
 ```bash
 docker-compose exec app mix deps.get
 ```
 
-### 9. Настройте базу данных
+### 9. Set Up the Database
 
-Создайте базу данных и настройте подключение в файле `config/dev.exs`:
+Create the database and configure the connection in the `config/dev.exs` file:
 
 ```elixir
 config :rednews, Rednews.Repo,
@@ -109,47 +109,47 @@ config :rednews, Rednews.Repo,
   pool_size: 10
 ```
 
-Создайте и выполните миграции:
+Create and run migrations:
 
 ```bash
 docker-compose exec app mix ecto.create
 docker-compose exec app mix ecto.migrate
 ```
 
-Приложение будет доступно по адресу: [http://localhost:4000](http://localhost:4000). 🌐
+The application will be available at: [http://localhost:4000](http://localhost:4000). 🌐
 
-## Использование 📖
+## Usage 📖
 
-1. **Регистрация и вход**: Создайте аккаунт или войдите в систему
-2. **Публикация контента**: Добавьте статью или новость, выбрав категорию и теги
-3. **Фильтрация и поиск**: Используйте фильтры для поиска нужных материалов
-4. **Лайки и комментарии**: Взаимодействуйте с контентом, выражая своё мнение
+1. **Registration and Login**: Create an account or log in
+2. **Publishing Content**: Add an article or news by selecting a category and tags
+3. **Filtering and Search**: Use filters to find the desired materials
+4. **Likes and Comments**: Engage with content by expressing your opinion
 
-## Структура проекта 🗂️
+## Project Structure 🗂️
 
-- **lib/rednews** — Основной код приложения
-  - **accounts.ex** — Контекст для работы с пользователями и каналами 👤
-  - **posts.ex** — Контекст для работы с статьями, новостями, лайками, комментариями 📝
-- **priv/repo/migrations** — Миграции базы данных 🗄️
-- **assets/** — Фронтенд-ресурсы (CSS, JavaScript) 🎨
-- **config/** — Конфигурационные файлы ⚙️
+- **lib/rednews** — Main application code
+  - **accounts.ex** — Context for working with users and channels 👤
+  - **posts.ex** — Context for working with articles, news, likes, and comments 📝
+- **priv/repo/migrations** — Database migrations 🗄️
+- **assets/** — Frontend resources (CSS, JavaScript) 🎨
+- **config/** — Configuration files ⚙️
 
-## Лицензия 📜
+## License 📜
 
-Этот проект распространяется под лицензией MIT. Подробнее см. в файле [LICENSE](LICENSE).
+This project is distributed under the MIT License. For more details, see the [LICENSE](LICENSE) file.
 
-## Автор 👤
+## Author 👤
 
 - [Adamanr](https://github.com/adamanr) 🧑‍💻
 
-## Как внести вклад 🤝
+## How to Contribute 🤝
 
-Если вы хотите улучшить проект, следуйте этим шагам:
+If you want to improve the project, follow these steps:
 
-1. Форкните репозиторий. 🍴
-2. Создайте ветку для вашей функции (`git checkout -b feature/AmazingFeature`) 🌿
-3. Зафиксируйте изменения (`git commit -m 'Add some AmazingFeature'`) 💾
-4. Отправьте изменения в ваш форк (`git push origin feature/AmazingFeature`) 🚀
-5. Создайте Pull Request 📥
+1. Fork the repository. 🍴
+2. Create a branch for your feature (`git checkout -b feature/AmazingFeature`) 🌿
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`) 💾
+4. Push to your fork (`git push origin feature/AmazingFeature`) 🚀
+5. Create a Pull Request 📥
 
-Если у вас есть вопросы или предложения, создайте [Issue](https://github.com/adamanr/rednews/issues) или свяжитесь со мной! 📩
+If you have any questions or suggestions, create an [Issue](https://github.com/adamanr/rednews/issues) or contact me! 📩

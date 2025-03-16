@@ -11,6 +11,7 @@ defmodule RednewsWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
+    plug :set_locale
   end
 
   pipeline :api do
@@ -20,7 +21,19 @@ defmodule RednewsWeb.Router do
   scope "/", RednewsWeb do
     pipe_through :browser
 
+    get "/change_locale/:locale", LocaleController, :change_locale
     get "/", PageController, :home
+  end
+
+  defp set_locale(conn, _opts) do
+    locale =
+      conn.assigns[:locale] ||
+        get_session(conn, :locale) ||
+        Application.get_env(:rednews, RednewsWeb.Gettext)[:default_locale]
+
+    Gettext.put_locale(RednewsWeb.Gettext, locale)
+
+    conn |> assign(:locale, locale)
   end
 
   # Other scopes may use custom stacks.
@@ -104,8 +117,8 @@ defmodule RednewsWeb.Router do
     live_session :require_authenticated_user,
       on_mount: [{RednewsWeb.UserAuth, :ensure_authenticated}] do
       live "/users/user/:id", UsersLive.UserProfile, :new
-      live "/users/settings", UserSettingsLive, :edit
-      live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+      live "/users/edit", UserEditLive, :edit
+      live "/users/edit/confirm_email/:token", UserEditLive, :confirm_email
     end
   end
 

@@ -374,20 +374,34 @@ defmodule Rednews.Accounts do
   def list_channels(options \\ :default, params \\ %{}) do
     query =
       case options do
-        :default -> from(c in Channels)
-        :category -> from(c in Channels, where: c.category == ^params[:category])
-        :tags -> from(c in Channels, where: ^params[:tags] in c.tags)
+        :default ->
+          from(c in Channels)
+
+        :category ->
+          from(c in Channels, where: c.category == ^params[:category])
+
+        :tags ->
+          from(c in Channels, where: ^params[:tags] in c.tags)
+
         :date ->
           case params[:date] do
             "today" ->
               from(c in Channels, where: fragment("?::date = CURRENT_DATE", c.inserted_at))
+
             "week" ->
-              from(c in Channels, where: fragment("? >= CURRENT_DATE - INTERVAL '7 days'", c.inserted_at))
+              from(c in Channels,
+                where: fragment("? >= CURRENT_DATE - INTERVAL '7 days'", c.inserted_at)
+              )
+
             "month" ->
-              from(c in Channels, where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", c.inserted_at))
+              from(c in Channels,
+                where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", c.inserted_at)
+              )
+
             _ ->
               from(c in Channels)
           end
+
         :category_and_date ->
           query = from(c in Channels)
 
@@ -402,16 +416,25 @@ defmodule Rednews.Accounts do
             case params[:date] do
               "today" ->
                 from(c in query, where: fragment("?::date = CURRENT_DATE", c.inserted_at))
+
               "week" ->
-                from(c in query, where: fragment("? >= CURRENT_DATE - INTERVAL '7 days'", c.inserted_at))
+                from(c in query,
+                  where: fragment("? >= CURRENT_DATE - INTERVAL '7 days'", c.inserted_at)
+                )
+
               "month" ->
-                from(c in query, where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", c.inserted_at))
+                from(c in query,
+                  where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", c.inserted_at)
+                )
+
               _ ->
                 query
             end
 
           query
-        _ -> raise ArgumentError, "Unknown options: #{options}"
+
+        _ ->
+          raise ArgumentError, "Unknown options: #{options}"
       end
 
     Repo.all(query)
@@ -525,7 +548,7 @@ defmodule Rednews.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_channels!(id), do: Repo.get!(Channels, 1)
+  def get_channels!(id), do: Repo.get!(Channels, id)
 
   @doc """
   Creates a channels.

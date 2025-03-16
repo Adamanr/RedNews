@@ -12,36 +12,32 @@ defmodule RednewsWeb.UserLoginLive do
         />
       </div>
 
-      <div class="mx-auto max-w-md px-5 bg-opacity-50 py-8 bg-white shadow-md rounded-lg flex-shrink-0">
+      <div class="w-[25vw] mx-auto max-w-md px-5 bg-opacity-50 py-8 bg-white shadow-md rounded-lg flex-shrink-0">
         <.header class=" mb-6">
-          <h1 class="text-3xl font-bold">Авторизация</h1>
+          <h1 class="text-3xl font-bold">{gettext("Authorization")}</h1>
           <:subtitle>
             <p class="text-sm text-gray-600 mt-2">
-              Ещё не зарегистрированы?
+              {gettext("Not registered yet?")}
               <.link navigate={~p"/users/register"} class="font-semibold text-brand hover:underline">
-                Зарегистрироваться
+                {gettext("Register")}
               </.link>
             </p>
           </:subtitle>
         </.header>
 
         <.simple_form for={@form} id="login_form" action={~p"/users/log_in"} phx-update="ignore">
-          <.input field={@form[:email]} type="email" label="Почта" required />
-          <.input field={@form[:password]} type="password" label="Пароль" required />
+          <.input field={@form[:email]} type="email" label="Email" required />
+          <.input field={@form[:password]} type="password" label="Password" required />
 
           <:actions>
-            <.input
-              field={@form[:remember_me]}
-              type="checkbox"
-              label="Оставаться в системе"
-            />
+            <.input field={@form[:remember_me]} type="checkbox" label={gettext("Remember me")} />
             <.link href={~p"/users/reset_password"} class="text-sm font-semibold">
-              Забыли пароль?
+              {gettext("Forgot password?")}
             </.link>
           </:actions>
           <:actions>
-            <.button phx-disable-with="Logging in..." class="bg-zinc-600 w-full">
-              Войти
+            <.button phx-disable-with="Logging in..." class="text-white font-bold bg-zinc-600 w-full">
+              {gettext("Login")}
             </.button>
           </:actions>
         </.simple_form>

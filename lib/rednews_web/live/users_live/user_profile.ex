@@ -1,7 +1,6 @@
 defmodule RednewsWeb.UsersLive.UserProfile do
   use RednewsWeb, :live_view
 
-  alias Rednews.Posts
   alias Rednews.Accounts
 
   require Logger
@@ -47,10 +46,14 @@ defmodule RednewsWeb.UsersLive.UserProfile do
           <%= if @user.id == @current_user.id do %>
             <div>
               <.link href="/users/log_out" method="DELETE">
-                <p class="border-2 rounded-md text-center px-2 py-1 border-black">Выйти</p>
+                <p class="border-2 rounded-md text-center px-2 py-1 border-black">
+                  {gettext("Log out")}
+                </p>
               </.link>
-              <.link href="/users/settings">
-                <p class="border-2 rounded-md mt-4 text-center px-2 py-1 border-black">Изменить</p>
+              <.link href="/users/edit">
+                <p class="border-2 rounded-md mt-4 text-center px-2 py-1 border-black">
+                  {gettext("Edit")}
+                </p>
               </.link>
             </div>
           <% end %>
@@ -68,7 +71,7 @@ defmodule RednewsWeb.UsersLive.UserProfile do
                     {String.capitalize(to_string(key))}
                   </dt>
                   <dd class="mt-1 text-sm text-gray-900">
-                    {inspect(value)}
+                    {value}
                   </dd>
                 </div>
               <% end %>

@@ -55,6 +55,8 @@ defmodule RednewsWeb do
       use Phoenix.LiveView,
         layout: {RednewsWeb.Layouts, :app}
 
+      on_mount {RednewsWeb.LiveHooks, :set_locale}
+
       unquote(html_helpers())
     end
   end

@@ -1,7 +1,6 @@
 <div class="flex">
   <div class="hidden md:block">
     <.sidebar
-      current_user={@current_user}
       categories={@categories}
       selected_category={@selected_category}
       selected_date={@selected_date}
@@ -12,34 +11,44 @@
       <section class="relative h-cover">
         <div class="md:grid grid-cols-4 gap-5">
           <main class="col-span-4 space-y-14 pb-24">
-          <%= if @selected_category == "all"  do %>
-            <article>
-              <h1 class="text-2xl mb-3 font-bold">Новость дня</h1>
-              <div class="bg-white rounded-3xl h-fit">
-                <img
-                  src={@first_headline.header}
-                  class="w-full h-[55vh] object-cover rounded-3xl"
-                  alt="Header image"
-                />
-                <div class="p-4">
-                  <div class="flex justify-between items-center">
-                    <h1 class="bg-rose-400 text-white px-4 py-1 rounded-full font-black text-xl" style="font-family:'Montserrat Alternates', sans-serif;">
-                      {@first_headline.category}
-                    </h1>
-                    <p>1</p>
+            <%= if @selected_category == "all"  do %>
+              <article>
+                <h1 class="text-2xl mb-3 font-bold">{gettext("News of the day")}</h1>
+                <div class="bg-white rounded-3xl h-fit">
+                  <img
+                    src={@first_headline.header}
+                    class="w-full h-[55vh] object-cover rounded-3xl"
+                    alt="Header image"
+                  />
+                  <div class="p-4">
+                    <div class="flex justify-between items-center">
+                      <h1
+                        class="bg-rose-400 text-white px-4 py-1 rounded-full font-black text-xl"
+                        style="font-family:'Montserrat Alternates', sans-serif;"
+                      >
+                        {Gettext.gettext(RednewsWeb.Gettext, @first_headline.category)}
+                      </h1>
+                    </div>
+                    <.link href={"/news/headline/#{@first_headline.id}"}>
+                      <p class="pt-3 text-2xl">
+                        {@first_headline.title}
+                      </p>
+                    </.link>
                   </div>
-                  <.link href={"/news/headline/#{@first_headline.id}"}>
-                    <p class="pt-3 text-2xl">
-                      {@first_headline.title}
-                    </p>
-                  </.link>
                 </div>
-              </div>
-            </article>
-          <% end %>
+              </article>
+            <% end %>
 
             <section>
-              <h1 class="text-2xl mb-5 font-bold  pb-5">{if @selected_category == "all", do: "Все новости", else: "Новости #{Helpers.convert_date_to_print(@selected_date)} по категории - #{Helpers.convert_category_to_print(@selected_category) }"}</h1>
+              <h1 class="text-2xl font-bold  pb-5">
+                {if @selected_category == "all",
+                  do: gettext("All news"),
+                  else:
+                    gettext("News %{date} by category - %{category}",
+                      category: Helpers.convert_category_to_print(@selected_category),
+                      date: @selected_date
+                    )}
+              </h1>
               <div class="md:grid grid-cols-3 gap-2">
                 <%= for {id, headlines} <- @streams.headlines do %>
                   <article
@@ -65,10 +74,12 @@
                             src={headlines.channel.header}
                             alt="Channel logo"
                           />
-                          <p class="text-xl text-zinc-200 font-['Merge_One']">{headlines.channel.name}</p>
+                          <p class="text-xl text-zinc-200 font-['Merge_One']">
+                            {headlines.channel.name}
+                          </p>
                         </div>
                         <span class="text-zinc-200 font-['Montserrat_Alternates'] font-bold text-sm">
-                          {String.capitalize(headlines.category)}
+                          {Gettext.gettext(RednewsWeb.Gettext, headlines.category)}
                         </span>
                       </div>
                     </div>
@@ -80,23 +91,25 @@
         </div>
       </section>
     <% else %>
-      <%= if @selected_category == "all" do %>
-        <div class="max-w-4xl mx-auto mt-2 bg-white rounded-2xl pb-8 text-2xl text-center font-bold">
-          <img class="rounded-2xl h-[55vh] w-full" src="https://i.pinimg.com/originals/3d/2d/41/3d2d416c53e6d0b2d6b157edf1e4b1db.gif" alt="No news">
-          <h1 class="py-8">В настоящее время новостей нет 😵‍💫</h1>
-          <.link href="/news/new" class="text-sky-600 border-sky-600 border-2 px-4 py-2 rounded-md hover:bg-sky-400 hover:text-white hover:border-0 mt-6 font-bold text-xl">
-            Но я знаю новость!
-          </.link>
-        </div>
-      <% else %>
-        <div class="max-w-4xl mx-auto mt-2 bg-white rounded-2xl pb-8 text-2xl text-center font-bold">
-          <img class="rounded-2xl h-[55vh] w-full" src="https://i.pinimg.com/originals/3d/2d/41/3d2d416c53e6d0b2d6b157edf1e4b1db.gif" alt="No news">
-          <h1 class="py-8">В категории "{Helpers.convert_category_to_print(@selected_category)}" {if is_nil(@selected_date), do: "", else: Helpers.convert_date_to_print(@selected_date)} новостей нет ☕️</h1>
-          <.link href="/news/new" class="text-sky-600 border-sky-600 border-2 px-4 py-2 rounded-md hover:bg-sky-400 hover:text-white hover:border-0 mt-6 font-bold text-xl">
-            Но я знаю новость!
-          </.link>
-        </div>
-      <% end %>
+      <div class="max-w-4xl mx-auto mt-2 bg-white rounded-2xl pb-8 text-2xl text-center font-bold">
+        <img
+          class="rounded-2xl h-[55vh] w-full"
+          src="https://i.pinimg.com/originals/3d/2d/41/3d2d416c53e6d0b2d6b157edf1e4b1db.gif"
+          alt="No news"
+        />
+        <h1 class="py-8">
+          {gettext("There are no articles in the %{category} category for %{date}",
+            category: Helpers.convert_category_to_print(@selected_category),
+            date: String.capitalize(@selected_date)
+          )} 😵‍💫
+        </h1>
+        <.link
+          href="/news/new"
+          class="text-sky-600 border-sky-600 border-2 px-4 py-2 rounded-md hover:bg-sky-400 hover:text-white hover:border-0 mt-6 font-bold text-xl"
+        >
+          {gettext("I know the news!")}
+        </.link>
+      </div>
     <% end %>
   </div>
 </div>

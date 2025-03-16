@@ -35,7 +35,13 @@ defmodule RednewsWeb.ChannelsLive.Index do
         {"category", category} ->
           socket
           |> assign(:selected_category, category)
-          |> assign_channels(Accounts.list_channels(:category_and_date, %{category: category, date: socket.assigns[:selected_date]}) |> Repo.preload(:user))
+          |> assign_channels(
+            Accounts.list_channels(:category_and_date, %{
+              category: category,
+              date: socket.assigns[:selected_date]
+            })
+            |> Repo.preload(:user)
+          )
 
         {"tags", tags} ->
           socket
@@ -45,7 +51,13 @@ defmodule RednewsWeb.ChannelsLive.Index do
         {"date", date} ->
           socket
           |> assign(:selected_date, date)
-          |> assign_channels(Accounts.list_channels(:category_and_date, %{category: socket.assigns[:selected_category], date: date}) |> Repo.preload(:user))
+          |> assign_channels(
+            Accounts.list_channels(:category_and_date, %{
+              category: socket.assigns[:selected_category],
+              date: date
+            })
+            |> Repo.preload(:user)
+          )
 
         {_, "tags"} ->
           socket

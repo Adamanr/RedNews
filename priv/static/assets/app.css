@@ -1017,6 +1017,10 @@ select {
   margin-bottom: 1.5rem;
 }
 
+.me-4 {
+  margin-inline-end: 1rem;
+}
+
 .me-5 {
   margin-inline-end: 1.25rem;
 }
@@ -1146,6 +1150,10 @@ select {
 
 .h-12 {
   height: 3rem;
+}
+
+.h-14 {
+  height: 3.5rem;
 }
 
 .h-2 {
@@ -1335,6 +1343,10 @@ select {
 
 .w-\[12vw\] {
   width: 12vw;
+}
+
+.w-\[25vw\] {
+  width: 25vw;
 }
 
 .w-\[30em\] {
@@ -2165,6 +2177,10 @@ select {
   padding-inline-end: 0.5rem;
 }
 
+.pe-4 {
+  padding-inline-end: 1rem;
+}
+
 .pr-6 {
   padding-right: 1.5rem;
 }
@@ -2179,14 +2195,6 @@ select {
 
 .pt-4 {
   padding-top: 1rem;
-}
-
-.ps-4 {
-  padding-inline-start: 1rem;
-}
-
-.pe-4 {
-  padding-inline-end: 1rem;
 }
 
 .text-left {

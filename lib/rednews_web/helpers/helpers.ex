@@ -1,5 +1,6 @@
 defmodule RednewsWeb.Helpers do
   alias Rednews.Accounts
+  use Gettext, backend: RednewsWeb.Gettext
 
   @moduledoc """
   A utility module providing helper functions for common tasks such as user session management,
@@ -21,6 +22,21 @@ defmodule RednewsWeb.Helpers do
       gfm: true,
       breaks: true
     })
+  end
+
+  @doc """
+  Translates a list of variables into their localized strings.
+
+  ## Parameters
+  - `options`: A list of variables to be translated.
+
+  ## Returns
+  - Returns a list of translated strings.
+  """
+  def translate_options(options) do
+    Enum.map(options, fn variable ->
+      Gettext.gettext(RednewsWeb.Gettext, variable)
+    end)
   end
 
   @doc """
@@ -66,32 +82,7 @@ defmodule RednewsWeb.Helpers do
       "Technology"
   """
   def convert_category_to_print(category) do
-    if category == nil, do: "Все", else: category
-  end
-
-  @doc """
-  Converts a date range identifier into a human-readable format.
-
-  ## Parameters
-  - `date`: A string representing the date range. Possible values: `"month"`, `"today"`, `"week"`, `"all"`.
-
-  ## Returns
-  - Returns a string describing the date range in a human-readable format.
-
-  ## Examples
-      iex> convert_date_to_print("month")
-      "for the month"
-
-      iex> convert_date_to_print("today")
-      "for today"
-  """
-  def convert_date_to_print(date) do
-    case date do
-      "month" -> "за месяц"
-      "today" -> "за сегодня"
-      "week" -> "за неделю"
-      "all" -> "за все время"
-    end
+    if category == nil, do: "All", else: category
   end
 
   @words_per_minute 200
@@ -107,21 +98,16 @@ defmodule RednewsWeb.Helpers do
 
   ## Examples
       iex> calculate_reading_time("This is a sample text.")
-      "1 minute 30 seconds"
+      "1 minute"
   """
   def calculate_reading_time(text) do
     word_count = String.split(text) |> length()
     minutes = div(word_count, @words_per_minute)
-    seconds = rem(word_count, @words_per_minute) * 60 / @words_per_minute
 
-    format_time(minutes, round(seconds))
+    format_time(minutes)
   end
 
-  defp format_time(minutes, seconds) when minutes > 0 do
-    "#{minutes} мин #{seconds} сек"
-  end
-
-  defp format_time(_, seconds) do
-    "#{seconds} сек"
+  defp format_time(minutes) do
+    if minutes > 0, do: "#{minutes}", else: "1"
   end
 end

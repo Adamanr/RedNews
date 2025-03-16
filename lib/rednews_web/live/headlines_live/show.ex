@@ -5,7 +5,6 @@ defmodule RednewsWeb.HeadlinesLive.Show do
 
   alias Rednews.Repo
   alias Rednews.Posts
-  alias Rednews.Accounts
   alias RednewsWeb.Helpers
 
   @impl true
@@ -18,7 +17,11 @@ defmodule RednewsWeb.HeadlinesLive.Show do
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
     headline = Posts.get_headlines!(id) |> Repo.preload(:channel)
-    me_like = if not is_nil(socket.assigns.current_user), do: Posts.me_like?(id, :headline, socket.assigns.current_user.id), else: false
+
+    me_like =
+      if not is_nil(socket.assigns.current_user),
+        do: Posts.me_like?(id, :headline, socket.assigns.current_user.id),
+        else: false
 
     {:noreply,
      socket
@@ -99,7 +102,4 @@ defmodule RednewsWeb.HeadlinesLive.Show do
         {:noreply, put_flash(socket, :error, "Failed to unlike the headline.")}
     end
   end
-
-  defp page_title(:show), do: "Show Headlines"
-  defp page_title(:edit), do: "Edit Headlines"
 end

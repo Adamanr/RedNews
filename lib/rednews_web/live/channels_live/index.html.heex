@@ -1,7 +1,6 @@
 <div class="flex">
   <div class="md:block hidden">
     <.sidebar
-      current_user={@current_user}
       categories={@categories}
       selected_category={@selected_category}
       selected_date={@selected_date}
@@ -10,16 +9,35 @@
   <div class="w-full">
     <%= if length(@streams.channels.inserts) > 0 do %>
       <section class="relative pb-10 mb-10">
-        <h1 class="text-2xl font-bold text-gray-900 mb-4">{if @selected_category == "all", do: "Все каналы", else: "Каналы #{Helpers.convert_date_to_print(@selected_date)} по категории - #{Helpers.convert_category_to_print(@selected_category)}"}</h1>
+        <h1 class="text-2xl font-bold text-gray-900 mb-4">
+          {if @selected_category == "all",
+            do: gettext("All Channels"),
+            else:
+              gettext("Channels %{date} by category - %{category}",
+                category: Helpers.convert_category_to_print(@selected_category),
+                date: @selected_date
+              )}
+        </h1>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           <%= for {_id, channel} <- @streams.channels do %>
             <article class="w-full space-y-2">
               <div class="relative">
-                <img src={channel.logo} class="h-[45vh] w-full object-cover rounded-md" alt="Channel logo"/>
-                <p style="font-family:'Merge One', sans-serif;" class="absolute bottom-5 left-5 px-5 py-2 rounded-2xl bg-white text-xl">{channel.category}</p>
+                <img
+                  src={channel.logo}
+                  class="h-[45vh] w-full object-cover rounded-md"
+                  alt="Channel logo"
+                />
+                <p
+                  style="font-family:'Merge One', sans-serif;"
+                  class="absolute bottom-5 left-5 px-5 py-2 rounded-2xl bg-white text-xl"
+                >
+                  {Gettext.gettext(RednewsWeb.Gettext, channel.category)}
+                </p>
               </div>
               <div style="font-family:'Merriweather Sans', sans-serif;">
-                <.link href={"/channels/channel/#{channel.id}"} class="text-2xl py-4 font-bold">{channel.name}</.link>
+                <.link href={"/channels/channel/#{channel.id}"} class="text-2xl py-4 font-bold">
+                  {channel.name}
+                </.link>
                 <p class="text-gray-600 text-md">{channel.desc}</p>
               </div>
             </article>
@@ -28,10 +46,22 @@
       </section>
     <% else %>
       <div class="max-w-4xl mx-auto mt-2 bg-white rounded-2xl pb-8 text-2xl text-center font-bold">
-        <img class="rounded-2xl h-[55vh] w-full" src="https://i.pinimg.com/originals/36/ce/ef/36ceefd0975813864d4f47a0a609e037.gif" alt="No channels">
-        <h1 class="py-8">В категории "{Helpers.convert_category_to_print(@selected_category)}" {if is_nil(@selected_date), do: "", else: Helpers.convert_date_to_print(@selected_date)} каналов нет ☕️</h1>
-        <.link href="/channels/new" class="text-green-600 border-green-600 border-2 px-4 py-2 rounded-md hover:bg-green-400 hover:text-white hover:border-0 mt-6 font-bold text-xl">
-          Я создам!
+        <img
+          class="rounded-2xl h-[55vh] w-full"
+          src="https://i.pinimg.com/originals/36/ce/ef/36ceefd0975813864d4f47a0a609e037.gif"
+          alt="No channels"
+        />
+        <h1 class="py-8">
+          {gettext("There are no channels in the %{category} category for %{date}",
+            category: Helpers.convert_category_to_print(@selected_category),
+            date: String.capitalize(@selected_date)
+          )} ☕️
+        </h1>
+        <.link
+          href="/channels/new"
+          class="text-green-600 border-green-600 border-2 px-4 py-2 rounded-md hover:bg-green-400 hover:text-white hover:border-0 mt-6 font-bold text-xl"
+        >
+          {gettext("I will create!")}
         </.link>
       </div>
     <% end %>
