@@ -11,13 +11,15 @@ defmodule RednewsWeb.ArticlesLive.Index do
   def mount(_params, session, socket) do
     articles = Posts.list_article() |> Repo.preload(:user)
 
+    first_article = if length(articles) > 0, do: hd(articles), else: nil
+
     socket =
       socket
-      |> assign(:first_article, hd(articles))
+      |> assign(:first_article, first_article)
       |> assign(:current_user, Helpers.get_current_user(session))
       |> assign(:categories, Posts.list_categories())
       |> assign(:selected_category, "all")
-      |> assign(:selected_date, "all")
+      |> assign(:selected_date, "all time")
       |> stream(:article, articles)
 
     {:ok, socket}

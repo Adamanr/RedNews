@@ -85,6 +85,16 @@ defmodule RednewsWeb.Helpers do
     if category == nil, do: "All", else: category
   end
 
+  def convert_time_to_print(time) do
+    case time do
+      "today" -> "for today"
+      "month" -> "for month"
+      "week" -> "for week"
+      "all" -> "all time"
+      _ -> time
+    end
+  end
+
   @words_per_minute 200
 
   @doc """

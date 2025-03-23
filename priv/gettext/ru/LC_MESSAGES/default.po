@@ -408,3 +408,18 @@ msgstr "Описание"
 
 msgid "Categories"
 msgstr "Категории"
+
+msgid "all"
+msgstr "Все"
+
+msgid "all time"
+msgstr "за все время"
+
+msgid "for month"
+msgstr "за месяц"
+
+msgid "for week"
+msgstr "за неделю"
+
+msgid "for today"
+msgstr "за сегодня"

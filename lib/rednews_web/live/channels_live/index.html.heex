@@ -53,8 +53,16 @@
         />
         <h1 class="py-8">
           {gettext("There are no channels in the %{category} category for %{date}",
-            category: Helpers.convert_category_to_print(@selected_category),
-            date: String.capitalize(@selected_date)
+            category:
+              Gettext.gettext(
+                RednewsWeb.Gettext,
+                Helpers.convert_category_to_print(@selected_category)
+              ),
+            date:
+              Gettext.gettext(
+                RednewsWeb.Gettext,
+                Helpers.convert_time_to_print(@selected_date)
+              )
           )} ☕️
         </h1>
         <.link
