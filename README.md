@@ -6,6 +6,8 @@
 - **Create channels**: To organize content efficiently, you can create thematic channels that help structure information and simplify management 📂
 - **Filter and sort**: With built-in filters by categories, tags, and publication dates, you can easily find the desired material in just a few seconds 🔍
 - **Interact with content**: The portal provides like functionality, allowing users to express their opinions and engage with published content ❤️
+- **Multilingual support**: Fully localized in English, Russian, Chinese, and Japanese 🌐
+
 
 ![ 📸](priv/static/images/rednews.jpg)
 
