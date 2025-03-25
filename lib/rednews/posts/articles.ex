@@ -18,7 +18,7 @@ defmodule Rednews.Posts.Articles do
   @doc false
   def changeset(articles, attrs) do
     articles
-    |> cast(attrs, [:title, :content, :category, :header, :user_id, :additional])
+    |> cast(attrs, [:title, :content, :category, :header, :user_id, :tags, :additional])
     |> validate_required([:title, :content, :category, :header, :user_id])
   end
 end

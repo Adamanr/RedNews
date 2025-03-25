@@ -36,7 +36,7 @@ defmodule RednewsWeb.UserRegistrationLive do
               </div>
             </.error>
 
-            <.input field={@form[:email]} type="email" label="Email" required class="mb-4" />
+            <.input field={@form[:email]} type="email" label={gettext("Email")} required class="mb-4" />
             <.input
               field={@form[:password]}
               type="password"
@@ -51,7 +51,7 @@ defmodule RednewsWeb.UserRegistrationLive do
               placeholder={gettext("https://example.com/avatar.png")}
               class="mb-4"
             />
-            <.input field={@form[:login]} type="text" label="Логин" required class="mb-4" />
+            <.input field={@form[:login]} type="text" label={gettext("Login")} required class="mb-4" />
             <.input
               field={@form[:username]}
               type="text"

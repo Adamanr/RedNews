@@ -6,46 +6,48 @@
         src={@article.header}
       />
 
-      <div class="absolute bottom-5 left-5" style="font-family:'Merge One', sans-serif;">
-        <%= if @me_like do %>
-          <button
-            phx-click="unlike_article"
-            phx-value-id={@article.id}
-            class="px-3 items-center space-x-2 flex py-1 rounded-full bg-white "
-          >
-            <p class="text-xl text-rose-500 font-bold">{gettext("I like")}</p>
-            <svg
-              class="w-6 h-6 text-rose-400 fill-rose-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+      <%= if not is_nil(@current_user) do %>
+        <div class="absolute bottom-5 left-5" style="font-family:'Merge One', sans-serif;">
+          <%= if @me_like do %>
+            <button
+              phx-click="unlike_article"
+              phx-value-id={@article.id}
+              class="px-3 items-center space-x-2 flex py-1 rounded-full bg-white "
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-              />
-            </svg>
-          </button>
-        <% else %>
-          <button
-            phx-click="like_article"
-            phx-value-id={@article.id}
-            class="px-3 items-center space-x-2 flex py-1 rounded-full bg-white"
-          >
-            <p class="text-xl font-bold">{gettext("You like?")}</p>
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-              />
-            </svg>
-          </button>
-        <% end %>
-      </div>
+              <p class="text-xl text-rose-500 font-bold">{gettext("I like")}</p>
+              <svg
+                class="w-6 h-6 text-rose-400 fill-rose-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>
+            </button>
+          <% else %>
+            <button
+              phx-click="like_article"
+              phx-value-id={@article.id}
+              class="px-3 items-center space-x-2 flex py-1 rounded-full bg-white"
+            >
+              <p class="text-xl font-bold">{gettext("You like?")}</p>
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>
+            </button>
+          <% end %>
+        </div>
+      <% end %>
     </div>
 
     <div class="p-5 max-w-7xl mx-auto bg-white rounded-lg mt-5">

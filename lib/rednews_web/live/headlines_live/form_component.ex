@@ -29,6 +29,8 @@ defmodule RednewsWeb.HeadlinesLive.FormComponent do
           <.input
             field={@form[:tags]}
             type="text"
+            phx-update="ignore"
+            id="headlines-tags-container"
             label={gettext("Tags (Example: Games,News)")}
             value={Enum.join(@headlines.tags || [], ", ")}
             placeholder={gettext("Games,News")}
@@ -55,12 +57,22 @@ defmodule RednewsWeb.HeadlinesLive.FormComponent do
           <.input field={@form[:header]} type="text" label={gettext("News image URL")} />
         </div>
 
-        <.input field={@form[:content]} type="textarea" label={gettext("News text")} />
+        <div phx-update="ignore" id="article-content-container">
+          <.input
+            field={@form[:content]}
+            type="textarea"
+            label={gettext("Articles text")}
+            rows="10"
+            class="min-h-[200px] h-[200px] w-full resize-none transition-none"
+          />
+        </div>
 
         <:actions>
           <div class="flex place-items-end text-white font-bold w-full space-x-4">
             <div class="flex-1"></div>
-            <.button class="bg-green-600" phx-disable-with="Saving...">{gettext("Publish")}</.button>
+            <.button class="bg-green-600" phx-disable-with={gettext("Saving...")}>
+              {gettext("Publish")}
+            </.button>
           </div>
         </:actions>
       </.simple_form>
@@ -113,7 +125,10 @@ defmodule RednewsWeb.HeadlinesLive.FormComponent do
 
         {:noreply,
          socket
-         |> put_flash(:info, "Headlines #{action}d successfully")
+         |> put_flash(
+           :ok,
+           Gettext.gettext(RednewsWeb.Gettext, "Headlines #{action}d successfully")
+         )
          |> push_navigate(to: socket.assigns.navigate)}
 
       {:error, %Ecto.Changeset{} = changeset} ->

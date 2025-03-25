@@ -20,12 +20,14 @@ defmodule RednewsWeb.CommentsLive.FormComponent do
               required
             />
 
-            <div class="text-right mt-2 mb-4">
+            <div class="text-right flex justify-end w-full mt-2 mb-4">
               <.button
                 phx-disable-with="Отправка..."
                 class="bg-indigo-600 hover:bg-indigo-700 px-3 py-3 rounded-xl text-white font-semibold transition duration-200 flex items-center gap-2"
               >
-                <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {gettext("Send")}
+
+                <svg class="w-4 h-4 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -33,7 +35,6 @@ defmodule RednewsWeb.CommentsLive.FormComponent do
                     d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
                   />
                 </svg>
-                {gettext("Send")}
               </.button>
             </div>
           </.form>
@@ -78,7 +79,7 @@ defmodule RednewsWeb.CommentsLive.FormComponent do
         <% end %>
 
         <%= if length(@comments) == 0 do %>
-          <h1 class="text-xl text-gray-500">Тут пока пусто</h1>
+          <h1 class="text-xl text-gray-500">{gettext("There is nothing here yet")}</h1>
         <% else %>
           <div id="comments-list" class="space-y-4">
             <%= for item <- @comments, is_nil(item.comment.reply_id) do %>

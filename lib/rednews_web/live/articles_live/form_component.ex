@@ -33,6 +33,8 @@ defmodule RednewsWeb.ArticlesLive.FormComponent do
           <.input
             field={@form[:tags]}
             type="text"
+            phx-update="ignore"
+            id="article-tags-container"
             label={gettext("Tags (Example: Games,News)")}
             value={Enum.join(@articles.tags || [], ", ")}
             placeholder={gettext("Games,News")}
@@ -45,12 +47,23 @@ defmodule RednewsWeb.ArticlesLive.FormComponent do
           />
         </div>
 
-        <.input field={@form[:content]} type="textarea" label={gettext("Articles text")} rows="10" />
+        <div phx-update="ignore" id="article-content-container">
+          <.input
+            field={@form[:content]}
+            type="textarea"
+            label={gettext("Articles text")}
+            rows="10"
+            class="min-h-[200px] h-[200px] w-full resize-none transition-none"
+          />
+        </div>
 
         <:actions>
           <div class="flex w-full">
             <div class="flex-1"></div>
-            <.button class="bg-zinc-600 text-white font-bold flex-end" phx-disable-with="Saving...">
+            <.button
+              class="bg-zinc-600 text-white font-bold flex-end"
+              phx-disable-with={gettext("Saving...")}
+            >
               {gettext("Publish")}
             </.button>
           </div>

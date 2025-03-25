@@ -34,8 +34,8 @@ defmodule RednewsWeb.Helpers do
   - Returns a list of translated strings.
   """
   def translate_options(options) do
-    Enum.map(options, fn variable ->
-      Gettext.gettext(RednewsWeb.Gettext, variable)
+    Enum.map(options, fn en_term ->
+      {Gettext.gettext(RednewsWeb.Gettext, en_term), en_term}
     end)
   end
 
@@ -85,6 +85,30 @@ defmodule RednewsWeb.Helpers do
     if category == nil, do: "All", else: category
   end
 
+  @doc """
+  Converts a time period string into a more readable display format.
+
+  ## Parameters
+  - `time` - A string representing the time period. Expected values are:
+    - "today" - will be converted to "for today"
+    - "week" - will be converted to "for week"
+    - "month" - will be converted to "for month"
+    - "all" - will be converted to "all time"
+    Any other value will be returned unchanged.
+
+  ## Examples
+      iex> convert_time_to_print("today")
+      "for today"
+
+      iex> convert_time_to_print("month")
+      "for month"
+
+      iex> convert_time_to_print("custom")
+      "custom"
+
+  ## Returns
+  - Formatted string representation of the time period.
+  """
   def convert_time_to_print(time) do
     case time do
       "today" -> "for today"

@@ -66,8 +66,16 @@
               do: gettext("All articles"),
               else:
                 gettext("Articles %{date} by category - %{category}",
-                  category: Helpers.convert_category_to_print(@selected_category),
-                  date: @selected_date
+                  category:
+                    Gettext.gettext(
+                      RednewsWeb.Gettext,
+                      Helpers.convert_category_to_print(@selected_category)
+                    ),
+                  date:
+                    Gettext.gettext(
+                      RednewsWeb.Gettext,
+                      Helpers.convert_time_to_print(@selected_date)
+                    )
                 )}
           </h1>
           <%= for {_, article} <- @streams.article do %>
@@ -89,11 +97,11 @@
                 </.link>
                 <p class="text-gray-600">
                   {if not is_nil(article.additional),
-                    do: String.slice(article.content, 0, 200),
-                    else: String.slice(article.content, 0, 300)}..
+                    do: String.slice(article.content, 0, 150),
+                    else: String.slice(article.content, 0, 250)}..
                 </p>
-                <div class="md:hidden block h-[10vh]"></div>
-                <div class="absolute md:mt-0 mt-10 text-gray-600 font-light w-full space-x-4 text-md  bottom-0 flex pt-4">
+                <div class="md:hidden block h-[14vh]"></div>
+                <div class="absolute md:mt-0 mt-14 text-gray-600 font-light w-full space-x-4 text-md  bottom-0 flex pt-4">
                   <div class="flex w-fit space-x-2">
                     <img src="/images/calendar.svg" class="w-6 h-6" />
                     <p class="items-center">{article.inserted_at}</p>

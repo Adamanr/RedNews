@@ -98,7 +98,7 @@
           </div>
 
           <div>
-            <%= if @channel.user_id == @current_user.id do %>
+            <%= if not is_nil(@current_user) && @channel.user_id == @current_user.id do %>
               <.link
                 patch={~p"/channels/channel/#{@channel}/show/edit"}
                 class="flex mb-3 items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-yellow-400 hover:bg-indigo-700 transition-colors"
@@ -209,13 +209,15 @@
                 </a>
                 <p class="text-gray-200 mb-4">{String.slice(headline.content, 0, 200)}</p>
 
-                <div class="flex flex-wrap gap-2">
-                  <%= for tag <- headline.tags do %>
-                    <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded">
-                      {tag}
-                    </span>
-                  <% end %>
-                </div>
+                <%= if not is_nil(headline.tags) do %>
+                  <div class="flex flex-wrap gap-2">
+                    <%= for tag <- headline.tags do %>
+                      <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded">
+                        {tag}
+                      </span>
+                    <% end %>
+                  </div>
+                <% end %>
               </div>
             </article>
           <% end %>

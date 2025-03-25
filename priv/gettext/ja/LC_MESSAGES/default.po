@@ -1,0 +1,479 @@
+msgid ""
+msgstr ""
+
+#: lib/rednews_web/components/core_components.ex:694
+msgid "Actions"
+msgstr "操作"
+
+#: lib/rednews_web/components/core_components.ex:227
+msgid "Attempting to reconnect"
+msgstr "再接続中"
+
+#: lib/rednews_web/components/core_components.ex:218
+msgid "Error!"
+msgstr "エラー！"
+
+#: lib/rednews_web/components/core_components.ex:239
+msgid "Hang in there while we get back on track"
+msgstr "復旧まで今しばらくお待ちください"
+
+#: lib/rednews_web/components/core_components.ex:234
+msgid "Something went wrong!"
+msgstr "問題が発生しました！"
+
+#: lib/rednews_web/components/core_components.ex:217
+msgid "Success!"
+msgstr "成功！"
+
+#: lib/rednews_web/components/core_components.ex:222
+msgid "We can't find the internet"
+msgstr "インターネットに接続できません"
+
+#: lib/rednews_web/components/core_components.ex:79
+#: lib/rednews_web/components/core_components.ex:161
+msgid "close"
+msgstr "閉じる"
+
+msgid "News"
+msgstr "ニュース"
+
+msgid "Articles"
+msgstr "記事"
+
+msgid "Channels"
+msgstr "チャンネル"
+
+msgid "All Channels"
+msgstr "すべてのチャンネル"
+
+msgid "Date"
+msgstr "日付"
+
+msgid "Today"
+msgstr "今日"
+
+msgid "Week"
+msgstr "今週"
+
+msgid "Month"
+msgstr "今月"
+
+msgid "All"
+msgstr "すべて"
+
+msgid "All news"
+msgstr "すべてのニュース"
+
+msgid "All articles"
+msgstr "すべての記事"
+
+msgid "All channels"
+msgstr "すべてのチャンネル"
+
+msgid "News of the day"
+msgstr "今日のニュース"
+
+msgid "Author"
+msgstr "著者"
+
+msgid "About channel"
+msgstr "チャンネルについて"
+
+msgid "Edit"
+msgstr "編集"
+
+msgid "Delete"
+msgstr "削除"
+
+msgid "Go to link"
+msgstr "リンクへ移動"
+
+msgid "Latest news"
+msgstr "最新ニュース"
+
+msgid "Additional information"
+msgstr "追加情報"
+
+msgid "Comments"
+msgstr "コメント"
+
+msgid "Send"
+msgstr "送信"
+
+msgid "I like"
+msgstr "いいね"
+
+msgid "You like?"
+msgstr "いいですか？"
+
+msgid "Tags"
+msgstr "タグ"
+
+msgid "Category"
+msgstr "カテゴリ"
+
+msgid "Politics"
+msgstr "政治"
+
+msgid "Economy"
+msgstr "経済"
+
+msgid "Society"
+msgstr "社会"
+
+msgid "Culture"
+msgstr "文化"
+
+msgid "Sports"
+msgstr "スポーツ"
+
+msgid "Science and Technology"
+msgstr "科学技術"
+
+msgid "Health"
+msgstr "健康"
+
+msgid "Education"
+msgstr "教育"
+
+msgid "Incidents"
+msgstr "事件"
+
+msgid "Auto"
+msgstr "自動車"
+
+msgid "Real Estate"
+msgstr "不動産"
+
+msgid "Tourism and Travel"
+msgstr "観光と旅行"
+
+msgid "Ecology"
+msgstr "生態学"
+
+msgid "Fashion and Style"
+msgstr "ファッションとスタイル"
+
+msgid "Cinema and Television"
+msgstr "映画とテレビ"
+
+msgid "Music"
+msgstr "音楽"
+
+msgid "Games and Entertainment"
+msgstr "ゲームとエンターテイメント"
+
+msgid "Business"
+msgstr "ビジネス"
+
+msgid "Finance"
+msgstr "金融"
+
+msgid "World News"
+msgstr "国際ニュース"
+
+msgid "Regional News"
+msgstr "地域ニュース"
+
+msgid "Technology"
+msgstr "テクノロジー"
+
+msgid "Cryptocurrencies"
+msgstr "暗号通貨"
+
+msgid "Army and Defense"
+msgstr "軍事と防衛"
+
+msgid "Agriculture"
+msgstr "農業"
+
+msgid "Energy"
+msgstr "エネルギー"
+
+msgid "Transport"
+msgstr "交通"
+
+msgid "Weather"
+msgstr "天気"
+
+msgid "History"
+msgstr "歴史"
+
+msgid "Humor"
+msgstr "ユーモア"
+
+msgid "I will write!"
+msgstr "書きます！"
+
+msgid "I know the news!"
+msgstr "ニュースを知っています！"
+
+msgid "I will create!"
+msgstr "作成します！"
+
+msgid "Reading time: %{time} min"
+msgstr "読了時間: %{time}分"
+
+msgid "There are no articles in the %{category} category for %{date}"
+msgstr "%{date}の%{category}カテゴリに記事はありません"
+
+msgid "Articles %{date} by category - %{category}"
+msgstr "%{date}の記事（%{category}カテゴリ）"
+
+msgid "There are no news in the %{category} category for %{date}"
+msgstr "%{date}の%{category}カテゴリにニュースはありません"
+
+msgid "News %{date} by category - %{category}"
+msgstr "%{date}のニュース（%{category}カテゴリ）"
+
+msgid "There are no channels in the %{category} category for %{date}"
+msgstr "%{date}の%{category}カテゴリにチャンネルはありません"
+
+msgid "Channels %{date} by category - %{category}"
+msgstr "%{date}のチャンネル（%{category}カテゴリ）"
+
+msgid "Verified: Fake news"
+msgstr "検証済み: 偽ニュース"
+
+msgid "Reliable information"
+msgstr "信頼できる情報"
+
+msgid "No verification conducted"
+msgstr "検証未実施"
+
+msgid "Relevance"
+msgstr "関連性"
+
+msgid "Important"
+msgstr "重要"
+
+msgid "Importance"
+msgstr "重要性"
+
+msgid "Not important"
+msgstr "重要ではない"
+
+msgid "Not defined"
+msgstr "未定義"
+
+msgid "Leave your comment"
+msgstr "コメントを残す"
+
+msgid "Creator"
+msgstr "作成者"
+
+msgid "Collapse"
+msgstr "折りたたむ"
+
+msgid "Expand"
+msgstr "展開する"
+
+msgid "Log out"
+msgstr "ログアウト"
+
+msgid "Login"
+msgstr "ログイン"
+
+msgid "Create"
+msgstr "作成"
+
+msgid "Select what you want to create"
+msgstr "作成するものを選択"
+
+msgid "Create news"
+msgstr "ニュースを作成"
+
+msgid "Create channel"
+msgstr "チャンネルを作成"
+
+msgid "Create article"
+msgstr "記事を作成"
+
+msgid "There is not what you want to do?"
+msgstr "やりたいことが見つかりませんか？"
+
+msgid "Check if this is in the project's Github issue"
+msgstr "プロジェクトのGithub issueを確認してください"
+
+msgid "Posts"
+msgstr "投稿"
+
+msgid "Authorization"
+msgstr "認証"
+
+msgid "Registration"
+msgstr "登録"
+
+msgid "Not registered yet?"
+msgstr "まだ登録していませんか？"
+
+msgid "Register"
+msgstr "登録する"
+
+msgid "Email"
+msgstr "メール"
+
+msgid "Password"
+msgstr "パスワード"
+
+msgid "Remember me"
+msgstr "ログイン状態を保持"
+
+msgid "Forgot password?"
+msgstr "パスワードをお忘れですか？"
+
+msgid "Already registered?"
+msgstr "すでに登録済みですか？"
+
+msgid "Log in to your account"
+msgstr "アカウントにログイン"
+
+msgid "Oops, something went wrong! Check the errors below"
+msgstr "エラーが発生しました！以下のエラーを確認してください"
+
+msgid "Avatar URL"
+msgstr "アバターURL"
+
+msgid "Username"
+msgstr "ユーザー名"
+
+msgid "Create Account"
+msgstr "アカウント作成"
+
+msgid "Creating an account"
+msgstr "アカウント作成中"
+
+msgid "Logo URL"
+msgstr "ロゴURL"
+
+msgid "Background URL"
+msgstr "背景URL"
+
+msgid "Tags (Example: Games,News)"
+msgstr "タグ（例: ゲーム,ニュース）"
+
+msgid "To create news, you need a channel!"
+msgstr "ニュースを作成するにはチャンネルが必要です！"
+
+msgid "News image URL"
+msgstr "ニュース画像URL"
+
+msgid "Channel image URL"
+msgstr "チャンネル画像URL"
+
+msgid "News text"
+msgstr "ニュース本文"
+
+msgid "Publish"
+msgstr "公開"
+
+msgid "Games,News"
+msgstr "ゲーム,ニュース"
+
+msgid "Title"
+msgstr "タイトル"
+
+msgid "Articles text"
+msgstr "記事本文"
+
+msgid "Article image URL"
+msgstr "記事画像URL"
+
+msgid "Name"
+msgstr "名前"
+
+msgid "Channel Link"
+msgstr "チャンネルリンク"
+
+msgid "Description"
+msgstr "説明"
+
+msgid "Categories"
+msgstr "カテゴリ"
+
+msgid "all"
+msgstr "すべて"
+
+msgid "all time"
+msgstr "すべての期間"
+
+msgid "for month"
+msgstr "今月"
+
+msgid "for week"
+msgstr "今週"
+
+msgid "for today"
+msgstr "今日"
+
+msgid "Editing main data"
+msgstr "基本データの編集"
+
+msgid "You can change your basic data right here!"
+msgstr "ここで基本データを変更できます！"
+
+msgid "Change email"
+msgstr "メールを変更"
+
+msgid "Change password"
+msgstr "パスワードを変更"
+
+msgid "Change user info"
+msgstr "ユーザー情報を変更"
+
+msgid "Editing email"
+msgstr "メール編集"
+
+msgid "Editing password"
+msgstr "パスワード編集"
+
+msgid "Editing user info"
+msgstr "ユーザー情報編集"
+
+msgid "Confirm new password"
+msgstr "新しいパスワードを確認"
+
+msgid "Current password"
+msgstr "現在のパスワード"
+
+msgid "New password"
+msgstr "新しいパスワード"
+
+msgid "Saving.."
+msgstr "保存中.."
+
+msgid "Profile Image"
+msgstr "プロフィール画像"
+
+msgid "Latest News"
+msgstr "最新ニュース"
+
+msgid "Data has been successfully saved!"
+msgstr "データが正常に保存されました！"
+
+msgid "Headlines #{action}d successfully"
+msgstr "ニュースの#{action}に成功しました"
+
+msgid "The user is confirmed"
+msgstr "ユーザーが確認されました"
+
+msgid "You must log in to access this page"
+msgstr "このページにアクセスするにはログインが必要です。"
+
+msgid "There is nothing here yet"
+msgstr "まだ何もありません"
+
+msgid "Forgot your password?"
+msgstr "パスワードを忘れた場合"
+
+msgid "Reset your password"
+msgstr "パスワードをリセット"
+
+msgid "We'll send a password reset link to your inbox"
+msgstr "パスワードを忘れた場合"
+
+msgid "Send password reset instructions"
+msgstr "パスワードリセット指示を送信"
+
+msgid "Log in"
+msgstr "ログイン"

@@ -43,7 +43,7 @@ config :esbuild,
 
 config :rednews, RednewsWeb.Gettext,
   default_locale: "en",
-  locales: ~w(en ru)
+  locales: ~w(en ru zh ja)
 
 # Configure tailwind (the version is required)
 config :tailwind,

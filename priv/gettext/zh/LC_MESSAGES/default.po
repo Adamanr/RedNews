@@ -1,0 +1,479 @@
+msgid ""
+msgstr ""
+
+#: lib/rednews_web/components/core_components.ex:694
+msgid "Actions"
+msgstr "操作"
+
+#: lib/rednews_web/components/core_components.ex:227
+msgid "Attempting to reconnect"
+msgstr "正在尝试重新连接"
+
+#: lib/rednews_web/components/core_components.ex:218
+msgid "Error!"
+msgstr "错误！"
+
+#: lib/rednews_web/components/core_components.ex:239
+msgid "Hang in there while we get back on track"
+msgstr "请稍等，我们正在恢复服务"
+
+#: lib/rednews_web/components/core_components.ex:234
+msgid "Something went wrong!"
+msgstr "出了点问题！"
+
+#: lib/rednews_web/components/core_components.ex:217
+msgid "Success!"
+msgstr "成功！"
+
+#: lib/rednews_web/components/core_components.ex:222
+msgid "We can't find the internet"
+msgstr "无法连接到互联网"
+
+#: lib/rednews_web/components/core_components.ex:79
+#: lib/rednews_web/components/core_components.ex:161
+msgid "close"
+msgstr "关闭"
+
+msgid "News"
+msgstr "新闻"
+
+msgid "Articles"
+msgstr "文章"
+
+msgid "Channels"
+msgstr "频道"
+
+msgid "All Channels"
+msgstr "所有频道"
+
+msgid "Date"
+msgstr "日期"
+
+msgid "Today"
+msgstr "今日"
+
+msgid "Week"
+msgstr "本周"
+
+msgid "Month"
+msgstr "本月"
+
+msgid "All"
+msgstr "全部"
+
+msgid "All news"
+msgstr "所有新闻"
+
+msgid "All articles"
+msgstr "所有文章"
+
+msgid "All channels"
+msgstr "所有频道"
+
+msgid "News of the day"
+msgstr "每日新闻"
+
+msgid "Author"
+msgstr "作者"
+
+msgid "About channel"
+msgstr "关于频道"
+
+msgid "Edit"
+msgstr "编辑"
+
+msgid "Delete"
+msgstr "删除"
+
+msgid "Go to link"
+msgstr "前往链接"
+
+msgid "Latest news"
+msgstr "最新新闻"
+
+msgid "Additional information"
+msgstr "附加信息"
+
+msgid "Comments"
+msgstr "评论"
+
+msgid "Send"
+msgstr "发送"
+
+msgid "I like"
+msgstr "我喜欢"
+
+msgid "You like?"
+msgstr "你喜欢吗？"
+
+msgid "Tags"
+msgstr "标签"
+
+msgid "Category"
+msgstr "类别"
+
+msgid "Politics"
+msgstr "政治"
+
+msgid "Economy"
+msgstr "经济"
+
+msgid "Society"
+msgstr "社会"
+
+msgid "Culture"
+msgstr "文化"
+
+msgid "Sports"
+msgstr "体育"
+
+msgid "Science and Technology"
+msgstr "科技"
+
+msgid "Health"
+msgstr "健康"
+
+msgid "Education"
+msgstr "教育"
+
+msgid "Incidents"
+msgstr "事件"
+
+msgid "Auto"
+msgstr "汽车"
+
+msgid "Real Estate"
+msgstr "房地产"
+
+msgid "Tourism and Travel"
+msgstr "旅游"
+
+msgid "Ecology"
+msgstr "生态"
+
+msgid "Fashion and Style"
+msgstr "时尚"
+
+msgid "Cinema and Television"
+msgstr "影视"
+
+msgid "Music"
+msgstr "音乐"
+
+msgid "Games and Entertainment"
+msgstr "游戏娱乐"
+
+msgid "Business"
+msgstr "商业"
+
+msgid "Finance"
+msgstr "金融"
+
+msgid "World News"
+msgstr "国际新闻"
+
+msgid "Regional News"
+msgstr "地区新闻"
+
+msgid "Technology"
+msgstr "技术"
+
+msgid "Cryptocurrencies"
+msgstr "加密货币"
+
+msgid "Army and Defense"
+msgstr "军事国防"
+
+msgid "Agriculture"
+msgstr "农业"
+
+msgid "Energy"
+msgstr "能源"
+
+msgid "Transport"
+msgstr "交通"
+
+msgid "Weather"
+msgstr "天气"
+
+msgid "History"
+msgstr "历史"
+
+msgid "Humor"
+msgstr "幽默"
+
+msgid "I will write!"
+msgstr "我要写！"
+
+msgid "I know the news!"
+msgstr "我知道新闻！"
+
+msgid "I will create!"
+msgstr "我要创建！"
+
+msgid "Reading time: %{time} min"
+msgstr "阅读时间：%{time}分钟"
+
+msgid "There are no articles in the %{category} category for %{date}"
+msgstr "%{date}的%{category}类别中没有文章"
+
+msgid "Articles %{date} by category - %{category}"
+msgstr "%{date}按类别分类的文章 - %{category}"
+
+msgid "There are no news in the %{category} category for %{date}"
+msgstr "%{date}的%{category}类别中没有新闻"
+
+msgid "News %{date} by category - %{category}"
+msgstr "%{date}按类别分类的新闻 - %{category}"
+
+msgid "There are no channels in the %{category} category for %{date}"
+msgstr "%{date}的%{category}类别中没有频道"
+
+msgid "Channels %{date} by category - %{category}"
+msgstr "%{date}按类别分类的频道 - %{category}"
+
+msgid "Verified: Fake news"
+msgstr "已验证：假新闻"
+
+msgid "Reliable information"
+msgstr "可靠信息"
+
+msgid "No verification conducted"
+msgstr "未经验证"
+
+msgid "Relevance"
+msgstr "相关性"
+
+msgid "Important"
+msgstr "重要"
+
+msgid "Importance"
+msgstr "重要性"
+
+msgid "Not important"
+msgstr "不重要"
+
+msgid "Not defined"
+msgstr "未定义"
+
+msgid "Leave your comment"
+msgstr "留下您的评论"
+
+msgid "Creator"
+msgstr "创建者"
+
+msgid "Collapse"
+msgstr "折叠"
+
+msgid "Expand"
+msgstr "展开"
+
+msgid "Log out"
+msgstr "退出"
+
+msgid "Login"
+msgstr "登录"
+
+msgid "Create"
+msgstr "创建"
+
+msgid "Select what you want to create"
+msgstr "选择您想创建的内容"
+
+msgid "Create news"
+msgstr "创建新闻"
+
+msgid "Create channel"
+msgstr "创建频道"
+
+msgid "Create article"
+msgstr "创建文章"
+
+msgid "There is not what you want to do?"
+msgstr "没有您想做的内容？"
+
+msgid "Check if this is in the project's Github issue"
+msgstr "检查这是否在项目的Github问题中"
+
+msgid "Posts"
+msgstr "帖子"
+
+msgid "Authorization"
+msgstr "授权"
+
+msgid "Registration"
+msgstr "注册"
+
+msgid "Not registered yet?"
+msgstr "尚未注册？"
+
+msgid "Register"
+msgstr "注册"
+
+msgid "Email"
+msgstr "电子邮件"
+
+msgid "Password"
+msgstr "密码"
+
+msgid "Remember me"
+msgstr "记住我"
+
+msgid "Forgot password?"
+msgstr "忘记密码？"
+
+msgid "Already registered?"
+msgstr "已经注册？"
+
+msgid "Log in to your account"
+msgstr "登录您的账户"
+
+msgid "Oops, something went wrong! Check the errors below"
+msgstr "哎呀，出错了！请检查以下错误"
+
+msgid "Avatar URL"
+msgstr "头像链接"
+
+msgid "Username"
+msgstr "用户名"
+
+msgid "Create Account"
+msgstr "创建账户"
+
+msgid "Creating an account"
+msgstr "正在创建账户"
+
+msgid "Logo URL"
+msgstr "标志链接"
+
+msgid "Background URL"
+msgstr "背景链接"
+
+msgid "Tags (Example: Games,News)"
+msgstr "标签（例如：游戏,新闻）"
+
+msgid "To create news, you need a channel!"
+msgstr "要创建新闻，您需要一个频道！"
+
+msgid "News image URL"
+msgstr "新闻图片链接"
+
+msgid "Channel image URL"
+msgstr "频道图片链接"
+
+msgid "News text"
+msgstr "新闻正文"
+
+msgid "Publish"
+msgstr "发布"
+
+msgid "Games,News"
+msgstr "游戏,新闻"
+
+msgid "Title"
+msgstr "标题"
+
+msgid "Articles text"
+msgstr "文章正文"
+
+msgid "Article image URL"
+msgstr "文章图片链接"
+
+msgid "Name"
+msgstr "名称"
+
+msgid "Channel Link"
+msgstr "频道链接"
+
+msgid "Description"
+msgstr "描述"
+
+msgid "Categories"
+msgstr "分类"
+
+msgid "all"
+msgstr "全部"
+
+msgid "all time"
+msgstr "所有时间"
+
+msgid "for month"
+msgstr "本月"
+
+msgid "for week"
+msgstr "本周"
+
+msgid "for today"
+msgstr "今日"
+
+msgid "Editing main data"
+msgstr "编辑主要数据"
+
+msgid "You can change your basic data right here!"
+msgstr "您可以在此更改您的基本数据！"
+
+msgid "Change email"
+msgstr "更改电子邮件"
+
+msgid "Change password"
+msgstr "更改密码"
+
+msgid "Change user info"
+msgstr "更改用户信息"
+
+msgid "Editing email"
+msgstr "正在编辑电子邮件"
+
+msgid "Editing password"
+msgstr "正在编辑密码"
+
+msgid "Editing user info"
+msgstr "正在编辑用户信息"
+
+msgid "Confirm new password"
+msgstr "确认新密码"
+
+msgid "Current password"
+msgstr "当前密码"
+
+msgid "New password"
+msgstr "新密码"
+
+msgid "Saving.."
+msgstr "正在保存.."
+
+msgid "Profile Image"
+msgstr "个人资料图片"
+
+msgid "Latest News"
+msgstr "最新新闻"
+
+msgid "Data has been successfully saved!"
+msgstr "数据已成功保存！"
+
+msgid "Headlines #{action}d successfully"
+msgstr "新闻#{action}成功"
+
+msgid "The user is confirmed"
+msgstr "用户已确认"
+
+msgid "You must log in to access this page"
+msgstr "您必须登录才能访问此页面。"
+
+msgid "There is nothing here yet"
+msgstr "这里还没有内容"
+
+msgid "Forgot your password?"
+msgstr "忘记密码？"
+
+msgid "Reset your password"
+msgstr "重置密码"
+
+msgid "We'll send a password reset link to your inbox"
+msgstr "我们会向您的邮箱发送密码重置链接"
+
+msgid "Send password reset instructions"
+msgstr "发送密码重置说明"
+
+msgid "Log in"
+msgstr "登录"

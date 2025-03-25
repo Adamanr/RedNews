@@ -12,31 +12,31 @@
         <div class="md:grid grid-cols-4 gap-5">
           <main class="col-span-4 space-y-14 pb-24">
             <%= if @selected_category == "all"  do %>
-              <article>
-                <h1 class="text-2xl mb-3 font-bold">{gettext("News of the day")}</h1>
-                <div class="bg-white rounded-3xl h-fit">
-                  <img
-                    src={@first_headline.header}
-                    class="w-full h-[55vh] object-cover rounded-3xl"
-                    alt="Header image"
-                  />
-                  <div class="p-4">
-                    <div class="flex justify-between items-center">
-                      <h1
-                        class="bg-rose-400 text-white px-4 py-1 rounded-full font-black text-xl"
-                        style="font-family:'Montserrat Alternates', sans-serif;"
-                      >
-                        {Gettext.gettext(RednewsWeb.Gettext, @first_headline.category)}
-                      </h1>
-                    </div>
-                    <.link href={"/news/headline/#{@first_headline.id}"}>
+              <.link href={"/news/headline/#{@first_headline.id}"}>
+                <article>
+                  <h1 class="text-2xl mb-3 font-bold">{gettext("News of the day")}</h1>
+                  <div class="bg-white rounded-3xl h-fit">
+                    <img
+                      src={@first_headline.header}
+                      class="w-full h-[55vh] object-cover rounded-3xl"
+                      alt="Header image"
+                    />
+                    <div class="p-4">
+                      <div class="flex justify-between items-center">
+                        <h1
+                          class="bg-rose-400 text-white px-4 py-1 rounded-full font-black text-xl"
+                          style="font-family:'Montserrat Alternates', sans-serif;"
+                        >
+                          {Gettext.gettext(RednewsWeb.Gettext, @first_headline.category)}
+                        </h1>
+                      </div>
                       <p class="pt-3 text-2xl">
                         {@first_headline.title}
                       </p>
-                    </.link>
+                    </div>
                   </div>
-                </div>
-              </article>
+                </article>
+              </.link>
             <% end %>
 
             <section>
@@ -45,45 +45,52 @@
                   do: gettext("All news"),
                   else:
                     gettext("News %{date} by category - %{category}",
-                      category: Helpers.convert_category_to_print(@selected_category),
-                      date: @selected_date
+                      category:
+                        Gettext.gettext(
+                          RednewsWeb.Gettext,
+                          Helpers.convert_category_to_print(@selected_category)
+                        ),
+                      date:
+                        Gettext.gettext(
+                          RednewsWeb.Gettext,
+                          Helpers.convert_time_to_print(@selected_date)
+                        )
                     )}
               </h1>
               <div class="md:grid grid-cols-3 gap-2">
                 <%= for {id, headlines} <- @streams.headlines do %>
-                  <article
-                    id={id}
-                    class="relative h-[40vh] group bg-gradient-to-t from-black to-zinc-800/50 rounded-md overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
-                  >
-                    <img
-                      src={headlines.header || "/images/placeholder.jpg"}
-                      alt={headlines.title}
-                      class="absolute w-full h-full object-cover opacity-40 z-0 transform group-hover:scale-105 transition-transform duration-700"
-                    />
-                    <div class="absolute w-full bottom-0 px-6 z-20">
-                      <h2
-                        class="text-2xl font-bold text-white mb-4 cursor-pointer group-hover:text-white transition-colors duration-200"
-                        phx-click={JS.navigate(~p"/news/headline/#{headlines}")}
-                      >
-                        {headlines.title}
-                      </h2>
-                      <div class="md:flex w-full items-center pb-4">
-                        <div class="flex flex-1 items-center space-x-4">
-                          <img
-                            class="h-7 w-7 rounded-md"
-                            src={headlines.channel.header}
-                            alt="Channel logo"
-                          />
-                          <p class="text-xl text-zinc-200 font-['Merge_One']">
-                            {headlines.channel.name}
-                          </p>
+                  <.link href={"/news/headline/#{headlines.id}"}>
+                    <article
+                      id={id}
+                      class="relative h-[40vh] md:mt-0 mt-5 group bg-gradient-to-t from-black to-zinc-800/50 rounded-md overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
+                    >
+                      <img
+                        src={headlines.header || "/images/placeholder.jpg"}
+                        alt={headlines.title}
+                        class="absolute w-full h-full object-cover opacity-40 z-0 transform group-hover:scale-105 transition-transform duration-700"
+                      />
+                      <div class="absolute w-full bottom-0 px-6 z-20">
+                        <h2 class="text-2xl font-bold text-white mb-4 cursor-pointer group-hover:text-white transition-colors duration-200">
+                          {headlines.title}
+                        </h2>
+                        <div class="md:flex w-full items-center pb-4">
+                          <div class="flex flex-1 items-center space-x-4">
+                            <img
+                              class="h-7 w-7 rounded-md"
+                              src={headlines.channel.header}
+                              alt="Channel logo"
+                            />
+                            <p class="text-xl text-zinc-200 font-['Merge_One']">
+                              {headlines.channel.name}
+                            </p>
+                          </div>
+                          <span class="text-zinc-200 font-['Montserrat_Alternates'] font-bold text-sm">
+                            {Gettext.gettext(RednewsWeb.Gettext, headlines.category)}
+                          </span>
                         </div>
-                        <span class="text-zinc-200 font-['Montserrat_Alternates'] font-bold text-sm">
-                          {Gettext.gettext(RednewsWeb.Gettext, headlines.category)}
-                        </span>
                       </div>
-                    </div>
-                  </article>
+                    </article>
+                  </.link>
                 <% end %>
               </div>
             </section>

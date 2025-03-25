@@ -3,11 +3,11 @@ defmodule Rednews.Repo.Migrations.CreateArticle do
 
   def change do
     create table(:articles) do
-      add :title, :string
+      add :title, :text
       add :content, :text
       add :is_draft, :boolean, null: true
       add :category, :string
-      add :header, :string
+      add :header, :text
       add :tags, {:array, :string}
       add :additional, :map
       add :user_id, references(:users, on_delete: :nothing)

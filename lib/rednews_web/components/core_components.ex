@@ -200,6 +200,27 @@ defmodule RednewsWeb.CoreComponents do
     """
   end
 
+  def tabs(assigns) do
+    ~H"""
+    <div class="tabs">
+      <div class="flex border-b">
+        <%= for {tab, idx} <- Enum.with_index(@tabs) do %>
+          <button
+            class={"px-4 py-2 font-medium #{if @active_tab == idx, do: "border-b-2 border-blue-500 text-blue-600", else: "text-gray-500 hover:text-gray-700"}"}
+            phx-click="switch_tab"
+            phx-value-tab={idx}
+          >
+            {tab}
+          </button>
+        <% end %>
+      </div>
+      <div class="tab-content py-4">
+        {render_slot(@tab_content, @active_tab)}
+      </div>
+    </div>
+    """
+  end
+
   @doc """
   Shows the flash group with standard titles and content.
 
@@ -419,7 +440,7 @@ defmodule RednewsWeb.CoreComponents do
       <select
         id={@id}
         name={@name}
-        class="mt-2 block border-0 bg-gray-100 w-full rounded-md  shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
+        class="mt-2 block border-2 border-zinc-300 focus:border-zinc-400 w-full rounded-md  shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
         multiple={@multiple}
         {@rest}
       >
@@ -439,7 +460,7 @@ defmodule RednewsWeb.CoreComponents do
         id={@id}
         name={@name}
         class={[
-          "mt-2 block w-full border-0 bg-gray-100 rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6 min-h-[6rem]",
+          "mt-2 block w-full border-2 bg-gray-100 rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6 min-h-[6rem]",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
@@ -461,7 +482,7 @@ defmodule RednewsWeb.CoreComponents do
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
-          "mt-2 block w-full border-0 bg-gray-100 rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+          "mt-2 block w-full border-2 bg-gray-100 rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
@@ -500,9 +521,11 @@ defmodule RednewsWeb.CoreComponents do
     """
   end
 
+  attr :class, :string, default: nil
+
   def create_modal(assigns) do
     ~H"""
-    <button type="button" id="openModalButton" class="me-5 ms-2">
+    <button type="button" id="openModalButton" class={@class}>
       <img src="/images/add.svg" class="h-11 w-11 text-black" />
     </button>
 
@@ -605,7 +628,7 @@ defmodule RednewsWeb.CoreComponents do
 
   def menu(assigns) do
     ~H"""
-    <div class="h-20 flex bg-white font-[Marmelad:Regular]">
+    <div class="menu h-20 md:overflow-x-hidden overflow-x-scroll flex bg-white font-[Marmelad:Regular]">
       <.link
         href="/"
         class="flex w-[11.5vw] md:text-3xl md:flex hidden md:block font-black px-6 px-2 h-full items-center space-x-3"
@@ -619,8 +642,8 @@ defmodule RednewsWeb.CoreComponents do
             href="/news"
             class={"flex px-2 h-full  items-center space-x-3 #{if @current_path == "/news", do: "border-b-2 border-gray-800", else: "bg-white"}"}
           >
-            <img class="h-5 w-5 text-black" src="/images/news.svg" />
-            <h1 class="">{gettext("News")}</h1>
+            <img class="md:h-5 md:w-5 h-3 w-3 text-black" src="/images/news.svg" />
+            <h1 class="md:text-xl text-sm">{gettext("News")}</h1>
           </.link>
         </div>
         <.link
@@ -628,8 +651,8 @@ defmodule RednewsWeb.CoreComponents do
           class={"flex px-2 h-full  items-center space-x-3 #{if @current_path == "/articles", do: "border-b-2 border-gray-800", else: "bg-white"}"}
         >
           <div class="flex px-2  h-full items-center space-x-3">
-            <img class="h-5 w-5 text-black" src="/images/articles.svg" />
-            <h1 class="">{gettext("Articles")}</h1>
+            <img class="md:h-5 md:w-5 w-3 h-3 text-black" src="/images/articles.svg" />
+            <h1 class="md:text-xl text-sm">{gettext("Articles")}</h1>
           </div>
         </.link>
         <.link
@@ -637,30 +660,80 @@ defmodule RednewsWeb.CoreComponents do
           class={"flex px-2 h-full  items-center space-x-3 #{if @current_path == "/channels", do: "border-b-2 border-gray-800", else: "bg-white"}"}
         >
           <div class="flex px-2  h-full items-center space-x-3">
-            <img class="h-5 w-5 text-black" src="/images/channels.svg" />
-            <h1 class="">{gettext("Channels")}</h1>
+            <img class="md:h-5 md:w-5 w-3 h-3 text-black" src="/images/channels.svg" />
+            <h1 class="md:text-xl text-sm">{gettext("Channels")}</h1>
           </div>
         </.link>
       </div>
 
-      <.create_modal />
+      <div class="flex">
+        <.create_modal />
 
-      <%= if not is_nil(@current_user) do %>
-        <.link href={"/users/user/#{@current_user.id}"}>
-          <div class="flex px-2  h-full items-center">
-            <img src={@current_user.avatar} class="items-center rounded-md h-10 w-10 " />
-          </div>
-        </.link>
-      <% end %>
+        <div class="inline-block  flex items-center h-[5vh] my-auto py-2 w-0.5 mx-4 self-stretch bg-neutral-100 dark:bg-white/10">
+        </div>
 
-      <div class="flex items-center me-4">
-        <%= if @locale == "en" do %>
-          <.link href="/change_locale/ru  ">
-            <img src="/images/usa.svg" class="h-14 w-14 text-black" />
+        <div class="flex  w-[3.5em] h-[5em] items-center">
+          <%= case @locale do %>
+            <% "en" -> %>
+              <.link href="/change_locale/ru">
+                <img src="/images/usa.svg" class="md:h-14 md:w-14 w-8 h-8 text-black" />
+              </.link>
+            <% "ru" -> %>
+              <.link href="/change_locale/zh">
+                <img src="/images/russia.svg" class="h-14 w-14 text-black" />
+              </.link>
+            <% "zh" -> %>
+              <.link href="/change_locale/ja">
+                <img src="/images/china.svg" class="h-14 w-14 text-black" />
+              </.link>
+            <% "ja" -> %>
+              <.link href="/change_locale/en">
+                <img src="/images/japan.svg" class="h-14 w-14 text-black" />
+              </.link>
+          <% end %>
+        </div>
+
+        <div class="inline-block  flex items-center h-[5vh] my-auto py-2 w-0.5 mx-4 self-stretch bg-neutral-100 dark:bg-white/10">
+        </div>
+        <%= if not is_nil(@current_user) do %>
+          <.link href={"/users/user/#{@current_user.id}"}>
+            <div class="flex px-2 me-2 h-full w-full w-[4em] items-center">
+              <img
+                src={@current_user.avatar}
+                class="items-center rounded-md border border-gray-800 h-10 w-10 "
+              />
+            </div>
           </.link>
         <% else %>
-          <.link href="/change_locale/en">
-            <img src="/images/russia.svg" class="h-14 w-14 text-black" />
+          <.link href="/users/log_in">
+            <div class="flex px-2 me-4 h-full w-full items-center">
+              <svg
+                class="items-center rounded-md border-2 p-1 border-gray-800 h-10 w-10 "
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M20 23L12 23C11.4477 23 11 22.5523 11 22C11 21.4477 11.4477 21 12 21L20 21C20.5523 21 21 20.5523 21 20L21 4C21 3.44771 20.5523 3 20 3L12 3C11.4477 3 11 2.55228 11 2C11 1.44772 11.4477 1 12 1L20 0.999999C21.6569 0.999999 23 2.34315 23 4L23 20C23 21.6569 21.6569 23 20 23Z"
+                    fill="#0F0F0F"
+                  >
+                  </path>
+
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M18.6881 10.6901C19.3396 11.4418 19.3396 12.5581 18.6881 13.3098L14.5114 18.1291C13.2988 19.5282 11 18.6707 11 16.8193L11 15L5 15C3.89543 15 3 14.1046 3 13L3 11C3 9.89541 3.89543 8.99998 5 8.99998L11 8.99998L11 7.18071C11 5.3293 13.2988 4.47176 14.5114 5.87085L18.6881 10.6901ZM16.6091 12.6549C16.9348 12.279 16.9348 11.7209 16.6091 11.345L13 7.18071L13 9.49998C13 10.3284 12.3284 11 11.5 11L5 11L5 13L11.5 13C12.3284 13 13 13.6716 13 14.5L13 16.8193L16.6091 12.6549Z"
+                    fill="#0F0F0F"
+                  >
+                  </path>
+                </g>
+              </svg>
+            </div>
           </.link>
         <% end %>
       </div>
@@ -794,7 +867,7 @@ defmodule RednewsWeb.CoreComponents do
         <ul class="mt-4 text-gray-600 space-y-2">
           <li
             phx-click="filtred"
-            phx-value-filter={Jason.encode!(%{"options" => "date", "params" => "all"})}
+            phx-value-filter={Jason.encode!(%{options: "date", params: "all"})}
             class={"#{if @selected_date == "all", do: "underline underline-offset-4"}"}
           >
             {gettext("All")}
@@ -946,7 +1019,7 @@ defmodule RednewsWeb.CoreComponents do
       to: selector,
       time: 200,
       transition:
-        {"transition-all transform ease-in duration-200",
+        {"transition-all opacity-0 transform ease-in duration-200",
          "opacity-100 translate-y-0 sm:scale-100",
          "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"}
     )

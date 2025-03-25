@@ -9,9 +9,7 @@ defmodule RednewsWeb.HeadlinesLive.Show do
 
   @impl true
   def mount(_params, session, socket) do
-    {:ok,
-     socket
-     |> assign(:current_user, Helpers.get_current_user(session))}
+    {:ok, assign(socket, :current_user, Helpers.get_current_user(session))}
   end
 
   @impl true

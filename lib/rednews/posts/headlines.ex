@@ -20,7 +20,7 @@ defmodule Rednews.Posts.Headlines do
   @doc false
   def changeset(headlines, attrs) do
     headlines
-    |> cast(attrs, [:title, :content, :category, :header, :channel_id])
+    |> cast(attrs, [:title, :content, :category, :header, :channel_id, :tags])
     |> validate_required([:title, :category, :header, :channel_id])
   end
 end

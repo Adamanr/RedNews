@@ -215,6 +215,35 @@ defmodule Rednews.Accounts do
     end
   end
 
+  @doc """
+    Returns an `%Ecto.Changeset{}` for changing the user info
+
+    ## Examples
+        iex> change_user_info(user)
+        %Ecto.Changeset{data: %User{}}
+  """
+  def change_user_info(user, attrs \\ %{}) do
+    User.user_info_changeset(user, attrs)
+  end
+
+  @doc """
+    Updates the user info.
+
+    ## Examples
+
+    iex> update_user_info(user, %{username: "John Doe", avatar: "https://example.com/avatar.jpg"})
+    {:ok, %User{}}
+
+    iex> update_user_info(user, %{username: "John Doe", avatar: "https://example.com/avatar.jpg", login: "john"})
+    {:error, %Ecto.Changeset{}}
+
+  """
+  def update_user_info(user, attrs) do
+    changeset = User.user_info_changeset(user, attrs)
+
+    Repo.update(changeset)
+  end
+
   ## Session
 
   @doc """
@@ -382,6 +411,9 @@ defmodule Rednews.Accounts do
 
         :tags ->
           from(c in Channels, where: ^params[:tags] in c.tags)
+
+        :author ->
+          from(c in Channels, where: ^params[:user_id] == c.user_id)
 
         :date ->
           case params[:date] do
@@ -601,7 +633,7 @@ defmodule Rednews.Accounts do
 
   def delete_channels(%Channels{} = channel) do
     Repo.transaction(fn ->
-      Repo.delete_all(from h in Headlines, where: h.user_id == ^channel.id)
+      Repo.delete_all(from h in Headlines, where: h.channel_id == ^channel.id)
 
       Repo.delete(channel)
     end)

@@ -14,8 +14,16 @@
             do: gettext("All Channels"),
             else:
               gettext("Channels %{date} by category - %{category}",
-                category: Helpers.convert_category_to_print(@selected_category),
-                date: @selected_date
+                category:
+                  Gettext.gettext(
+                    RednewsWeb.Gettext,
+                    Helpers.convert_category_to_print(@selected_category)
+                  ),
+                date:
+                  Gettext.gettext(
+                    RednewsWeb.Gettext,
+                    Helpers.convert_time_to_print(@selected_date)
+                  )
               )}
         </h1>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

@@ -290,7 +290,7 @@ msgid "Log out"
 msgstr "Выйти"
 
 msgid "Login"
-msgstr "Войти"
+msgstr "Логин"
 
 msgid "Create"
 msgstr "Создать"
@@ -423,3 +423,75 @@ msgstr "за неделю"
 
 msgid "for today"
 msgstr "за сегодня"
+
+msgid "Editing main data"
+msgstr "Редактирование основных данных"
+
+msgid "You can change your basic data right here!"
+msgstr "Вы можете изменить свои основные данные здесь!"
+
+msgid "Change email"
+msgstr "Изменить почту"
+
+msgid "Change password"
+msgstr "Изменить пароль"
+
+msgid "Change user info"
+msgstr "Изменить данные пользователя"
+
+msgid "Editing email"
+msgstr "Редактирование почты"
+
+msgid "Editing password"
+msgstr "Редактирование пароля"
+
+msgid "Editing user info"
+msgstr "Редактирование данных пользователя"
+
+msgid "Confirm new password"
+msgstr "Подтвердите новый пароль"
+
+msgid "Current password"
+msgstr "Текущий пароль"
+
+msgid "New password"
+msgstr "Новый пароль"
+
+msgid "Saving.."
+msgstr "Сохранение.."
+
+msgid "Profile Image"
+msgstr "Картинка профиля"
+
+msgid "Latest News"
+msgstr "Последние новости"
+
+msgid "Data has been successfully saved!"
+msgstr "Данные успешно сохранены!"
+
+msgid "Headlines #{action}d successfully"
+msgstr "Новость #{action} успешно создана"
+
+msgid "The user is confirmed"
+msgstr "Пользователь подтверждён"
+
+msgid "You must log in to access this page"
+msgstr "Для доступа к этой странице необходимо войти в систему"
+
+msgid "There is nothing here yet"
+msgstr "Здесь пока пусто"
+
+msgid "Forgot your password?"
+msgstr "Забыли пароль?"
+
+msgid "Reset your password"
+msgstr "Сбросить пароль"
+
+msgid "We'll send a password reset link to your inbox"
+msgstr "Мы отправим ссылку для сброса пароля на вашу почту"
+
+msgid "Send password reset instructions"
+msgstr "Отправить инструкции по сбросу пароля"
+
+msgid "Log in"
+msgstr "Войти"

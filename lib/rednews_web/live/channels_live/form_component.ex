@@ -49,7 +49,9 @@ defmodule RednewsWeb.ChannelsLive.FormComponent do
         <:actions>
           <div class="flex place-items-end text-white font-bold w-full space-x-4">
             <div class="flex-1"></div>
-            <.button class="bg-green-600" phx-disable-with="Saving...">{gettext("Create")}</.button>
+            <.button class="bg-green-600" phx-disable-with={gettext("Saving...")}>
+              {gettext("Create")}
+            </.button>
           </div>
         </:actions>
       </.simple_form>

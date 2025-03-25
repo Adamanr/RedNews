@@ -174,6 +174,9 @@ defmodule Rednews.Posts do
         :tags ->
           from(a in Articles, where: ^params[:tags] in a.tags)
 
+        :author ->
+          from(a in Articles, where: a.user_id == ^params[:user_id])
+
         :date ->
           case params[:date] do
             "today" ->
@@ -188,6 +191,9 @@ defmodule Rednews.Posts do
               from(a in Articles,
                 where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", a.inserted_at)
               )
+
+            "all" ->
+              from(a in Articles)
 
             _ ->
               from(a in Articles)
@@ -217,6 +223,9 @@ defmodule Rednews.Posts do
                 from(a in query,
                   where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", a.inserted_at)
                 )
+
+              "all" ->
+                from(a in Articles)
 
               _ ->
                 query
@@ -351,6 +360,50 @@ defmodule Rednews.Posts do
   alias Rednews.Posts.Headlines
 
   @doc """
+  Fetches all headlines belonging to a given user by aggregating them from all their channels.
+
+  ## Parameters
+  - `user_id` - The ID of the user whose headlines should be retrieved.
+
+  ## Behavior
+  1. First retrieves all channels associated with the given user (as an author).
+  2. If no channels exist, returns an empty list `[]`.
+  3. If channels exist:
+     - Fetches headlines **asynchronously** for each channel (improves performance).
+     - Merges all results into a single flattened list.
+
+  ## Notes
+  - Uses `Task.async_stream/2` for concurrent processing of channels.
+  - Returns headlines in no guaranteed order (due to async nature).
+
+  ## Examples
+      iex> list_user_headlines(123)
+      [%Headline{}, %Headline{}, ...]
+
+      iex> list_user_headlines(999)  # User with no channels
+      []
+
+  ## Returns
+  - `[%Headline{}, ...]` - A list of headline structs (may be empty).
+  - `[]` - If the user has no channels.
+  """
+  def list_user_headlines(user_id) do
+    case Accounts.list_channels(:author, %{user_id: user_id}) do
+      [] ->
+        []
+
+      channels ->
+        channels
+        |> Task.async_stream(fn channel ->
+          list_headlines(:channel, %{channel: channel.id})
+        end)
+        |> Stream.map(fn {:ok, headlines} -> headlines end)
+        |> Enum.to_list()
+        |> List.flatten()
+    end
+  end
+
+  @doc """
   Lists headlines based on the provided options and parameters.
 
   ## Parameters
@@ -380,7 +433,10 @@ defmodule Rednews.Posts do
           from(h in Headlines, where: ^params[:tags] in h.tags)
 
         :channel ->
-          from(h in Headlines, where: h.channel_id == ^params[:channel])
+          from(h in Headlines,
+            where: h.channel_id == ^params[:channel],
+            order_by: [desc: h.inserted_at]
+          )
 
         :date ->
           case params[:date] do
@@ -397,7 +453,7 @@ defmodule Rednews.Posts do
                 where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", h.inserted_at)
               )
 
-            _ ->
+            "all" ->
               from(h in Headlines)
           end
 
@@ -425,6 +481,9 @@ defmodule Rednews.Posts do
                 from(h in query,
                   where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", h.inserted_at)
                 )
+
+              "all" ->
+                from(h in Headlines)
 
               _ ->
                 query
@@ -522,9 +581,7 @@ defmodule Rednews.Posts do
   def create_headlines(attrs \\ %{}) do
     attrs = split_tag(attrs)
 
-    headlines = %Headlines{tags: attrs["tags"]}
-
-    headlines
+    %Headlines{}
     |> Headlines.changeset(attrs)
     |> Repo.insert()
   end
@@ -575,6 +632,8 @@ defmodule Rednews.Posts do
 
   """
   def change_headlines(%Headlines{} = headlines, attrs \\ %{}) do
+    attrs = split_tag(attrs)
+
     Headlines.changeset(headlines, attrs)
   end
 

@@ -134,6 +134,15 @@ defmodule Rednews.Accounts.User do
   end
 
   @doc """
+  A user changeset for changing the user information.
+  """
+  def user_info_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:avatar, :login, :username, :desc])
+    |> validate_length(:desc, min: 0, max: 300)
+  end
+
+  @doc """
   Confirms the account by setting `confirmed_at`.
   """
   def confirm_changeset(user) do
