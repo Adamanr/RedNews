@@ -7,16 +7,18 @@ defmodule RednewsWeb.CommentsLive.FormComponent do
 
   def render(assigns) do
     ~H"""
-    <div class="comments-section ">
+    <div class="bg-white/80 dark:bg-gray-800/90 backdrop-blur-sm backdrop-blur-lg rounded-3xl p-6 shadow-xl">
       <div class="relative ">
-        <h3 class="text-2xl font-bold text-gray-900 mb-6">{gettext("Comments")}</h3>
+        <h3 class="text-2xl font-bold dark:text-gray-200 text-gray-900 mb-6">
+          {gettext("Comments")}
+        </h3>
         <%= if not is_nil(@current_user) do %>
           <.form for={@form} id="comment-form" phx-target={@myself} phx-submit="create_comment">
             <.input
               field={@form[:content]}
               type="textarea"
               placeholder={gettext("Leave your comment")}
-              class="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 resize-none min-h-[120px]"
+              class="w-full dark:bg-gray-600 p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 resize-none min-h-[120px]"
               required
             />
 
@@ -55,9 +57,11 @@ defmodule RednewsWeb.CommentsLive.FormComponent do
                 </svg>
               </div>
               <div class="flex-1">
-                <p class="font-semibold text-gray-900">
-                  {Accounts.get_user!(@reply.author).username}
-                </p>
+                <.link href={"/users/user/#{@reply.author}"}>
+                  <p class="font-semibold text-gray-900">
+                    {Accounts.get_user!(@reply.author).username}
+                  </p>
+                </.link>
                 <p class="text-gray-600 mt-1">{@reply.content}</p>
               </div>
               <.button
@@ -84,7 +88,7 @@ defmodule RednewsWeb.CommentsLive.FormComponent do
           <div id="comments-list" class="space-y-4">
             <%= for item <- @comments, is_nil(item.comment.reply_id) do %>
               <div id={"comment-#{item.comment.id}"} class="">
-                <div class="flex items-start gap-4 bg-white p-2 rounded-lg">
+                <div class="flex items-start gap-4 dark:bg-gray-700/70 backdrop-blur-sm bg-white p-2 rounded-lg">
                   <img
                     src={item.author.avatar || "/images/default-avatar.png"}
                     class="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm"
@@ -93,34 +97,38 @@ defmodule RednewsWeb.CommentsLive.FormComponent do
                   <div class="flex-1">
                     <div class="flex items-center justify-between">
                       <div>
-                        <h4 class="font-semibold text-gray-900">{item.author.username}</h4>
+                        <.link href={"/users/user/#{item.author.id}"}>
+                          <h4 class="font-semibold dark:text-gray-300 text-gray-900">
+                            {item.author.username}
+                          </h4>
+                        </.link>
                         <p class="text-sm text-gray-500 mt-1">
                           {Calendar.strftime(item.comment.inserted_at, "%B %d, %Y at %I:%M %p")}
                         </p>
                       </div>
-                      <%= if @current_user && @current_user.id == item.comment.author do %>
-                        <div class="flex gap-2">
-                          <.button
-                            phx-click="reply_comment"
-                            phx-value-id={item.comment.id}
-                            phx-target={@myself}
-                            class="text-sm bg-indigo-100 text-indigo-700 hover:bg-indigo-400 rounded-lg transition duration-200"
-                          >
-                            <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none">
-                              <path
-                                d="M4.5 12L9.5 7M4.5 12L9.5 17M4.5 12L11 12M14.5 12C16.1667 12 19.5 13 19.5 17"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                              />
-                            </svg>
-                          </.button>
+                      <div class="flex gap-2">
+                        <.button
+                          phx-click="reply_comment"
+                          phx-value-id={to_string(item.comment.id)}
+                          phx-target={@myself}
+                          class="text-sm bg-indigo-700 text-indigo-700 hover:bg-indigo-400 rounded-lg transition duration-200"
+                        >
+                          <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none">
+                            <path
+                              d="M4.5 12L9.5 7M4.5 12L9.5 17M4.5 12L11 12M14.5 12C16.1667 12 19.5 13 19.5 17"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                        </.button>
+                        <%= if @current_user && @current_user.id == item.comment.author do %>
                           <.button
                             phx-click="delete_comment"
                             phx-value-id={item.comment.id}
                             phx-target={@myself}
-                            class="text-sm bg-red-100 text-red-700 hover:bg-red-400 rounded-lg transition duration-200"
+                            class="text-sm bg-red-700 text-red-700 hover:bg-red-400 rounded-lg transition duration-200"
                             data-confirm="Вы уверены, что хотите удалить этот комментарий?"
                           >
                             <svg
@@ -155,17 +163,17 @@ defmodule RednewsWeb.CommentsLive.FormComponent do
                               </g>
                             </svg>
                           </.button>
-                        </div>
-                      <% end %>
+                        <% end %>
+                      </div>
                     </div>
-                    <div class="mt-3 text-gray-700 prose prose-sm max-w-none">
+                    <div class="mt-3 text-gray-700 dark:text-gray-400 prose prose-sm max-w-none">
                       {raw(Helpers.to_html(item.comment.content))}
                     </div>
                   </div>
                 </div>
                 <div class="border-black border-l-2 ms-3">
                   <%= for reply_item <- Posts.get_reply_comments(assigns.pub_id, assigns.pub_type, item.comment.id) do %>
-                    <div id={"comment-#{reply_item.comment.id}"} class="mt-4 ml-4 bg-gray-300  p-2">
+                    <div id={"comment-#{reply_item.comment.id}"} class="mt-4 ml-4 bg-gray-500/80  p-2">
                       <div class="flex items-start gap-4">
                         <img
                           src={reply_item.author.avatar || "/images/default-avatar.png"}
@@ -175,10 +183,13 @@ defmodule RednewsWeb.CommentsLive.FormComponent do
                         <div class="flex-1">
                           <div class="flex items-center justify-between">
                             <div>
-                              <h4 class="font-semibold text-gray-900">
-                                {reply_item.author.username}
-                              </h4>
-                              <p class="text-sm text-gray-500 mt-1">
+                              <.link href={"/users/user/#{reply_item.author.id}"}>
+                                <h4 class="font-semibold dark:text-gray-300 text-gray-900">
+                                  {reply_item.author.username}
+                                </h4>
+                              </.link>
+
+                              <p class="text-sm dark:text-gray-400 text-gray-500 mt-1">
                                 {Calendar.strftime(
                                   reply_item.comment.inserted_at,
                                   "%B %d, %Y at %I:%M %p"
@@ -191,7 +202,7 @@ defmodule RednewsWeb.CommentsLive.FormComponent do
                                   phx-click="delete_comment"
                                   phx-value-id={reply_item.comment.id}
                                   phx-target={@myself}
-                                  class="text-xs px-3 py-1.5 bg-red-100 text-red-700 hover:bg-red-400 rounded-lg transition duration-200"
+                                  class="text-xs px-3 py-1.5 bg-red-600 text-red-700 hover:bg-red-400 rounded-lg transition duration-200"
                                   data-confirm="Вы уверены, что хотите удалить этот комментарий?"
                                 >
                                   <svg
@@ -229,7 +240,7 @@ defmodule RednewsWeb.CommentsLive.FormComponent do
                               </div>
                             <% end %>
                           </div>
-                          <div class="mt-3 text-gray-700 prose prose-sm max-w-none">
+                          <div class="mt-3 text-gray-700 dark:text-gray-900 prose prose-sm max-w-none">
                             {raw(Helpers.to_html(reply_item.comment.content))}
                           </div>
                         </div>
@@ -269,7 +280,7 @@ defmodule RednewsWeb.CommentsLive.FormComponent do
         {:noreply,
          socket
          |> assign(:comments, Posts.get_comments(socket.assigns.pub_id, socket.assigns.pub_type))
-         |> put_flash(:info, "Comment added successfully!")
+         |> put_flash(:info, gettext("Comment added successfully!"))
          |> assign(:form, to_form(%{"content" => ""}))}
 
       {:error, changeset} ->
@@ -281,8 +292,14 @@ defmodule RednewsWeb.CommentsLive.FormComponent do
   end
 
   def handle_event("reply_comment", %{"id" => id}, socket) do
-    {id, _} = Integer.parse(id)
-    {:noreply, socket |> assign(:reply, Posts.get_comment(id, socket.assigns.pub_type))}
+    case Integer.parse(id) do
+      {id, _} ->
+        comment = Posts.get_comment(id, socket.assigns.pub_type)
+        {:noreply, socket |> assign(:reply, comment)}
+
+      :error ->
+        {:noreply, socket |> put_flash(:error, "Invalid comment ID")}
+    end
   end
 
   def handle_event("remove_reply", _params, socket) do
@@ -290,17 +307,24 @@ defmodule RednewsWeb.CommentsLive.FormComponent do
   end
 
   def handle_event("delete_comment", %{"id" => id}, socket) do
-    {id, _} = Integer.parse(id)
+    case Integer.parse(id) do
+      {id, _} ->
+        case Posts.delete_comment(id) do
+          {:ok, _} ->
+            {:noreply,
+             socket
+             |> put_flash(:info, gettext("Comment deleted successfully!"))
+             |> assign(
+               :comments,
+               Posts.get_comments(socket.assigns.pub_id, socket.assigns.pub_type)
+             )}
 
-    case Posts.delete_comment(id) do
-      {:ok, _} ->
-        {:noreply,
-         socket
-         |> put_flash(:info, "Comment deleted successfully!")
-         |> assign(:comments, Posts.get_comments(socket.assigns.pub_id, socket.assigns.pub_type))}
+          {:error, _} ->
+            {:noreply, put_flash(socket, :error, "Error deleting comment")}
+        end
 
-      {:error, _} ->
-        {:noreply, put_flash(socket, :error, "Error deleting comment")}
+      :error ->
+        {:noreply, put_flash(socket, :error, "Invalid comment ID")}
     end
   end
 

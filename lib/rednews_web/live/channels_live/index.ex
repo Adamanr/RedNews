@@ -82,6 +82,25 @@ defmodule RednewsWeb.ChannelsLive.Index do
     {:noreply, stream(socket, :channels, socket.assigns[:channels], reset: true)}
   end
 
+  @impl true
+  def handle_event("search_channels", %{"value" => search_term}, socket) do
+    socket =
+      if String.length(search_term) > 0 do
+        socket
+        |> assign(:search_term, search_term)
+        |> assign_channels(
+          Accounts.list_channels(:search, %{search_term: search_term})
+          |> Repo.preload(:user)
+        )
+      else
+        socket
+        |> assign(:search_term, nil)
+        |> assign_channels(Accounts.list_channels() |> Repo.preload(:user))
+      end
+
+    {:noreply, stream(socket, :channels, socket.assigns[:channels], reset: true)}
+  end
+
   defp assign_channels(socket, channels) do
     assign(socket, :channels, channels)
   end

@@ -53,8 +53,8 @@ defmodule Rednews.AccountsTest do
       {:error, changeset} = Accounts.register_user(%{})
 
       assert %{
-               password: ["can't be blank"],
-               email: ["can't be blank"]
+               password: [gettext("can't be blank")],
+               email: [gettext("can't be blank")]
              } = errors_on(changeset)
     end
 

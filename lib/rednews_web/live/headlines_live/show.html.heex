@@ -1,44 +1,221 @@
-<section class="h-full">
-  <div class="w-full h-full relative">
+<section class="relative min-h-screen">
+  <div class="container max-w-5xl mb-16  mx-auto px-4 py-8 relative z-10">
     <img
       src={@headline.header}
-      class="active:absolute active:z-30 active:h-[100vh] active:object-full w-full h-[70vh] object-cover rounded-2xl"
-      alt="Header image"
+      alt="Headline Header Image"
+      class="w-full h-[35em] rounded-lg mb-5 object-cover brightness-90 group-hover:brightness-110 group-hover:scale-105 transition-all duration-500"
     />
-    <div class="absolute max-w-7xl top-[50vh] px-10 left-0 right-0 mx-auto z-20 h-full">
-      <div class="md:flex items-center mb-2">
-        <h1 class="text-xl h-[4vh] items-center text-center flex rounded-2xl font-['Montserrat_Alternates'] font-bold text-white md:ms-2 md:mt-0 mt-2 px-4 bg-[#EE5A5A] md:w-fit">
+    <div class="flex flex-col md:flex-row items-center justify-between mb-8 space-y-4 md:space-y-0">
+      <div class="flex items-center space-x-4">
+        <span class="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-full text-sm font-bold uppercase tracking-wider shadow-lg">
           {Gettext.gettext(RednewsWeb.Gettext, @headline.category)}
-        </h1>
-        <div class="text-xl py-1 rounded-2xl font-['Montserrat_Alternates'] text-black font-bold  md:mt-0 mt-1 md:mx-2 w-full md:w-fit">
-          <%= case @headline.is_fake do %>
+        </span>
+
+        <%= case @headline.is_fake do %>
+          <% true -> %>
+            <div class="flex items-center space-x-2 bg-red-100 rounded-full px-3 py-1 animate-wiggle">
+              <svg
+                class="w-5 h-5 text-red-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                />
+              </svg>
+              <span class="text-red-700 font-semibold">{gettext("Verified: Fake news")}</span>
+            </div>
+          <% false -> %>
+            <div class="flex items-center space-x-2 bg-green-100 rounded-full px-3 py-1 animate-bounce-slow">
+              <svg
+                class="w-5 h-5 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span class="text-green-700 font-semibold">{gettext("Reliable information")}</span>
+            </div>
+          <% nil -> %>
+            <div class="flex items-center space-x-2 bg-gray-200 rounded-full px-3 py-1">
+              <svg
+                class="w-5 h-5 text-gray-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span class="text-gray-700 font-semibold">
+                {gettext("No verification conducted")}
+              </span>
+            </div>
+        <% end %>
+      </div>
+
+      <.link
+        href={"/channels/channel/#{@headline.channel_id}"}
+        class="flex items-center space-x-3 hover:bg-purple-100 p-2 rounded-full transition-all duration-300 ease-in-out transform hover:scale-105"
+      >
+        <img
+          src={@headline.channel.logo}
+          class="w-10 h-10 rounded-full border-2 border-purple-300 shadow-md"
+          alt="Channel logo"
+        />
+        <span class="font-bold dark:text-purple-400 text-purple-800 text-lg">
+          {@headline.channel.name}
+        </span>
+      </.link>
+    </div>
+
+    <article class="bg-white/80 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl p-8 md:p-12 shadow-2xl  relative overflow-hidden">
+      <div class="absolute -top-10 -right-10 w-32 h-32 bg-purple-200/50 rounded-full blur-2xl">
+      </div>
+
+      <h1 class="text-3xl pb-2 md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 mb-6 leading-tight">
+        {@headline.title}
+      </h1>
+
+      <div class="prose prose-lg max-w-none dark:text-gray-300 text-gray-800 leading-relaxed">
+        {raw(Helpers.to_html(@headline.content))}
+      </div>
+
+      <div class="pt-10">
+        <%= if not is_nil(@current_user) do %>
+          <div class="rounded-2xl transition-all duration-300 hover:scale-105">
+            <%= if @me_like do %>
+              <button
+                phx-click="unlike"
+                phx-value-id={@headline.id}
+                class="relative overflow-hidden group flex items-center justify-center md:w-fit w-full h-12 px-6 space-x-2 rounded-full bg-white border-2 border-green-500 hover:border-green-600 shadow-md hover:shadow-lg transition-all duration-300"
+                aria-label={gettext("Unlike")}
+              >
+                <span class="absolute inset-0 bg-green-100 rounded-full opacity-0 group-active:opacity-100 group-active:animate-ping-slow transition-opacity duration-300">
+                </span>
+
+                <p class="text-lg font-medium text-green-600 group-hover:text-green-700 transition-colors duration-300 z-10">
+                  {gettext("Liked")}
+                </p>
+
+                <svg
+                  class="w-7 h-7 text-green-600 group-hover:text-green-700 transition-colors duration-300 z-10"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+              </button>
+            <% else %>
+              <button
+                phx-click="like"
+                phx-value-id={@headline.id}
+                class="relative overflow-hidden group flex items-center justify-center md:w-fit w-full h-12 px-6 space-x-2 rounded-full bg-white border-2 border-rose-400 hover:border-rose-500 shadow hover:shadow-md transition-all duration-300"
+                aria-label={gettext("Like")}
+              >
+                <span class="absolute inset-0 bg-rose-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                </span>
+
+                <p class="text-lg font-medium text-rose-500 group-hover:text-rose-600 transition-colors duration-300 z-10">
+                  {gettext("Like?")}
+                </p>
+
+                <svg
+                  class="w-7 h-7 text-rose-500 group-hover:text-rose-600 transition-colors duration-300 z-10"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+              </button>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </article>
+
+    <div class="grid md:grid-cols-2 gap-6 mt-8">
+      <section class="bg-white/80 dark:bg-gray-800/90 backdrop-blur-sm h-fit rounded-3xl p-6 space-y-4 shadow-xl">
+        <h3 class="text-2xl font-bold dark:text-purple-500 text-purple-800 dark:border-gray-700 border-b-2 border-purple-200 pb-2">
+          {gettext("Additional Information")}
+        </h3>
+
+        <div class="flex items-center space-x-3">
+          <span class="dark:text-gray-300 text-gray-600 font-medium">
+            {gettext("Importance")}:
+          </span>
+          <div class="flex-grow bg-gradient-to-r from-purple-200 to-pink-200 rounded-full h-3 relative">
+            <div
+              class="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full"
+              style={"width: #{if @likes, do: @likes * 10, else: 0}%"}
+            >
+            </div>
+          </div>
+          <span class="text-purple-600 font-bold">
+            {if @likes, do: @likes * 10, else: 0}%
+          </span>
+        </div>
+
+        <div class="flex space-x-2 items-center">
+          <h1 class="font-medium dark:text-gray-300 text-gray-600">{gettext("Author")}:</h1>
+          <.link href={"/channels/channel/#{@headline.channel_id}"} class="flex">
+            <img
+              src={@headline.channel.logo}
+              class="w-7 h-7 rounded-lg self-center"
+              alt="Channel logo"
+            />
+            <p class="ps-2 flex dark:text-gray-200 items-center">{@headline.channel.name}</p>
+          </.link>
+        </div>
+
+        <div class="flex space-x-3">
+          <span class="font-medium dark:text-gray-300 text-gray-600">
+            {gettext("Relevance")}:
+          </span>
+          <%= case @headline.is_very_important do %>
             <% true -> %>
-              <div class="h-[4vh] bg-white flex items-center rounded-2xl py-1 px-2 text-red-700">
-                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="flex items-center text-green-700">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
                   />
                 </svg>
-                <span class="font-medium ">{gettext("Verified: Fake news")}</span>
+                <span class="font-medium">{gettext("Important")}</span>
               </div>
             <% false -> %>
-              <div class="h-[4vh] bg-white flex items-center py-1 px-2 rounded-2xl text-green-700">
-                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="flex items-center dark:text-gray-300 text-gray-600">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <span class="font-medium">{gettext("Reliable information")}</span>
+                <span class="font-medium">{gettext("Not important")}</span>
               </div>
             <% nil -> %>
-              <div class="h-[4vh] flex items-center py-1 px-2 text-white bg-gray-600 rounded-2xl">
-                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="flex items-center dark:text-gray-300 text-gray-500">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -46,231 +223,70 @@
                     d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <span class="font-medium">{gettext("No verification conducted")}</span>
+                <span class="font-medium">{gettext("Not defined")}</span>
               </div>
           <% end %>
         </div>
-      </div>
 
-      <article class="bg-white h-fit pb-5 rounded-2xl px-10">
-        <h1 class="text-4xl py-7">{@headline.title}</h1>
-        <div class="prose prose-lg leading-7 h-full w-full">
-          {raw(Helpers.to_html(@headline.content))}
+        <div class="flex space-x-5 items-center">
+          <h1 class="font-medium dark:text-gray-300 text-gray-600">{gettext("Category")}:</h1>
+          <p class="dark:bg-stone-800 bg-brand text-white px-2 py-1 rounded-md text-xs font-semibold">
+            {Gettext.gettext(RednewsWeb.Gettext, @headline.category)}
+          </p>
         </div>
-      </article>
 
-      <div class="md:grid grid-cols-2 mt-5 gap-5 max-w-7xl mx-auto">
-        <section
-          class="h-fit bg-white p-5 rounded-md"
-          style="font-family:'Merge One', sans-serif;"
-        >
-          <div class="flex space-y-3 flex-col">
-            <h3 class="text-2xl font-bold text-gray-900">{gettext("Additional information")}</h3>
-            <div class="flex space-x-2 items-center">
-              <h1>{gettext("Author")}</h1>
-              <.link href={"/channels/channel/#{@headline.channel_id}"} class="flex">
-                <img
-                  src={@headline.channel.logo}
-                  class="w-7 h-7 rounded-lg self-center"
-                  alt="Channel logo"
-                />
-                <p class="ps-2">{@headline.channel.name}</p>
-              </.link>
-            </div>
-            <div class="flex">
-              <span class="pe-2">{gettext("Relevance")}</span>
-              <%= case @headline.is_very_important do %>
-                <% true -> %>
-                  <div class="flex items-center text-green-700">
-                    <svg
-                      class="w-5 h-5 mr-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M13 10V3L4 14h7v7l9-11h-7z"
-                      />
-                    </svg>
-                    <span class="font-medium">{gettext("Important")}</span>
-                  </div>
-                <% false -> %>
-                  <div class="flex items-center text-gray-600">
-                    <svg
-                      class="w-5 h-5 mr-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    <span class="font-medium">{gettext("Not important")}</span>
-                  </div>
-                <% nil -> %>
-                  <div class="flex items-center text-gray-500">
-                    <svg
-                      class="w-5 h-5 mr-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    <span class="font-medium">{gettext("Not defined")}</span>
-                  </div>
-              <% end %>
-            </div>
-            <%= if not is_nil(@headline.tags) do %>
-              <div class="md:flex space-x-5 items-center">
-                <h1>{gettext("Tags")}</h1>
-                <%= for tag <- @headline.tags do %>
-                  <p>#{tag}</p>
-                <% end %>
-              </div>
+        <%= if not is_nil(@headline.tags) do %>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="font-medium text-gray-600">{gettext("Tags")}:</span>
+            <%= for tag <- @headline.tags do %>
+              <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded-full text-xs font-semibold">
+                #{tag}
+              </span>
             <% end %>
-            <div class="md:flex space-x-5 items-center">
-              <h1>{gettext("Category")}:</h1>
-              <p>{Gettext.gettext(RednewsWeb.Gettext, @headline.category)}</p>
-            </div>
-            <div class="flex space-x-2 items-center">
-              <div class="flex justify-between items-center mb-2">
-                <span class="text-gray-600">{gettext("Importance")}:</span>
-              </div>
-              <div class="relative w-full bg-gray-200 rounded-full h-2">
-                <div
-                  title="Тест"
-                  class="bg-blue-600 h-2 rounded-full"
-                  style={"width: #{if @likes, do: @likes * 10, else: 0}%"}
-                >
-                </div>
-                <p class="absolute right-0 -top-6 text-gray-600">
-                  {if @likes, do: @likes * 10, else: 0}%
-                </p>
-              </div>
-            </div>
-            <%= if not is_nil(@current_user) do %>
-              <div class="rounded-2xl">
-                <%= if @me_like do %>
-                  <button
-                    phx-click="unlike"
-                    phx-value-id={@headline.id}
-                    class="h-[4vh] py-1 space-x-2 items-center border-2 px-2 border-green-600 flex rounded-md text-xs font-medium text-gray-600"
-                  >
-                    <p class="text-xl text-green-600">{gettext("I like")}</p>
-                    <svg
-                      class="w-8 h-8 text-green-600 stroke-2"
-                      viewBox="0 0 48 48"
-                      id="a"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                    >
-                      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
-                      </g>
-                      <g id="SVGRepo_iconCarrier">
-                        <defs>
-                          <style>
-                            .b{fill:currentColor;}.c{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;}
-                          </style>
-                        </defs>
-                        <path
-                          class="c"
-                          d="m15.1964,18.1715c.4585-10.2163,19.8765-16.9631,27.1509,2.1572,6.5658,18.8645-16.4267,22.4577-29.7546,17.4099C2.7102,35.0782.0321,21.5536,15.1961,18.1712l.0004.0003Z"
-                        >
-                        </path>
-                        <path class="c" d="m11.7517,29.9387s6.3228,6.2353,13.0533,1.1628"></path>
-                        <circle class="b" cx="20.6394" cy="16.3881" r=".7496"></circle>
-                        <circle class="b" cx="28.7099" cy="17.6042" r=".7496"></circle>
-                      </g>
-                    </svg>
-                  </button>
-                <% else %>
-                  <button
-                    phx-click="like"
-                    phx-value-id={@headline.id}
-                    class="h-[4vh] py-1  space-x-2 border-2 items-center px-2 flex rounded-md border-rose-600 text-xs font-medium text-gray-600"
-                  >
-                    <p class="text-xl text-rose-600">{gettext("You like?")}</p>
-                    <svg class="w-8 h-8 text-rose-600 stroke-2" viewBox="0 0 41 34" fill="none">
-                      <path
-                        d="M11.6945 10.9887C12.153 0.772357 31.571 -5.97444 38.8454 13.1459C45.4112 32.0104 22.4187 35.6036 9.09076 30.5558C-0.791741 27.8954 -3.46954 14.3711 11.6945 10.9887Z"
-                        stroke="currentColor"
-                      />
-                      <path
-                        d="M20.6733 27.542C20.6733 27.542 16.1798 19.8827 8.36578 23.0404"
-                        stroke="currentColor"
-                      />
-                      <path
-                        d="M17.3869 9.20517C17.3869 9.34302 17.2751 9.45477 17.1373 9.45477C16.9994 9.45477 16.8877 9.34301 16.8877 9.20517C16.8877 9.06732 16.9994 8.95557 17.1373 8.95557C17.2751 8.95557 17.3869 9.06732 17.3869 9.20517Z"
-                        fill="currentColor"
-                      />
-                      <path
-                        d="M25.4577 10.4215C25.4577 10.5593 25.3459 10.6711 25.2081 10.6711C25.0702 10.6711 24.9585 10.5593 24.9585 10.4215C24.9585 10.2836 25.0702 10.1719 25.2081 10.1719C25.3459 10.1719 25.4577 10.2836 25.4577 10.4215Z"
-                        fill="currentColor"
-                      />
-                    </svg>
-                  </button>
-                <% end %>
-              </div>
-            <% end %>
-            <%= if not is_nil(@headline.additional) do %>
-              <div class="items-center w-1/2">
-                <h1 class="mb-4">{gettext("Additional parameters")}:</h1>
-                <%= for {k, v} <- @headline.additional do %>
-                  <div class="flex items-center">
-                    <p class="whitespace-nowrap">{k}:</p>
-                    <p class="ps-2 max-w-[25vw] break-words">{v}</p>
-                  </div>
-                <% end %>
-              </div>
-            <% end %>
-            <%= if not is_nil(@current_user) and @headline.channel.user_id == @current_user.id do %>
-              <h3 class="text-2xl font-bold py-2 text-gray-900">{gettext("Actions")}</h3>
-              <div class="flex text-white space-x-2">
-                <.link
-                  phx-click={JS.push("delete", value: %{id: @headline.id})}
-                  data-confirm="Are you sure?"
-                  class="w-1/2 inline-flex items-center text-cetner gap-2 bg-gray-400 text-white px-4 py-2 rounded-md text-xl font-medium hover:bg-rose-400 transition-colors"
-                >
-                  <img src="/images/trash.svg" class="h-5 w-5" />
-                  {gettext("Delete")}
-                </.link>
-                <.link
-                  patch={~p"/news/headline/#{@headline}/show/edit"}
-                  class="w-1/2 inline-flex items-center gap-2 bg-gray-400 text-white px-4 py-2 rounded-md text-xl font-medium hover:bg-amber-400 transition-colors"
-                >
-                  <img src="/images/edit.svg" class="h-5 w-5" />
-                  {gettext("Edit")}
-                </.link>
+          </div>
+        <% end %>
+
+        <%= if not is_nil(@headline.additional) do %>
+          <div class="space-y-2">
+            <h4 class="text-lg font-bold text-purple-700">{gettext("Additional Parameters")}</h4>
+            <%= for {k, v} <- @headline.additional do %>
+              <div class="flex justify-between border-b border-purple-100 pb-1">
+                <span class="text-gray-600 font-medium">{k}</span>
+                <span class="text-purple-800 font-semibold truncate max-w-[200px]">{v}</span>
               </div>
             <% end %>
           </div>
-        </section>
-        <section class="bg-white p-5 rounded-md">
-          <.live_component
-            module={RednewsWeb.CommentsLive.FormComponent}
-            id="comments"
-            pub_type="headline"
-            pub_id={@headline.id}
-            current_user={@current_user}
-          />
-        </section>
-      </div>
+        <% end %>
 
-      <div class="h-[10vh]"></div>
+        <%= if not is_nil(@current_user) and @headline.channel.user_id == @current_user.id do %>
+          <div class="mt-8 space-y-2 justify-center">
+            <button
+              phx-click={JS.push("delete", value: %{id: @headline.id})}
+              data-confirm="Are you sure?"
+              class="flex w-full items-center space-x-2 bg-gradient-to-r from-red-400 to-red-600 text-white px-6 py-3 rounded-md hover:from-red-500 hover:to-red-700 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+            >
+              <img src="/images/trash.svg" class="h-6 w-6" />
+              <span class="font-bold">{gettext("Delete")}</span>
+            </button>
+
+            <.link
+              patch={~p"/news/headline/#{@headline}/show/edit"}
+              class="flex items-center space-x-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-6 py-3 rounded-md hover:from-yellow-500 hover:to-orange-600 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+            >
+              <img src="/images/edit.svg" class="h-6 w-6" />
+              <span class="font-bold">{gettext("Edit")}</span>
+            </.link>
+          </div>
+        <% end %>
+      </section>
+
+      <.live_component
+        module={RednewsWeb.CommentsLive.FormComponent}
+        id="comments"
+        pub_type="headline"
+        pub_id={@headline.id}
+        current_user={@current_user}
+      />
     </div>
   </div>
 </section>

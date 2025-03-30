@@ -12,12 +12,32 @@ defmodule RednewsWeb.HeadlinesLive.Index do
 
     {:ok,
      socket
-     |> assign(:first_headline, Enum.at(headlines, 0))
+     |> assign(:first_headline, Enum.at(headlines, 1))
      |> assign(:current_user, Helpers.get_current_user(session))
      |> assign(:categories, Posts.list_categories())
      |> assign(:selected_category, "all")
+     |> assign(:search_term, "")
      |> assign(:selected_date, "all")
      |> stream(:headlines, headlines)}
+  end
+
+  @impl true
+  def handle_event("search_news", %{"value" => search_term}, socket) do
+    socket =
+      if String.length(search_term) > 0 do
+        socket
+        |> assign(:search_term, search_term)
+        |> assign_headlines(
+          Posts.list_headlines(:search, %{search_term: search_term})
+          |> Repo.preload(:channel)
+        )
+      else
+        socket
+        |> assign(:search_term, nil)
+        |> assign_headlines(Posts.list_headlines() |> Repo.preload(:channel))
+      end
+
+    {:noreply, stream(socket, :headlines, socket.assigns[:headline], reset: true)}
   end
 
   @impl true

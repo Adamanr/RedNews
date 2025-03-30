@@ -1,24 +1,81 @@
-<div class="mb-20">
-  <article class="rounded-xl mt-2">
-    <div class="relative mx-auto max-w-7xl">
-      <img
-        class="active:z-30 active:h-[85vh] active:max-w-full active:object-cover w-full h-[70vh] object-cover rounded-2xl "
-        src={@article.header}
-      />
+<div class="relative min-h-screen py-10">
+  <article class="max-w-5xl mx-auto rounded-3xl  overflow-hidden transition-all duration-500 hover:shadow-4xl">
+    <div class="relative">
+      <div class="image-container relative">
+        <img
+          src={@article.header}
+          alt={@article.title}
+          class="w-full h-[68vh] object-cover transform transition-transform duration-500"
+        />
+
+        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 transform transition-transform duration-500 hover:scale-105 to-transparent p-6">
+          <h1 class="text-4xl font-extrabold text-white drop-shadow-lg line-clamp-2">
+            {@article.title}
+          </h1>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-8 shadow-lg dark:bg-gray-800/90 backdrop-blur-sm bg-white rounded-b-2xl space-y-6">
+      <div class="article-meta flex items-center justify-between text-gray-600">
+        <div class="flex items-center space-x-4">
+          <.link href={"/users/user/#{@article.user_id}"} class="flex items-center space-x-2">
+            <img
+              src={@article.user.avatar}
+              class="w-12 h-12 rounded-full border-2 border-indigo-200"
+            />
+            <div>
+              <p class="font-semibold dark:text-gray-300 text-lg">{@article.user.username}</p>
+              <p class="text-sm dark:text-gray-400 text-gray-500">{gettext("Article Author")}</p>
+            </div>
+          </.link>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <div class="dark:bg-stone-600 bg-indigo-50 px-3 py-1 rounded-full">
+            <p class="text-sm dark:text-indigo-300 text-indigo-600">
+              {Gettext.gettext(RednewsWeb.Gettext, @article.category)}
+            </p>
+          </div>
+
+          <%= if not is_nil(@article.tags) do %>
+            <div class="flex space-x-2">
+              <%= for tag <- @article.tags do %>
+                <span class="dark:bg-gray-600 bg-pink-50 dark:text-pink-200 text-pink-600 text-xs px-2 py-1 rounded-full">
+                  #{tag}
+                </span>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="prose prose-lg dark:text-gray-300 prose-indigo max-w-none">
+        {raw(Helpers.to_html(@article.content))}
+      </div>
 
       <%= if not is_nil(@current_user) do %>
-        <div class="absolute bottom-5 left-5" style="font-family:'Merge One', sans-serif;">
+        <div class=" pt-10">
           <%= if @me_like do %>
             <button
               phx-click="unlike_article"
               phx-value-id={@article.id}
-              class="px-3 items-center space-x-2 flex py-1 rounded-full bg-white "
+              class="like-button liked"
             >
-              <p class="text-xl text-rose-500 font-bold">{gettext("I like")}</p>
+              <svg class="flex items-center w-8 h-8 fill-rose-500" viewBox="0 0 24 24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+              </svg>
+              <span>{gettext("Liked")}</span>
+            </button>
+          <% else %>
+            <button
+              phx-click="like_article"
+              phx-value-id={@article.id}
+              class="items-center like-button"
+            >
               <svg
-                class="w-6 h-6 text-rose-400 fill-rose-400"
+                class="flex items-center  w-8 h-8 stroke-current"
                 fill="none"
-                stroke="currentColor"
                 viewBox="0 0 24 24"
               >
                 <path
@@ -28,105 +85,92 @@
                   d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                 />
               </svg>
-            </button>
-          <% else %>
-            <button
-              phx-click="like_article"
-              phx-value-id={@article.id}
-              class="px-3 items-center space-x-2 flex py-1 rounded-full bg-white"
-            >
-              <p class="text-xl font-bold">{gettext("You like?")}</p>
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                />
-              </svg>
+              <span>{gettext("Like?")}</span>
             </button>
           <% end %>
         </div>
       <% end %>
     </div>
 
-    <div class="p-5 max-w-7xl mx-auto bg-white rounded-lg mt-5">
-      <h1 class="pb-10 text-3xl font-bold">{@article.title}</h1>
-      <div class="prose prose-lg leading-7 h-full w-full ">
-        {raw(Helpers.to_html(@article.content))}
-      </div>
-    </div>
+    <div class="grid md:grid-cols-2 mb-10 gap-6 mt-8">
+      <div class="rounded-2xl h-fit">
+        <div class="dark:bg-gray-800/90 backdrop-blur-sm bg-indigo-50 p-6 rounded-2xl">
+          <h3 class="text-2xl font-bold dark:text-purple-500 text-purple-800 dark:border-gray-700 mb-5 border-b-2 border-purple-200 pb-2">
+            {gettext("Additional Information")}
+          </h3>
 
-    <div class="max-w-7xl gap-5 mt-5 mx-auto md:grid grid-cols-2">
-      <div
-        class="h-fit w-full bg-white p-5 rounded-md"
-        style="font-family:'Merge One', sans-serif;"
-      >
-        <div class="flex space-y-3 flex-col ">
-          <h3 class="text-2xl font-bold text-gray-900">{gettext("Additional information")}</h3>
-
-          <div class="flex space-x-5 items-center ">
-            <h1>{gettext("Author")}:</h1>
-            <.link href={"/users/user/#{@article.user_id}"} class="flex">
-              <img src={@article.user.avatar} class="w-10 h-10 rounded-lg self-center" />
-              <p class="py-2 ps-2">{@article.user.username}</p>
+          <div class="space-y-6 dark:text-gray-300 font-medium">
+            <div class="flex space-x-5 items-center ">
+              <h1>{gettext("Author")}:</h1>
+              <.link href={"/users/user/#{@article.user_id}"} class="flex">
+                <img src={@article.user.avatar} class="w-10 h-10 rounded-lg self-center" />
+                <p class="py-2 ps-2">{@article.user.username}</p>
+              </.link>
+            </div>
+            <%= if not is_nil(@article.tags) do %>
+              <div class="flex space-x-5 items-center">
+                <h1>{gettext("Tags")}:</h1>
+                <%= for tag <- @article.tags do %>
+                  <.link
+                    navigate={
+                      ~p"/articles?filter=#{Jason.encode!(%{options: "tags", params: tag})}"
+                    }
+                    class="text-blue-600 hover:underline"
+                  >
+                    #{tag}
+                  </.link>
+                <% end %>
+              </div>
+            <% end %>
+            <div class="flex space-x-5 items-center">
+              <h1>{gettext("Category")}:</h1>
+              <p>{Gettext.gettext(RednewsWeb.Gettext, @article.category)}</p>
+            </div>
+            <%= if not is_nil(@article.additional) do %>
+              <div class="items-center w-1/2">
+                <h1 class="mb-4">{gettext("Additional parameters")}</h1>
+                <%= for {k, v} <- @article.additional do %>
+                  <div class="flex items-center">
+                    <p class="whitespace-nowrap">{k}:</p>
+                    <p class="ps-2  max-w-[25vw] break-words ">{v}</p>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <%= if not is_nil(@current_user) and @article.user_id == @current_user.id do %>
+          <div class="mt-4 space-y-2">
+            <.link
+              patch={~p"/articles/article/#{@article}/show/edit"}
+              class="flex p-4 rounded-lg text-gray-600 font-bold btn btn-warning"
+            >
+              <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+              </svg>
+              {gettext("Edit Article")}
+            </.link>
+            <.link
+              phx-click={JS.push("delete", value: %{id: @article.id})}
+              data-confirm="Are you sure?"
+              class="flex p-4 rounded-lg text-red-600 font-bold btn  btn-danger"
+            >
+              <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+              </svg>
+              {gettext("Delete Article")}
             </.link>
           </div>
-          <%= if not is_nil(@article.tags) do %>
-            <div class="flex space-x-5 items-center ">
-              <h1>{gettext("Tags")}:</h1>
-              <%= for tag <- @article.tags  do %>
-                <p>#{tag}</p>
-              <% end %>
-            </div>
-          <% end %>
-          <div class="flex space-x-5 items-center ">
-            <h1>{gettext("Category")}:</h1>
-            <p>{Gettext.gettext(RednewsWeb.Gettext, @article.category)}</p>
-          </div>
-          <%= if not is_nil(@article.additional) do %>
-            <div class="items-center w-1/2">
-              <h1 class="mb-4">{gettext("Additional parameters")}</h1>
-              <%= for {k, v} <- @article.additional do %>
-                <div class="flex items-center">
-                  <p class="whitespace-nowrap">{k}:</p>
-                  <p class="ps-2  max-w-[25vw] break-words ">{v}</p>
-                </div>
-              <% end %>
-            </div>
-          <% end %>
-          <%= if not is_nil(@current_user) and @article.user_id == @current_user.id do %>
-            <h3 class="text-2xl font-bold py-2 text-gray-900">{gettext("Actions")}</h3>
+        <% end %>
+      </div>
 
-            <div class="flex space-x-2">
-              <.link
-                phx-click={JS.push("delete", value: %{id: @article.id})}
-                data-confirm="Are you sure?"
-                class="inline-flex w-1/2 items-center text-cetner gap-2 bg-gray-400 text-white px-4 py-2 rounded-md text-xl font-medium hover:bg-rose-400 transition-colors"
-              >
-                <img src="/images/trash.svg" class="h-5 w-5" />
-                {gettext("Delete")}
-              </.link>
-              <.link
-                patch={~p"/articles/article/#{@article}/show/edit"}
-                class="inline-flex w-1/2 items-center gap-2 bg-gray-400 text-white px-4 py-2 rounded-md text-xl font-medium hover:bg-amber-400 transition-colors"
-              >
-                <img src="/images/edit.svg" class="h-5 w-5" />
-                {gettext("Edit")}
-              </.link>
-            </div>
-          <% end %>
-        </div>
-      </div>
-      <div class="p-5 bg-white rounded-md">
-        <.live_component
-          module={RednewsWeb.CommentsLive.FormComponent}
-          id="comments"
-          pub_type="article"
-          pub_id={@article.id}
-          current_user={@current_user}
-        />
-      </div>
+      <.live_component
+        module={RednewsWeb.CommentsLive.FormComponent}
+        id="comments"
+        pub_type="article"
+        pub_id={@article.id}
+        current_user={@current_user}
+      />
     </div>
   </article>
 </div>

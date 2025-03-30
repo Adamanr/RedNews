@@ -1,86 +1,133 @@
-<div class="flex">
-  <div class="md:block hidden">
-    <.sidebar
-      categories={@categories}
-      selected_category={@selected_category}
-      selected_date={@selected_date}
-    />
-  </div>
-  <div class="w-full">
-    <%= if length(@streams.channels.inserts) > 0 do %>
-      <section class="relative pb-10 mb-10">
-        <h1 class="text-2xl font-bold text-gray-900 mb-4">
-          {if @selected_category == "all",
-            do: gettext("All Channels"),
-            else:
-              gettext("Channels %{date} by category - %{category}",
-                category:
-                  Gettext.gettext(
-                    RednewsWeb.Gettext,
-                    Helpers.convert_category_to_print(@selected_category)
-                  ),
-                date:
-                  Gettext.gettext(
-                    RednewsWeb.Gettext,
-                    Helpers.convert_time_to_print(@selected_date)
-                  )
-              )}
-        </h1>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <%= for {_id, channel} <- @streams.channels do %>
-            <article class="w-full space-y-2">
-              <div class="relative">
+<div class="md:min-h-screen p-4 md:p-6">
+  <div class="md:flex md:space-x-8 container mx-auto max-w-[100em]">
+    <div class="md:block hidden">
+      <.sidebar selected_category={@selected_category} selected_date={@selected_date} />
+    </div>
+    <div class="w-full">
+      <header class="mb-8 md:flex md:space-x-4 justify-between items-center">
+        <div class="flex-1">
+          <h1 class="text-5xl h-full pb-2 font-black bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-500">
+            {if @selected_category == "all",
+              do: gettext("Channels"),
+              else:
+                gettext("Channels in %{category}",
+                  category:
+                    Gettext.gettext(
+                      RednewsWeb.Gettext,
+                      Helpers.convert_category_to_print(@selected_category)
+                    )
+                )}
+          </h1>
+          <p class="text-gray-500 dark:text-gray-200 mt-2">
+            {Gettext.gettext(RednewsWeb.Gettext, Helpers.convert_time_to_print(@selected_date))}
+          </p>
+        </div>
+
+        <div class="relative md:w-96 md:mt-0 mt-5 w-full">
+          <input
+            type="text"
+            placeholder={gettext("Search channels...")}
+            phx-keyup="search_channels"
+            phx-debounce="300"
+            class="w-full px-5 py-3 rounded-full dark:bg-gray-800 dark:border-gray-700 bg-white border border-gray-200 focus:ring-2 focus:ring-indigo-500 transition-all shadow-md"
+          />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="absolute items-center h-full top-0 right-5 text-gray-400"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </div>
+      </header>
+
+      <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        <%= for {_id, channel} <- @streams.channels do %>
+          <.link href={"/channels/channel/#{channel.id}"}>
+            <article class="bg-white dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl overflow-hidden shadow-lg transform transition-all hover:-translate-y-2 hover:shadow-2xl group">
+              <div class="relative h-64 overflow-hidden">
                 <img
                   src={channel.logo}
-                  class="h-[45vh] w-full object-cover rounded-md"
-                  alt="Channel logo"
+                  alt={channel.name}
+                  class="w-full h-full object-cover absolute inset-0 transform group-hover:scale-110 transition-transform"
                 />
-                <p
-                  style="font-family:'Merge One', sans-serif;"
-                  class="absolute bottom-5 left-5 px-5 py-2 rounded-2xl bg-white text-xl"
-                >
-                  {Gettext.gettext(RednewsWeb.Gettext, channel.category)}
-                </p>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
+                  <span class="bg-purple-500 text-white px-2 py-1 rounded-full text-xs">
+                    {Gettext.gettext(RednewsWeb.Gettext, channel.category)}
+                  </span>
+                </div>
               </div>
-              <div style="font-family:'Merriweather Sans', sans-serif;">
-                <.link href={"/channels/channel/#{channel.id}"} class="text-2xl py-4 font-bold">
+
+              <div class="p-6">
+                <h2 class="text-2xl font-bold dark:text-gray-200 mb-3 text-gray-800 dark:group-hover:text-indigo-400 group-hover:text-purple-600 transition-colors">
                   {channel.name}
-                </.link>
-                <p class="text-gray-600 text-md">{channel.desc}</p>
+                </h2>
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-3">
+                  {channel.desc}
+                </p>
+
+                <div class="flex justify-between items-center dark:border-gray-600 border-t pt-4">
+                  <span class="text-gray-500 dark:group-hover:text-indigo-400">
+                    {gettext("View Channel")}
+                  </span>
+                  <div class="w-10 h-10 bg-purple-500 dark:text-gray-200 text-white rounded-full flex items-center justify-center group-hover:bg-purple-600 transition-colors">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </div>
+                </div>
               </div>
             </article>
-          <% end %>
-        </div>
+          </.link>
+        <% end %>
       </section>
-    <% else %>
-      <div class="max-w-4xl mx-auto mt-2 bg-white rounded-2xl pb-8 text-2xl text-center font-bold">
-        <img
-          class="rounded-2xl h-[55vh] w-full"
-          src="https://i.pinimg.com/originals/36/ce/ef/36ceefd0975813864d4f47a0a609e037.gif"
-          alt="No channels"
-        />
-        <h1 class="py-8">
-          {gettext("There are no channels in the %{category} category for %{date}",
-            category:
-              Gettext.gettext(
-                RednewsWeb.Gettext,
-                Helpers.convert_category_to_print(@selected_category)
-              ),
-            date:
-              Gettext.gettext(
-                RednewsWeb.Gettext,
-                Helpers.convert_time_to_print(@selected_date)
-              )
-          )} ☕️
-        </h1>
-        <.link
-          href="/channels/new"
-          class="text-green-600 border-green-600 border-2 px-4 py-2 rounded-md hover:bg-green-400 hover:text-white hover:border-0 mt-6 font-bold text-xl"
-        >
-          {gettext("I will create!")}
-        </.link>
-      </div>
-    <% end %>
+
+      <%= if length(@streams.channels.inserts) == 0 do %>
+        <div class="text-center py-4 space-x-8 container mx-auto max-w-5xl">
+          <img
+            src="https://i.pinimg.com/originals/5b/59/b9/5b59b930e55668208b77cb9708a0fa3c.gif"
+            alt="No channels"
+            class="mx-auto mb-8 rounded-2xl w-full h-[35em] object-cover"
+          />
+          <h2 class="text-3xl dark:text-gray-200 font-bold text-gray-800 mb-4">
+            {gettext("No channels found for %{category} on %{date}",
+              category:
+                Gettext.gettext(
+                  RednewsWeb.Gettext,
+                  Helpers.convert_category_to_print(@selected_category)
+                ),
+              date:
+                Gettext.gettext(
+                  RednewsWeb.Gettext,
+                  Helpers.convert_time_to_print(@selected_date)
+                )
+            )}
+          </h2>
+          <.link
+            href="/channels/new"
+            class="inline-block mt-6 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-full hover:from-purple-700 hover:to-pink-600 transition-all"
+          >
+            {gettext("Create Channel")}
+          </.link>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>
 

@@ -100,11 +100,11 @@ msgstr "评论"
 msgid "Send"
 msgstr "发送"
 
-msgid "I like"
-msgstr "我喜欢"
+msgid "Liked"
+msgstr "喜欢"
 
-msgid "You like?"
-msgstr "你喜欢吗？"
+msgid "Like?"
+msgstr "喜欢吗？"
 
 msgid "Tags"
 msgstr "标签"
@@ -214,23 +214,23 @@ msgstr "我要创建！"
 msgid "Reading time: %{time} min"
 msgstr "阅读时间：%{time}分钟"
 
-msgid "There are no articles in the %{category} category for %{date}"
-msgstr "%{date}的%{category}类别中没有文章"
+msgid "No articles found for %{category} on %{date}"
+msgstr "在 %{date} 没有找到 %{category} 的文章"
 
-msgid "Articles %{date} by category - %{category}"
-msgstr "%{date}按类别分类的文章 - %{category}"
+msgid "Articles in %{category}"
+msgstr "文章分类 - %{category}"
 
-msgid "There are no news in the %{category} category for %{date}"
-msgstr "%{date}的%{category}类别中没有新闻"
+msgid "No news found for %{category} on %{date}"
+msgstr "在 %{date} 没有找到 %{category} 的新闻"
 
-msgid "News %{date} by category - %{category}"
-msgstr "%{date}按类别分类的新闻 - %{category}"
+msgid "News in %{category}"
+msgstr "新闻分类 - %{category}"
 
-msgid "There are no channels in the %{category} category for %{date}"
-msgstr "%{date}的%{category}类别中没有频道"
+msgid "No channels found for %{category} on %{date}"
+msgstr "在 %{date} 没有找到 %{category} 的频道"
 
-msgid "Channels %{date} by category - %{category}"
-msgstr "%{date}按类别分类的频道 - %{category}"
+msgid "Channels in %{category}"
+msgstr "频道分类 - %{category}"
 
 msgid "Verified: Fake news"
 msgstr "已验证：假新闻"
@@ -280,13 +280,13 @@ msgstr "创建"
 msgid "Select what you want to create"
 msgstr "选择您想创建的内容"
 
-msgid "Create news"
+msgid "Create News"
 msgstr "创建新闻"
 
-msgid "Create channel"
+msgid "Create Channel"
 msgstr "创建频道"
 
-msgid "Create article"
+msgid "Create Article"
 msgstr "创建文章"
 
 msgid "There is not what you want to do?"
@@ -475,5 +475,281 @@ msgstr "我们会向您的邮箱发送密码重置链接"
 msgid "Send password reset instructions"
 msgstr "发送密码重置说明"
 
-msgid "Log in"
+msgid "Log In"
 msgstr "登录"
+
+msgid "Read full news"
+msgstr "阅读完整新闻"
+
+msgid "Search news..."
+msgstr "搜索新闻..."
+
+msgid "Search articles..."
+msgstr "搜索文章..."
+
+msgid "Search channels..."
+msgstr "搜索频道..."
+
+msgid "More Articles"
+msgstr "更多文章"
+
+msgid "View Channel"
+msgstr "查看频道"
+
+msgid "User Stats"
+msgstr "用户统计"
+
+msgid "About user"
+msgstr "关于用户"
+
+msgid "Edit Profile"
+msgstr "编辑个人资料"
+
+msgid "Always connected with events"
+msgstr "始终与事件保持连接"
+
+msgid "Read, Share, Discuss"
+msgstr "阅读、分享、讨论"
+
+msgid "Email Address"
+msgstr "电子邮件地址"
+
+msgid "New to our platform?"
+msgstr "新到我们的平台？"
+
+msgid "Create an Account"
+msgstr "创建账户"
+
+msgid "Other entry options"
+msgstr "其他登录方式"
+
+msgid "Welcome Back!"
+msgstr "欢迎回来！"
+
+msgid "Your digital adventure continues here"
+msgstr "欢迎回来！"
+
+msgid "Join the Community"
+msgstr "加入我们的社区"
+
+msgid "Create your unique account"
+msgstr "创建您的独特账户"
+
+msgid "Display Name"
+msgstr "显示名称"
+
+msgid "Profile Picture URL"
+msgstr "个人资料图片URL"
+
+msgid "Welcome to RedNews"
+msgstr "欢迎来到RedNews"
+
+msgid "One step closer to connecting with the world"
+msgstr "一步之遥，连接世界"
+
+msgid "Create Your Account"
+msgstr "创建您的账户"
+
+msgid "Already have an account?"
+msgstr "已有账户？"
+
+msgid "Paste your avatar link"
+msgstr "粘贴您的头像链接"
+
+msgid "Forgot Password?"
+msgstr "忘记密码？"
+
+msgid "Enter your email and we'll send you reset instructions"
+msgstr "请输入您的电子邮件，我们将发送重置说明"
+
+msgid "Send Reset Instructions"
+msgstr "发送重置说明"
+
+msgid "Back to Login"
+msgstr "返回登录"
+
+msgid "Reset Password"
+msgstr "重置密码"
+
+msgid "We've got your back!"
+msgstr "我们在这里！"
+
+msgid "Create New"
+msgstr "创建新账户"
+
+msgid "Publications"
+msgstr "出版物"
+
+msgid "News Post"
+msgstr "新闻帖子"
+
+msgid "Share latest updates and announcements"
+msgstr "分享最新的更新和公告"
+
+msgid "Article"
+msgstr "文章"
+
+msgid "Write in-depth content and stories"
+msgstr "撰写深入的内容和故事"
+
+msgid "Channel"
+msgstr "频道"
+
+msgid "Create community space for discussions and publications"
+msgstr "创建讨论和出版物的社区空间"
+
+msgid "Don't see what you're looking for?"
+msgstr "找不到您要找的东西？"
+
+msgid "Suggest a feature"
+msgstr "建议功能"
+
+msgid "Settings"
+msgstr "设置"
+
+msgid "Appearance"
+msgstr "外观"
+
+msgid "Light"
+msgstr "明亮"
+
+msgid "Dark"
+msgstr "黑暗"
+
+msgid "System"
+msgstr "系统"
+
+msgid "Language"
+msgstr "语言"
+
+msgid "Preferences"
+msgstr "偏好"
+
+msgid "Notifications"
+msgstr "通知"
+
+msgid "Enable app notifications"
+msgstr "启用应用通知"
+
+msgid "Account created successfully!"
+msgstr "账户创建成功！"
+
+msgid "Password updated successfully"
+msgstr "密码更新成功"
+
+msgid "Invalid email or password"
+msgstr "无效的电子邮件或密码"
+
+msgid "Logged out successfully"
+msgstr "已成功注销"
+
+msgid "Articles #{action}d successfully"
+msgstr "文章 #{action} 成功"
+
+msgid "Channels updated successfully"
+msgstr "频道更新成功"
+
+msgid "Channels created successfully"
+msgstr "频道创建成功"
+
+msgid "Comment added successfully!"
+msgstr "评论添加成功！"
+
+msgid "Comment deleted successfully!"
+msgstr "评论删除成功！"
+
+msgid "User confirmed successfully"
+msgstr "用户确认成功"
+
+msgid "Email changed successfully"
+msgstr "电子邮件更改成功"
+
+msgid "Password reset successfully"
+msgstr "密码重置成功"
+
+msgid "Share the latest updates with the world"
+msgstr "分享最新的更新与世界"
+
+msgid "comma separated"
+msgstr "逗号分隔"
+
+msgid "You need a channel to publish news!"
+msgstr "您需要一个频道来发布新闻！"
+
+msgid "Create one now"
+msgstr "现在创建一个"
+
+msgid "Featured Image URL"
+msgstr "特色图片URL"
+
+msgid "News Content"
+msgstr "新闻内容"
+
+msgid "Write your news story here..."
+msgstr "在这里写你的新闻故事..."
+
+msgid "Recommended size: 1200x630px"
+msgstr "推荐尺寸：1200x630px"
+
+msgid "Politics, Economy, Technology"
+msgstr "政治，经济，技术"
+
+msgid "Breaking: Major development..."
+msgstr "紧急：重大发展..."
+
+msgid "Create Breaking News"
+msgstr "创建紧急新闻"
+
+msgid "Publish News"
+msgstr "发布新闻"
+
+msgid "Create New Article"
+msgstr "创建新文章"
+
+msgid "Share your knowledge with the world"
+msgstr "分享你的知识与世界"
+
+msgid "Use high-quality image for better engagement"
+msgstr "使用高质量图片以提高参与度"
+
+msgid "Separate tags with commas"
+msgstr "用逗号分隔标签"
+
+msgid "Games, News, Technology"
+msgstr "游戏，新闻，技术"
+
+msgid "Catchy headline that grabs attention"
+msgstr "吸引人眼球的标题"
+
+msgid "Write your amazing content here..."
+msgstr "在这里写你的精彩内容..."
+
+msgid "Your article will be visible to everyone"
+msgstr "您的文章将对所有人可见"
+
+msgid "Publish Article"
+msgstr "发布文章"
+
+msgid "Create New Channel"
+msgstr "创建新频道"
+
+msgid "Awesome Channel"
+msgstr "精彩频道"
+
+msgid "Build your community space"
+msgstr "建立你的社区空间"
+
+msgid "Channel Name"
+msgstr "频道名称"
+
+msgid "Background Image URL"
+msgstr "背景图片URL"
+
+msgid "Tell people what your channel is about..."
+msgstr "告诉人们你的频道是什么..."
+
+msgid "As Guest"
+msgstr "作为客人"
+
+msgid "Article Content"
+msgstr "文章内容"

@@ -1,135 +1,190 @@
-<div class="flex">
-  <div class="hidden md:block">
-    <.sidebar
-      categories={@categories}
-      selected_category={@selected_category}
-      selected_date={@selected_date}
-    />
-  </div>
-  <div class="w-full">
-    <%= if length(@streams.headlines.inserts) > 0 do %>
-      <section class="relative h-cover">
-        <div class="md:grid grid-cols-4 gap-5">
-          <main class="col-span-4 space-y-14 pb-24">
-            <%= if @selected_category == "all"  do %>
-              <.link href={"/news/headline/#{@first_headline.id}"}>
-                <article>
-                  <h1 class="text-2xl mb-3 font-bold">{gettext("News of the day")}</h1>
-                  <div class="bg-white rounded-3xl h-fit">
+<div class="md:min-h-screen p-4 md:p-6">
+  <div class="md:flex md:space-x-8 container mx-auto max-w-[100em]">
+    <div class="md:block hidden">
+      <.sidebar selected_category={@selected_category} selected_date={@selected_date} />
+    </div>
+    <div class="w-full">
+      <header class="mb-6 md:flex justify-between items-center">
+        <div>
+          <h1 class="text-5xl pb-2 font-black bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-cyan-500">
+            {if @selected_category == "all",
+              do: gettext("Latest News"),
+              else:
+                gettext("News in %{category}",
+                  category:
+                    Gettext.gettext(
+                      RednewsWeb.Gettext,
+                      Helpers.convert_category_to_print(@selected_category)
+                    )
+                )}
+          </h1>
+          <p class="text-gray-500 dark:text-gray-300 mt-2">
+            {Gettext.gettext(RednewsWeb.Gettext, Helpers.convert_time_to_print(@selected_date))}
+          </p>
+        </div>
+
+        <div class="relative md:w-96 md:mt-0 mt-5 w-full">
+          <input
+            type="text"
+            placeholder={gettext("Search news...")}
+            phx-keyup="search_news"
+            phx-debounce="300"
+            class="w-full px-5 py-3 rounded-full dark:bg-gray-800 dark:border-gray-700 bg-white border border-gray-200 focus:ring-2 focus:ring-indigo-500 transition-all shadow-md"
+          />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="absolute items-center h-full top-0 right-5 text-gray-400"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </div>
+      </header>
+
+      <%= if length(@streams.headlines.inserts) > 0 and (@selected_category == "all" && @selected_date == "all" && @search_term == "") do %>
+        <section class="mb-16">
+          <.link href={"/news/headline/#{@first_headline.id}"}>
+            <div class="bg-white dark:bg-gray-800/90 rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all group backdrop-blur-sm">
+              <div class="md:flex">
+                <div class="md:w-1/2 p-10 flex flex-col justify-center">
+                  <div class="flex items-center space-x-3 mb-4">
                     <img
-                      src={@first_headline.header}
-                      class="w-full h-[55vh] object-cover rounded-3xl"
-                      alt="Header image"
+                      src={@first_headline.channel.header}
+                      class="w-12 h-12 rounded-full border-2 border-indigo-500"
                     />
-                    <div class="p-4">
-                      <div class="flex justify-between items-center">
-                        <h1
-                          class="bg-rose-400 text-white px-4 py-1 rounded-full font-black text-xl"
-                          style="font-family:'Montserrat Alternates', sans-serif;"
-                        >
-                          {Gettext.gettext(RednewsWeb.Gettext, @first_headline.category)}
-                        </h1>
-                      </div>
-                      <p class="pt-3 text-2xl">
-                        {@first_headline.title}
+                    <div>
+                      <p class="text-sm dark:text-gray-400 text-gray-600">
+                        {@first_headline.channel.name}
                       </p>
+                      <span class="dark:bg-gray-400 bg-indigo-50 text-indigo-600 px-2 py-1 rounded-full text-xs">
+                        {Gettext.gettext(RednewsWeb.Gettext, @first_headline.category)}
+                      </span>
                     </div>
                   </div>
-                </article>
-              </.link>
-            <% end %>
 
-            <section>
-              <h1 class="text-2xl font-bold  pb-5">
-                {if @selected_category == "all",
-                  do: gettext("All news"),
-                  else:
-                    gettext("News %{date} by category - %{category}",
-                      category:
-                        Gettext.gettext(
-                          RednewsWeb.Gettext,
-                          Helpers.convert_category_to_print(@selected_category)
-                        ),
-                      date:
-                        Gettext.gettext(
-                          RednewsWeb.Gettext,
-                          Helpers.convert_time_to_print(@selected_date)
-                        )
-                    )}
-              </h1>
-              <div class="md:grid grid-cols-3 gap-2">
-                <%= for {id, headlines} <- @streams.headlines do %>
-                  <.link href={"/news/headline/#{headlines.id}"}>
-                    <article
-                      id={id}
-                      class="relative h-[40vh] md:mt-0 mt-5 group bg-gradient-to-t from-black to-zinc-800/50 rounded-md overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
-                    >
-                      <img
-                        src={headlines.header || "/images/placeholder.jpg"}
-                        alt={headlines.title}
-                        class="absolute w-full h-full object-cover opacity-40 z-0 transform group-hover:scale-105 transition-transform duration-700"
-                      />
-                      <div class="absolute w-full bottom-0 px-6 z-20">
-                        <h2 class="text-2xl font-bold text-white mb-4 cursor-pointer group-hover:text-white transition-colors duration-200">
-                          {headlines.title}
-                        </h2>
-                        <div class="md:flex w-full items-center pb-4">
-                          <div class="flex flex-1 items-center space-x-4">
-                            <img
-                              class="h-7 w-7 rounded-md"
-                              src={headlines.channel.header}
-                              alt="Channel logo"
-                            />
-                            <p class="text-xl text-zinc-200 font-['Merge_One']">
-                              {headlines.channel.name}
-                            </p>
-                          </div>
-                          <span class="text-zinc-200 font-['Montserrat_Alternates'] font-bold text-sm">
-                            {Gettext.gettext(RednewsWeb.Gettext, headlines.category)}
-                          </span>
-                        </div>
-                      </div>
-                    </article>
-                  </.link>
-                <% end %>
+                  <h2 class="text-xl md:text-4xl font-black dark:text-gray-200 dark:group-hover:text-indigo-400 text-gray-800 mb-6 group-hover:text-indigo-600 transition-colors">
+                    {@first_headline.title}
+                  </h2>
+                  <p class="text-sm md:text-lg dark:text-gray-300 mb-8 leading-relaxed">
+                    {String.slice(@first_headline.content, 0, 300)}...
+                  </p>
+
+                  <div class="flex items-center justify-between dark:border-gray-600 border-t pt-6">
+                    <span class="text-gray-500 dark:text-gray-300 dark:group-hover:text-indigo-400">
+                      {gettext("Read full news")}
+                    </span>
+                    <div class="w-12 h-12 dark:text-gray-300 bg-indigo-500 text-white rounded-full flex items-center justify-center group-hover:bg-indigo-600 transition-colors">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <div class="md:w-1/2 h-[40em] overflow-hidden">
+                  <img
+                    src={@first_headline.header}
+                    alt={@first_headline.title}
+                    class="w-full h-full object-cover transform group-hover:scale-35 transition-transform"
+                  />
+                </div>
               </div>
-            </section>
-          </main>
-        </div>
+            </div>
+          </.link>
+        </section>
+      <% end %>
+
+      <section class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <%= for {id, headlines} <- @streams.headlines do %>
+          <%= if headlines.is_fake != false do %>
+            <.link href={"/news/headline/#{headlines.id}"}>
+              <article
+                id={id}
+                class="bg-white dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg transform transition-all hover:-translate-y-2 hover:shadow-2xl"
+              >
+                <div class="relative h-64 overflow-hidden">
+                  <img
+                    src={headlines.header || "/images/placeholder.jpg"}
+                    alt={headlines.title}
+                    class="w-full h-full object-cover absolute inset-0 transform hover:scale-110 transition-transform"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent">
+                  </div>
+                  <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
+                    <div class="flex justify-between items-center mb-2">
+                      <div class="flex items-center space-x-2">
+                        <img
+                          src={headlines.channel.header}
+                          class="w-8 h-8 rounded-full border-2 border-white"
+                        />
+                        <span class="text-sm">{headlines.channel.name}</span>
+                      </div>
+                      <span class="dark:bg-sky-950 bg-cyan-500 text-white px-2 py-1 rounded-full text-xs">
+                        {Gettext.gettext(RednewsWeb.Gettext, headlines.category)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="p-5">
+                  <h3 class="text-sm md:text-xl font-bold mb-3 dark:text-gray-200 text-gray-800 group-hover:text-indigo-600">
+                    {headlines.title}
+                  </h3>
+                  <p class="text-gray-600 dark:text-gray-300 text-sm line-clamp-3">
+                    {String.slice(headlines.content, 0, 150)}...
+                  </p>
+                </div>
+              </article>
+            </.link>
+          <% end %>
+        <% end %>
       </section>
-    <% else %>
-      <div class="max-w-4xl mx-auto mt-2 bg-white rounded-2xl pb-8 text-2xl text-center font-bold">
-        <img
-          class="rounded-2xl h-[55vh] w-full"
-          src="https://i.pinimg.com/originals/3d/2d/41/3d2d416c53e6d0b2d6b157edf1e4b1db.gif"
-          alt="No news"
-        />
-        <h1 class="py-8">
-          {gettext("There are no articles in the %{category} category for %{date}",
-            category:
-              Gettext.gettext(
-                RednewsWeb.Gettext,
-                Helpers.convert_category_to_print(@selected_category)
-              ),
-            date:
-              Gettext.gettext(
-                RednewsWeb.Gettext,
-                Helpers.convert_time_to_print(@selected_date)
-              )
-          )} 😵‍💫
-        </h1>
-        <.link
-          href="/news/new"
-          class="text-sky-600 border-sky-600 border-2 px-4 py-2 rounded-md hover:bg-sky-400 hover:text-white hover:border-0 mt-6 font-bold text-xl"
-        >
-          {gettext("I know the news!")}
-        </.link>
-      </div>
-    <% end %>
+
+      <%= if length(@streams.headlines.inserts) == 0 do %>
+        <div class="text-center py-4 space-x-8 container mx-auto max-w-5xl">
+          <img
+            src="https://i.pinimg.com/originals/fe/f4/1f/fef41f9945b81122f30e216d02efd0a7.gif"
+            alt="No news"
+            class="mx-auto mb-8 rounded-2xl w-full h-[35em]"
+          />
+          <h2 class="text-3xl dark:text-gray-200 font-bold text-gray-800 mb-4">
+            {gettext("No news found for %{category} on %{date}",
+              category:
+                Gettext.gettext(
+                  RednewsWeb.Gettext,
+                  Helpers.convert_category_to_print(@selected_category)
+                ),
+              date:
+                Gettext.gettext(
+                  RednewsWeb.Gettext,
+                  Helpers.convert_time_to_print(@selected_date)
+                )
+            )}
+          </h2>
+          <.link
+            href="/news/new"
+            class="inline-block mt-6 px-6 py-3 bg-gradient-to-r from-indigo-600 to-cyan-500 text-white rounded-full hover:from-indigo-700 hover:to-cyan-600 transition-all"
+          >
+            {gettext("I know the news!")}
+          </.link>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>
-
-<.flash_group flash={@flash} />
 
 <.modal
   :if={@live_action in [:new, :edit]}

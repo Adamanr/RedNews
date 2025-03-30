@@ -6,21 +6,18 @@ defmodule RednewsWeb.UserRegistrationLive do
 
   def render(assigns) do
     ~H"""
-    <div class="relative flex items-center justify-center min-h-screen bg-[#bdbdbd]">
-      <div class="w-[25vw] mx-auto max-w-md px-5 bg-opacity-50 py-8 bg-white shadow-md rounded-lg flex-shrink-0">
-        <.header class=" mb-6">
-          <h1 class="text-3xl font-bold">{gettext("Registration")}</h1>
-          <:subtitle>
-            <p class="text-sm text-gray-600 mt-2">
-              {gettext("Already registered?")}
-              <.link navigate={~p"/users/log_in"} class="font-semibold  text-brand hover:underline">
-                {gettext("Log in to your account")}
-              </.link>
+    <div class="min-h-screen dark:bg-gradient-to-br dark:from-gray-900 dark:via-blue-900 dark:to-purple-900  bg-gradient-to-br from-[#6a11cb] via-[#2575fc] to-[#00d4ff] flex items-center justify-center p-6">
+      <div class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 bg-white shadow-2xl rounded-3xl overflow-hidden animate-fade-in">
+        <div class="p-10 bg-white dark:bg-gray-900 h-full flex flex-col justify-center space-y-6">
+          <div class="text-center mb-8">
+            <h1 class="text-4xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#6a11cb] to-[#2575fc] mb-4">
+              {gettext("Join the Community")}
+            </h1>
+            <p class="text-sm dark:text-gray-400 text-gray-600">
+              {gettext("Create your unique account")}
             </p>
-          </:subtitle>
-        </.header>
+          </div>
 
-        <div>
           <.simple_form
             for={@form}
             id="registration_form"
@@ -29,55 +26,109 @@ defmodule RednewsWeb.UserRegistrationLive do
             phx-trigger-action={@trigger_submit}
             action={~p"/users/log_in?_action=registered"}
             method="post"
+            class="space-y-4"
           >
             <.error :if={@check_errors}>
-              <div class="text-red-600 text-sm font-medium mb-4">
-                {gettext("Oops, something went wrong! Check the errors below")}
+              <div
+                class="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded relative"
+                role="alert"
+              >
+                <span class="block sm:inline">
+                  {gettext("Oops, something went wrong! Check the errors below")}
+                </span>
               </div>
             </.error>
 
-            <.input field={@form[:email]} type="email" label={gettext("Email")} required class="mb-4" />
+            <div class="md:grid md:space-y-0 space-y-6 grid-cols-2 gap-4">
+              <.input
+                field={@form[:login]}
+                type="text"
+                label={gettext("Username")}
+                required
+                class="focus:ring-[#6a11cb] focus:border-[#6a11cb]"
+              />
+              <.input
+                field={@form[:username]}
+                type="text"
+                label={gettext("Display Name")}
+                required
+                class="focus:ring-[#2575fc] focus:border-[#2575fc]"
+              />
+            </div>
+
+            <.input
+              field={@form[:email]}
+              type="email"
+              label={gettext("Email Address")}
+              required
+              class="focus:ring-[#00d4ff] focus:border-[#00d4ff]"
+            />
+
             <.input
               field={@form[:password]}
               type="password"
-              label={gettext("Password")}
+              label={gettext("Create Password")}
               required
-              class="mb-4"
+              class="focus:ring-[#6a11cb] focus:border-[#6a11cb]"
             />
+
             <.input
               field={@form[:avatar]}
               type="text"
-              label={gettext("Avatar URL")}
-              placeholder={gettext("https://example.com/avatar.png")}
-              class="mb-4"
-            />
-            <.input field={@form[:login]} type="text" label={gettext("Login")} required class="mb-4" />
-            <.input
-              field={@form[:username]}
-              type="text"
-              label={gettext("Username")}
-              required
-              class="mb-4"
+              label={gettext("Profile Picture URL")}
+              placeholder={gettext("Paste your avatar link")}
+              class="focus:ring-[#2575fc] focus:border-[#2575fc]"
             />
 
-            <:actions>
+            <div class="pt-4">
               <.button
-                phx-disable-with={gettext("Creating an account")}
-                class="w-full bg-brand text-white py-2 px-4 rounded hover:bg-brand-dark"
+                phx-disable-with={gettext("Creating your profile...")}
+                class="w-full py-3 rounded-full text-white font-bold
+                       bg-gradient-to-r from-[#6a11cb] to-[#2575fc]
+                       hover:from-[#2575fc] hover:to-[#6a11cb]
+                       transition-all duration-300
+                       transform hover:scale-105
+                       focus:outline-none focus:ring-4 focus:ring-[#00d4ff]/50"
               >
-                {gettext("Create Account")}
+                {gettext("Create Your Account")}
               </.button>
-            </:actions>
+            </div>
           </.simple_form>
-        </div>
-      </div>
 
-      <div class="hidden lg:block">
-        <img
-          src="https://static.wixstatic.com/media/7ac599_7bd42534546f42ba9c9eec6de6b837f5~mv2.jpg/v1/fill/w_710,h_710,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/7ac599_7bd42534546f42ba9c9eec6de6b837f5~mv2.jpg"
-          alt="Registration Illustration"
-          class="max-w-full h-screen "
-        />
+          <div class="text-center text-sm dark:text-gray-300 text-gray-600 mt-4">
+            {gettext("Already have an account?")}
+            <.link
+              navigate={~p"/users/log_in"}
+              class="ml-2 font-semibold text-[#6a11cb] hover:underline"
+            >
+              {gettext("Log In")}
+            </.link>
+          </div>
+        </div>
+
+        <div class="hidden lg:block relative overflow-hidden dark:bg-gradient-to-br dark:from-gray-800 dark:via-gray-900 dark:to-indigo-800 bg-gradient-to-br from-[#6a11cb] via-[#2575fc] to-[#00d4ff]">
+          <div class="absolute inset-0 bg-pattern opacity-20"></div>
+          <div class="relative z-10 flex items-center justify-center h-full p-10 text-white text-center">
+            <div class="space-y-6">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 200 200"
+                class="mx-auto w-64 h-64 animate-pulse"
+              >
+                <circle cx="100" cy="100" r="90" fill="rgba(255,255,255,0.1)" />
+                <circle cx="100" cy="100" r="70" fill="rgba(255,255,255,0.2)" />
+                <path d="M100 40 L130 100 L70 100 Z" fill="white" transform="rotate(45 100 100)" />
+                <circle cx="100" cy="100" r="20" fill="white" />
+              </svg>
+              <h2 class="text-3xl font-bold">
+                {gettext("Welcome to RedNews")}
+              </h2>
+              <p class="text-sm opacity-80">
+                {gettext("One step closer to connecting with the world")}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     """

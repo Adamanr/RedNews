@@ -118,11 +118,11 @@ msgstr "Комментарии"
 msgid "Send"
 msgstr "Отправить"
 
-msgid "I like"
+msgid "Liked"
 msgstr "Мне нравится"
 
-msgid "You like?"
-msgstr "Вам нравится?"
+msgid "Like?"
+msgstr "Вам понравилось?"
 
 msgid "Tags"
 msgstr "Теги"
@@ -232,23 +232,23 @@ msgstr "Я создам!"
 msgid "Reading time: %{time} min"
 msgstr "Время чтения: %{time} мин"
 
-msgid "There are no articles in the %{category} category for %{date}"
+msgid "No articles found for %{category} on %{date}"
 msgstr "В категории %{category} %{date} статей нет"
 
-msgid "Articles %{date} by category - %{category}"
-msgstr "Статьи %{date} по категории - %{category}"
+msgid "Articles in %{category}"
+msgstr "Категория статей - %{category}"
 
-msgid "There are no news in the %{category} category for %{date}"
+msgid "No news found for %{category} on %{date}"
 msgstr "В категории %{category} %{date} новостей нет"
 
-msgid "News %{date} by category - %{category}"
-msgstr "Новости %{date} по категории - %{category}"
+msgid "News in %{category}"
+msgstr "Категория новостей - %{category}"
 
-msgid "There are no channels in the %{category} category for %{date}"
+msgid "No channels found for %{category} on %{date}"
 msgstr "В категории %{category} %{date} каналов нет"
 
-msgid "Channels %{date} by category - %{category}"
-msgstr "Каналы %{date} по категории - %{category}"
+msgid "Channels in %{category}"
+msgstr "Категория каналов - %{category}"
 
 msgid "Verified: Fake news"
 msgstr "Проверено: Фейковая новость"
@@ -298,13 +298,13 @@ msgstr "Создать"
 msgid "Select what you want to create"
 msgstr "Выберите что хотите создать"
 
-msgid "Create news"
+msgid "Create News"
 msgstr "Создать новость"
 
-msgid "Create channel"
+msgid "Create Channel"
 msgstr "Создать канал"
 
-msgid "Create article"
+msgid "Create Article"
 msgstr "Создать статью"
 
 msgid "There is not what you want to do?"
@@ -364,8 +364,8 @@ msgstr "Создание учетной записи"
 msgid "Logo URL"
 msgstr "Ссылка на логотип"
 
-msgid "Background URL"
-msgstr "Ссылка на фон"
+msgid "Background Image URL"
+msgstr "Ссылка на фоновое изображение"
 
 msgid "Tags (Example: Games,News)"
 msgstr "Теги (Пример: Игры, Новости)"
@@ -448,6 +448,8 @@ msgstr "Редактирование пароля"
 msgid "Editing user info"
 msgstr "Редактирование данных пользователя"
 
+
+
 msgid "Confirm new password"
 msgstr "Подтвердите новый пароль"
 
@@ -495,3 +497,283 @@ msgstr "Отправить инструкции по сбросу пароля"
 
 msgid "Log in"
 msgstr "Войти"
+
+msgid "Read full news"
+msgstr "Прочитать полную новость"
+
+msgid "Search news..."
+msgstr "Поиск новостей..."
+
+msgid "Search articles..."
+msgstr "Поиск статей..."
+
+msgid "Search channels..."
+msgstr "Поиск каналов..."
+
+msgid "More Articles"
+msgstr "Больше статей"
+
+msgid "View Channel"
+msgstr "Просмотреть канал"
+
+msgid "User Stats"
+msgstr "Статистика пользователя"
+
+msgid "About user"
+msgstr "О пользователе"
+
+msgid "Edit Profile"
+msgstr "Редактирование профиля"
+
+msgid "Always connected with events"
+msgstr "Всегда на связи с событиями"
+
+msgid "Read, Share, Discuss"
+msgstr "Читайте, делитесь, обсуждайте"
+
+msgid "Email Address"
+msgstr "Электронная почта"
+
+msgid "New to our platform?"
+msgstr "Первый раз на платформе?"
+
+msgid "Create an Account"
+msgstr "Создать аккаунт"
+
+msgid "Other entry options"
+msgstr "Другие варианты входа"
+
+msgid "Welcome Back!"
+msgstr "Добро пожаловать!"
+
+msgid "Your digital adventure continues here"
+msgstr "Ваша приключение продолжается здесь"
+
+msgid "Join the Community"
+msgstr "Присоединяйтесь к сообществу"
+
+msgid "Create your unique account"
+msgstr "Создайте свой уникальный аккаунт"
+
+msgid "Display Name"
+msgstr "Отображаемое имя"
+
+msgid "Profile Picture URL"
+msgstr "URL изображения профиля"
+
+msgid "Welcome to RedNews"
+msgstr "Добро пожаловать в RedNews"
+
+msgid "One step closer to connecting with the world"
+msgstr "На шаг ближе к соединению с миром"
+
+msgid "Create Your Account"
+msgstr "Создайте свой аккаунт"
+
+msgid "Already have an account?"
+msgstr "У вас уже есть аккаунт?"
+
+msgid "Paste your avatar link"
+msgstr "Вставьте ссылку на ваш аватар"
+
+msgid "Forgot Password?"
+msgstr "Забыли пароль?"
+
+msgid "Enter your email and we'll send you reset instructions"
+msgstr "Введите ваш email и мы отправим вам инструкции по сбросу пароля"
+
+msgid "Send Reset Instructions"
+msgstr "Отправить инструкции по сбросу пароля"
+
+msgid "Back to Login"
+msgstr "Вернуться к входу"
+
+msgid "Reset Password"
+msgstr "Сбросить пароль"
+
+msgid "We've got your back!"
+msgstr "Мы вас поддержим!"
+
+msgid "Create New"
+msgstr "Создать"
+
+msgid "Publications"
+msgstr "Публикации"
+
+msgid "News Post"
+msgstr "Новостной пост"
+
+msgid "Share latest updates and announcements"
+msgstr "Поделитесь последними обновлениями и объявлениями"
+
+msgid "Article"
+msgstr "Статья"
+
+msgid "Write in-depth content and stories"
+msgstr "Напишите интересные материалы и истории"
+
+msgid "Channel"
+msgstr "Канал"
+
+msgid "Create community space for discussions and publications"
+msgstr "Создать сообщество для обсуждений и публикаций"
+
+msgid "Don't see what you're looking for?"
+msgstr "Не нашли то, что искали?"
+
+msgid "Suggest a feature"
+msgstr "Предложить функцию"
+
+msgid "Settings"
+msgstr "Настройки"
+
+msgid "Appearance"
+msgstr "Внешний вид"
+
+msgid "Light"
+msgstr "Светлая"
+
+msgid "Dark"
+msgstr "Тёмная"
+
+msgid "System"
+msgstr "Системная"
+
+msgid "Language"
+msgstr "Язык"
+
+msgid "Preferences"
+msgstr "Настройки"
+
+msgid "Notifications"
+msgstr "Уведомления"
+
+msgid "Enable app notifications"
+msgstr "Включить уведомления приложения"
+
+
+msgid "Account created successfully!"
+msgstr "Аккаунт создан успешно!"
+
+msgid "Password updated successfully"
+msgstr "Пароль обновлен успешно!"
+
+msgid "Invalid email or password"
+msgstr "Неверный email или пароль"
+
+msgid "Logged out successfully"
+msgstr "Выход выполнен успешно!"
+
+msgid "Logged in successfully"
+msgstr "Вход выполнен успешно!"
+
+msgid "Articles #{action}d successfully"
+msgstr "Статьи #{action} успешно"
+
+msgid "Channels updated successfully"
+msgstr "Каналы обновлены успешно"
+
+msgid "Channels created successfully"
+msgstr "Каналы созданы успешно"
+
+msgid "Comment added successfully!"
+msgstr "Комментарий добавлен успешно!"
+
+msgid "Comment deleted successfully!"
+msgstr "Комментарий удален успешно!"
+
+msgid "User confirmed successfully"
+msgstr "Пользователь подтвержден успешно"
+
+msgid "Email changed successfully"
+msgstr "Email изменен успешно"
+
+msgid "Password reset successfully"
+msgstr "Пароль сброшен успешно"
+
+msgid "Share the latest updates with the world"
+msgstr "Поделитесь последними новостями с миром"
+
+msgid "comma separated"
+msgstr "через запятую"
+
+msgid "You need a channel to publish news!"
+msgstr "Нужен канал для публикации новостей!"
+
+msgid "Create one now"
+msgstr "Создайте его сейчас"
+
+msgid "Featured Image URL"
+msgstr "URL изображения"
+
+msgid "News Content"
+msgstr "Содержание новости"
+
+msgid "Write your news story here..."
+msgstr "Напишите свою новость здесь..."
+
+msgid "Recommended size: 1200x630px"
+msgstr "Рекомендуемый размер: 1200x630px"
+
+msgid "Politics, Economy, Technology"
+msgstr "Политика, Экономика, Технологии"
+
+msgid "Breaking: Major development..."
+msgstr "Срочно: Важное развитие..."
+
+msgid "Create Breaking News"
+msgstr "Создать срочную новость"
+
+msgid "Publish News"
+msgstr "Опубликовать новость"
+
+msgid "Create New Article"
+msgstr "Создать новую статью"
+
+msgid "Share your knowledge with the world"
+msgstr "Поделитесь своим знанием с миром"
+
+msgid "Use high-quality image for better engagement"
+msgstr "Используйте высококачественное изображение для улучшения взаимодействия"
+
+msgid "Separate tags with commas"
+msgstr "Разделите теги запятыми"
+
+msgid "Games, News, Technology"
+msgstr "Игры, Новости, Технологии"
+
+msgid "Catchy headline that grabs attention"
+msgstr "Заголовок, который захватывает внимание"
+
+msgid "Write your amazing content here..."
+msgstr "Напишите свой замечательный контент здесь..."
+
+msgid "Your article will be visible to everyone"
+msgstr "Ваша статья будет видна всем"
+
+msgid "Publish Article"
+msgstr "Опубликовать статью"
+
+msgid "Create New Channel"
+msgstr "Создать новый канал"
+
+msgid "Awesome Channel"
+msgstr "Прекрасный канал"
+
+msgid "Build your community space"
+msgstr "Постройте своё сообщество"
+
+msgid "Channel Name"
+msgstr "Название канала"
+
+msgid "Tell people what your channel is about..."
+msgstr "Скажите людям, что ваш канал о чем-то..."
+
+msgid "As Guest"
+msgstr "Как гость"
+
+msgid "Article Content"
+msgstr "Содержание статьи"
+
+msgid "Feed"
+msgstr "Лента"

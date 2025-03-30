@@ -24,6 +24,28 @@ defmodule RednewsWeb.Helpers do
     })
   end
 
+  @gradients [
+    {"from-indigo-500", "to-purple-600"},
+    {"from-blue-500", "to-cyan-600"},
+    {"from-pink-500", "to-rose-600"},
+    {"from-emerald-500", "to-teal-600"},
+    {"from-amber-500", "to-orange-600"},
+    {"from-violet-500", "to-fuchsia-600"},
+    {"from-sky-500", "to-blue-600"},
+    {"from-lime-500", "to-green-600"}
+  ]
+
+  @doc """
+    Returns a random gradient from the list of available gradients.
+
+    ## Examples
+      iex> random_gradient()
+      {"from-indigo-500", "to-purple-600"}
+  """
+  def random_gradient do
+    Enum.random(@gradients)
+  end
+
   @doc """
   Translates a list of variables into their localized strings.
 
@@ -34,9 +56,11 @@ defmodule RednewsWeb.Helpers do
   - Returns a list of translated strings.
   """
   def translate_options(options) do
-    Enum.map(options, fn en_term ->
+    options
+    |> Enum.map(fn en_term ->
       {Gettext.gettext(RednewsWeb.Gettext, en_term), en_term}
     end)
+    |> Enum.sort_by(fn {_translated, original} -> original end)
   end
 
   @doc """

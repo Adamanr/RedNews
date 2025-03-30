@@ -17,9 +17,10 @@ defmodule RednewsWeb.ArticlesLive.Index do
       socket
       |> assign(:first_article, first_article)
       |> assign(:current_user, Helpers.get_current_user(session))
-      |> assign(:categories, Posts.list_categories())
       |> assign(:selected_category, "all")
-      |> assign(:selected_date, "all time")
+      |> assign(:search_term, "")
+      |> assign(:selected_tags, "")
+      |> assign(:selected_date, "all")
       |> stream(:article, articles)
 
     {:ok, socket}
@@ -36,6 +37,25 @@ defmodule RednewsWeb.ArticlesLive.Index do
   end
 
   @impl true
+  def handle_event("search_articles", %{"value" => search_term}, socket) do
+    socket =
+      if String.length(search_term) > 0 do
+        socket
+        |> assign(:search_term, search_term)
+        |> assign_articles(
+          Posts.list_article(:search, %{search_term: search_term})
+          |> Repo.preload(:user)
+        )
+      else
+        socket
+        |> assign(:search_term, nil)
+        |> assign_articles(Posts.list_article() |> Repo.preload(:user))
+      end
+
+    {:noreply, stream(socket, :article, socket.assigns[:articles], reset: true)}
+  end
+
+  @impl true
   def handle_event("filtred", %{"filter" => filter}, socket) do
     %{"options" => options, "params" => params} = Jason.decode!(filter)
 
@@ -45,14 +65,17 @@ defmodule RednewsWeb.ArticlesLive.Index do
           socket
           |> assign(:selected_category, category)
           |> assign_articles(
-            Posts.list_article(:category_and_date, %{category: category})
+            Posts.list_article(:category_and_date, %{
+              category: category,
+              date: socket.assigns[:selected_date]
+            })
             |> Repo.preload(:user)
           )
 
-        {"tags", tags} ->
+        {"tags", tag} ->
           socket
-          |> assign(:selected_tags, tags)
-          |> assign_articles(Posts.list_article(:tags, %{tags: tags}) |> Repo.preload(:user))
+          |> assign(:selected_tags, tag)
+          |> assign_articles(Posts.list_article(:tags, %{tags: tag}) |> Repo.preload(:user))
 
         {"date", date} ->
           socket
@@ -64,16 +87,6 @@ defmodule RednewsWeb.ArticlesLive.Index do
             })
             |> Repo.preload(:user)
           )
-
-        {_, "tags"} ->
-          socket
-          |> assign(:selected_tags, "all")
-          |> assign_articles(Posts.list_article() |> Repo.preload(:user))
-
-        {_, "category"} ->
-          socket
-          |> assign(:selected_category, "all")
-          |> assign_articles(Posts.list_article() |> Repo.preload(:user))
 
         _ ->
           socket
@@ -95,12 +108,6 @@ defmodule RednewsWeb.ArticlesLive.Index do
 
   defp assign_articles(socket, articles) do
     assign(socket, :articles, articles)
-  end
-
-  defp apply_action(socket, :edit, %{"id" => id}) do
-    socket
-    |> assign(:page_title, "Edit Articles")
-    |> assign(:articles, Posts.get_articles!(id))
   end
 
   defp apply_action(socket, :new, _params) do

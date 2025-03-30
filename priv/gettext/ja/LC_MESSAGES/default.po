@@ -100,10 +100,10 @@ msgstr "コメント"
 msgid "Send"
 msgstr "送信"
 
-msgid "I like"
+msgid "Liked"
 msgstr "いいね"
 
-msgid "You like?"
+msgid "Like?"
 msgstr "いいですか？"
 
 msgid "Tags"
@@ -214,23 +214,23 @@ msgstr "作成します！"
 msgid "Reading time: %{time} min"
 msgstr "読了時間: %{time}分"
 
-msgid "There are no articles in the %{category} category for %{date}"
+msgid "No articles found for %{category} on %{date}"
 msgstr "%{date}の%{category}カテゴリに記事はありません"
 
-msgid "Articles %{date} by category - %{category}"
-msgstr "%{date}の記事（%{category}カテゴリ）"
+msgid "Articles in %{category}"
+msgstr "%{category}カテゴリの記事"
 
-msgid "There are no news in the %{category} category for %{date}"
+msgid "No news found for %{category} on %{date}"
 msgstr "%{date}の%{category}カテゴリにニュースはありません"
 
-msgid "News %{date} by category - %{category}"
-msgstr "%{date}のニュース（%{category}カテゴリ）"
+msgid "News in %{category}"
+msgstr "%{category}カテゴリのニュース"
 
-msgid "There are no channels in the %{category} category for %{date}"
+msgid "No channels found for %{category} on %{date}"
 msgstr "%{date}の%{category}カテゴリにチャンネルはありません"
 
-msgid "Channels %{date} by category - %{category}"
-msgstr "%{date}のチャンネル（%{category}カテゴリ）"
+msgid "Channels in %{category}"
+msgstr "%{category}カテゴリのチャンネル"
 
 msgid "Verified: Fake news"
 msgstr "検証済み: 偽ニュース"
@@ -280,13 +280,13 @@ msgstr "作成"
 msgid "Select what you want to create"
 msgstr "作成するものを選択"
 
-msgid "Create news"
+msgid "Create News"
 msgstr "ニュースを作成"
 
-msgid "Create channel"
+msgid "Create Channel"
 msgstr "チャンネルを作成"
 
-msgid "Create article"
+msgid "Create Article"
 msgstr "記事を作成"
 
 msgid "There is not what you want to do?"
@@ -477,3 +477,291 @@ msgstr "パスワードリセット指示を送信"
 
 msgid "Log in"
 msgstr "ログイン"
+
+msgid "Read full news"
+msgstr "フルニュースを読む"
+
+msgid "Search news..."
+msgstr "ニュースを検索..."
+
+msgid "Search articles..."
+msgstr "記事を検索..."
+
+msgid "Search channels..."
+msgstr "チャンネルを検索..."
+
+msgid "More Articles"
+msgstr "更多文章"
+
+msgid "View Channel"
+msgstr "チャンネルを表示"
+
+msgid "User Stats"
+msgstr "ユーザーの統計"
+
+msgid "About user"
+msgstr "ユーザーについて"
+
+msgid "Edit Profile"
+msgstr "プロフィールを編集"
+
+msgid "Always connected with events"
+msgstr "常にイベントに接続"
+
+msgid "Read, Share, Discuss"
+msgstr "読む、シェアする、ディスカッションする"
+
+msgid "Email Address"
+msgstr "メールアドレス"
+
+msgid "New to our platform?"
+msgstr "新しいプラットフォームですか？"
+
+msgid "Create an Account"
+msgstr "アカウントを作成"
+
+msgid "Other entry options"
+msgstr "他のログイン方法"
+
+msgid "Welcome Back!"
+msgstr "ようこそ！"
+
+msgid "Your digital adventure continues here"
+msgstr "あなたの数字の冒険はここから始まります"
+
+msgid "Join the Community"
+msgstr "コミュニティに参加する"
+
+msgid "Create your unique account"
+msgstr "あなたのユニークなアカウントを作成"
+
+msgid "Display Name"
+msgstr "表示名"
+
+msgid "Profile Picture URL"
+msgstr "プロフィール画像URL"
+
+msgid "Welcome to RedNews"
+msgstr "RedNewsへようこそ"
+
+msgid "One step closer to connecting with the world"
+msgstr "世界と接続するための1ステップ"
+
+msgid "Create Your Account"
+msgstr "アカウントを作成"
+
+msgid "Already have an account?"
+msgstr "既にアカウントをお持ちですか"
+
+msgid "Paste your avatar link"
+msgstr "アバターのリンクを貼り付け"
+
+msgid "Forgot Password?"
+msgstr "パスワードを忘れた場合"
+
+msgid "Enter your email and we'll send you reset instructions"
+msgstr "メールアドレスを入力して、リセット指示を送信します"
+
+msgid "Send Reset Instructions"
+msgstr "リセット指示を送信"
+
+msgid "Back to Login"
+msgstr "ログインに戻る"
+
+msgid "Reset Password"
+msgstr "パスワードをリセット"
+
+msgid "We've got your back!"
+msgstr "私たちがあなたのバックを取っています！"
+
+msgid "Open Settings"
+msgstr "設定を開く"
+
+msgid "Settings"
+msgstr "設定"
+
+msgid "Create New"
+msgstr "新規作成"
+
+msgid "Publications"
+msgstr "出版物"
+
+msgid "News Post"
+msgstr "ニュースポスト"
+
+msgid "Share latest updates and announcements"
+msgstr "最新の更新とアナウンスをシェア"
+
+msgid "Article"
+msgstr "記事"
+
+msgid "Write in-depth content and stories"
+msgstr "深く掘り下げたコンテンツとストーリーを書く"
+
+msgid "Channel"
+msgstr "チャンネル"
+
+msgid "Create community space for discussions and publications"
+msgstr "ディスカッションと出版物のためのコミュニティスペースを作成"
+
+msgid "Don't see what you're looking for?"
+msgstr "見つからないですか？"
+
+msgid "Suggest a feature"
+msgstr "機能を提案する"
+
+msgid "Appearance"
+msgstr "外観"
+
+msgid "Light"
+msgstr "ライト"
+
+msgid "Dark"
+msgstr "ダーク"
+
+msgid "System"
+msgstr "システム"
+
+msgid "Language"
+msgstr "言語"
+
+msgid "Preferences"
+msgstr "設定"
+
+msgid "Notifications"
+msgstr "通知"
+
+msgid "Enable app notifications"
+msgstr "アプリ通知を有効にする"
+
+msgid "Account created successfully!"
+msgstr "アカウントが作成されました！"
+
+msgid "Password updated successfully"
+msgstr "パスワードが更新されました！"
+
+msgid "Invalid email or password"
+msgstr "無効なメールアドレスまたはパスワード"
+
+msgid "Logged out successfully"
+msgstr "ログアウトしました！"
+
+msgid "Logged in successfully"
+msgstr "ログインしました！"
+
+msgid "Articles #{action}d successfully"
+msgstr "記事 #{action}d 成功"
+
+msgid "Channels updated successfully"
+msgstr "チャンネル更新成功"
+
+msgid "Channels created successfully"
+msgstr "チャンネル作成成功"
+
+msgid "Comment added successfully!"
+msgstr "コメント追加成功！"
+
+msgid "Comment deleted successfully!"
+msgstr "コメント削除成功！"
+
+msgid "User confirmed successfully"
+msgstr "ユーザー確認成功"
+
+msgid "Email changed successfully"
+msgstr "メール変更成功"
+
+msgid "Password reset successfully"
+msgstr "パスワードリセット成功"
+
+msgid "Create Breaking News"
+msgstr "ニュース速報を作成する"
+
+msgid "Share the latest updates with the world"
+msgstr "最新の更新を世界にシェアする"
+
+msgid "comma separated"
+msgstr "カンマ区切り"
+
+msgid "Create one now"
+msgstr "今すぐ作成する"
+
+msgid "Featured Image URL"
+msgstr "特徴的な画像URL"
+
+msgid "News Content"
+msgstr "ニュース内容"
+
+msgid "Write your news story here..."
+msgstr "ニュースストーリーをここに書いてください..."
+
+msgid "Recommended size: 1200x630px"
+msgstr "推奨サイズ：1200x630px"
+
+msgid "Politics, Economy, Technology"
+msgstr "政治、経済、テクノロジー"
+
+msgid "Breaking: Major development..."
+msgstr "Breaking: 大規模開発..."
+
+msgid "You need a channel to publish news!"
+msgstr "チャンネルを作成する必要があります"
+
+msgid "Publish News"
+msgstr "ニュースを公開する"
+
+msgid "Create New Article"
+msgstr "新しい記事を作成する"
+
+msgid "Share your knowledge with the world"
+msgstr "世界に知識をシェアする"
+
+msgid "Use high-quality image for better engagement"
+msgstr "より良いエンゲージメントのために高品質な画像を使用する"
+
+msgid "Separate tags with commas"
+msgstr "カンマでタグを区切る"
+
+msgid "Games, News, Technology"
+msgstr "ゲーム、ニュース、テクノロジー"
+
+msgid "Catchy headline that grabs attention"
+msgstr "注目を引きつけるキャッチーな見出し"
+
+msgid "Write your amazing content here..."
+msgstr "ここに素晴らしいコンテンツを書いてください..."
+
+msgid "Your article will be visible to everyone"
+msgstr "あなたの記事は誰でも見ることができます"
+
+msgid "Publish Article"
+msgstr "記事を公開する"
+
+msgid "Create New Channel"
+msgstr "新しいチャンネルを作成する"
+
+msgid "Awesome Channel"
+msgstr "素晴らしいチャンネル"
+
+msgid "Build your community space"
+msgstr "コミュニティスペースを構築する"
+
+msgid "Channel Name"
+msgstr "チャンネル名"
+
+msgid "Background Image URL"
+msgstr "背景画像URL"
+
+msgid "Tell people what your channel is about..."
+msgstr "あなたのチャンネルについて人々に伝える"
+
+msgid "As a guest"
+msgstr "ゲストとして"
+
+msgid "As Guest"
+msgstr "ゲストとして"
+
+msgid "Article Content"
+msgstr "記事の内容"
+
+msgid "Feed"
+msgstr "フィード"

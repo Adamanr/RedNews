@@ -6,8 +6,8 @@ defmodule Rednews.Posts do
   def split_tag(attrs) do
     tags =
       case attrs["tags"] do
-        nil -> "Новое"
-        "" -> "Новое"
+        nil -> "New"
+        "" -> "New"
         tags -> tags
       end
 
@@ -18,38 +18,6 @@ defmodule Rednews.Posts do
 
     Map.put(attrs, "tags", tags)
   end
-
-  @layout_categories [
-    {"Politics", %{name: :politics}},
-    {"Economy", %{name: :economy}},
-    {"Society", %{name: :society}},
-    {"Culture", %{name: :culture}},
-    {"Sports", %{name: :sports}},
-    {"Science and Technology", %{name: :science_and_technology}},
-    {"Health", %{name: :health}},
-    {"Education", %{name: :education}},
-    {"Incidents", %{name: :incidents}},
-    {"Auto", %{name: :auto}},
-    {"Real Estate", %{name: :nedvizhimost}},
-    {"Tourism and Travel", %{name: :tourism}},
-    {"Ecology", %{name: :ecology}},
-    {"Fashion and Style", %{name: :fashion_and_style}},
-    {"Cinema and Television", %{name: :cinema_and_television}},
-    {"Music", %{name: :music}},
-    {"Games and Entertainment", %{name: :games_and_entertainment}},
-    {"Business", %{name: :business}},
-    {"Finance", %{name: :finance}},
-    {"World News", %{name: :world_news}},
-    {"Regional News", %{name: :regional_news}},
-    {"Technology", %{name: :technology}},
-    {"Cryptocurrencies", %{name: :cryptocurrencies}},
-    {"Agriculture", %{name: :agriculture}},
-    {"Energy", %{name: :energy}},
-    {"Transport", %{name: :transport}},
-    {"Weather", %{name: :weather}},
-    {"History", %{name: :history}},
-    {"Humor", %{name: :humor}}
-  ]
 
   @categories [
     "Politics",
@@ -86,10 +54,16 @@ defmodule Rednews.Posts do
   @doc """
   Return categories list `{label, value}`.
   """
-  def list_categories, do: @categories
-  def list_layout_categories, do: @layout_categories
+  def list_categories do
+    @categories
+    |> Enum.map(fn category ->
+      %{label: Gettext.gettext(RednewsWeb.Gettext, category), value: category}
+    end)
+    |> Enum.sort_by(& &1)
+  end
 
   import Ecto.Query, warn: false
+
   alias Rednews.Accounts
   alias Rednews.Repo
 
@@ -172,7 +146,9 @@ defmodule Rednews.Posts do
           from(a in Articles, where: a.category == ^params[:category])
 
         :tags ->
-          from(a in Articles, where: ^params[:tags] in a.tags)
+          tag = params[:tags]
+          IO.puts("Filtering by tag: #{tag}")
+          from(a in Articles, where: fragment("? = ANY(?)", ^tag, a.tags))
 
         :author ->
           from(a in Articles, where: a.user_id == ^params[:user_id])
@@ -192,9 +168,6 @@ defmodule Rednews.Posts do
                 where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", a.inserted_at)
               )
 
-            "all" ->
-              from(a in Articles)
-
             _ ->
               from(a in Articles)
           end
@@ -203,7 +176,7 @@ defmodule Rednews.Posts do
           query = from(a in Articles)
 
           query =
-            if params[:category] do
+            if params[:category] && params[:category] != "all" do
               from(a in query, where: a.category == ^params[:category])
             else
               query
@@ -224,14 +197,18 @@ defmodule Rednews.Posts do
                   where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", a.inserted_at)
                 )
 
-              "all" ->
-                from(a in Articles)
-
               _ ->
                 query
             end
 
           query
+
+        :search ->
+          search_term = "%#{String.downcase(params[:search_term])}%"
+
+          from(a in Articles,
+            where: fragment("lower(?) LIKE ?", a.title, ^search_term)
+          )
 
         _ ->
           raise ArgumentError, "Unknown options: #{options}"
@@ -453,7 +430,7 @@ defmodule Rednews.Posts do
                 where: fragment("? >= CURRENT_DATE - INTERVAL '30 days'", h.inserted_at)
               )
 
-            "all" ->
+            _ ->
               from(h in Headlines)
           end
 
@@ -461,7 +438,7 @@ defmodule Rednews.Posts do
           query = from(h in Headlines)
 
           query =
-            if params[:category] do
+            if params[:category] && params[:category] != "all" do
               from(h in query, where: h.category == ^params[:category])
             else
               query
@@ -490,6 +467,13 @@ defmodule Rednews.Posts do
             end
 
           query
+
+        :search ->
+          search_term = "%#{String.downcase(params[:search_term])}%"
+
+          from(h in Headlines,
+            where: fragment("lower(?) LIKE ?", h.title, ^search_term)
+          )
 
         _ ->
           raise ArgumentError, "Unknown options: #{options}"

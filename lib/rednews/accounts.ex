@@ -438,7 +438,7 @@ defmodule Rednews.Accounts do
           query = from(c in Channels)
 
           query =
-            if params[:category] do
+            if params[:category] && params[:category] != "all" do
               from(c in query, where: c.category == ^params[:category])
             else
               query
@@ -464,6 +464,13 @@ defmodule Rednews.Accounts do
             end
 
           query
+
+        :search ->
+          search_term = "%#{String.downcase(params[:search_term])}%"
+
+          from(a in Channels,
+            where: fragment("lower(?) LIKE ?", a.name, ^search_term)
+          )
 
         _ ->
           raise ArgumentError, "Unknown options: #{options}"

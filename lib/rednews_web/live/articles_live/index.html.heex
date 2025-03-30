@@ -1,155 +1,280 @@
-<div class="flex">
-  <div class="md:block hidden">
-    <.sidebar
-      categories={@categories}
-      selected_category={@selected_category}
-      selected_date={@selected_date}
-    />
-  </div>
-  <div class="w-full">
-    <%= if length(@streams.article.inserts) > 0 do %>
-      <div class="relative">
-        <%= if @selected_category == "all" do %>
-          <div class="md:grid grid-cols-5  mt-4">
-            <div class={"relative h-[35em] w-full #{if length(@streams.article.inserts) > 1, do: "col-span-3", else: "col-span-5" }"}>
-              <img
-                class="h-full object-cover w-full rounded-3xl shadow-lg"
-                src={@first_article.header}
-              />
-              <div class="absolute bottom-0 top-0 h-full w-full bg-gradient-to-t rounded-xl from-black/80 to-white/20">
-              </div>
-              <div
-                class="absolute bottom-5 left-5 font-bold"
-                style="font-family: 'Merriweather Sans', sans-serif;"
-              >
-                <div class="flex text-white text-md space-x-2">
-                  <img src={@first_article.user.avatar} class="w-5 h-5 rounded-md" />
-                  <p class="">{@first_article.user.username}</p>
-                  <p class="rounded-md">·</p>
-                  <p class="">{Gettext.gettext(RednewsWeb.Gettext, @first_article.category)}</p>
-                </div>
-                <.link href={"/articles/article/#{@first_article.id}"}>
-                  <h1 class="text-2xl leading-8 text-white">{@first_article.title}</h1>
-                </.link>
-              </div>
-            </div>
-
-            <%= if length(@streams.article.inserts) > 1 do %>
-              <div class="flex col-span-2 h-[35em] w-full md:ps-5 md:mt-0 mt-5 space-y-4 flex-col">
-                <%= for {_id, _, article, _} <- Enum.slice(Enum.reverse(@streams.article.inserts), 1,3) do %>
-                  <div class="bg-white dark:bg-zinc-800 w-full flex rounded-lg shadow-lg space-x-4 h-1/3">
-                    <img class="w-[10em] rounded-lg  object-cover" src={article.header} />
-                    <div class="py-4 px-4 space-y-4">
-                      <p class="px-2 py-1 border rounded-md w-fit mb-2 border-black">
-                        {Gettext.gettext(RednewsWeb.Gettext, article.category)}
-                      </p>
-                      <a href={"/articles/article/#{article.id}"} class="text-xl">
-                        {article.title}
-                      </a>
-                      <p class="text-xs dark:text-gray-200 text-gray-600">
-                        <%= if String.length(article.title) > 40 do %>
-                          {String.slice(article.content, 0, 100)}
-                        <% else %>
-                          {String.slice(article.content, 0, 150)}
-                        <% end %>
-                      </p>
-                    </div>
-                  </div>
-                <% end %>
-              </div>
-            <% end %>
-          </div>
-        <% end %>
-        <div class="mt-5">
-          <h1 class="text-2xl mb-5 font-bold">
+<div class="md:flex w-full  md:min-h-screen p-6">
+  <div class="md:flex w-full md:space-x-8 md:container mx-auto md:max-w-[100em]">
+    <div class="md:block hidden">
+      <.sidebar selected_category={@selected_category} selected_date={@selected_date} />
+    </div>
+    <div class="w-full mb-20 mx-auto">
+      <header class="mb-6 md:flex justify-between items-center">
+        <div>
+          <h1 class="text-5xl  pb-2 font-black bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-500">
             {if @selected_category == "all",
-              do: gettext("All articles"),
+              do: gettext("Articles"),
               else:
-                gettext("Articles %{date} by category - %{category}",
+                gettext("Articles in %{category}",
                   category:
                     Gettext.gettext(
                       RednewsWeb.Gettext,
                       Helpers.convert_category_to_print(@selected_category)
-                    ),
-                  date:
-                    Gettext.gettext(
-                      RednewsWeb.Gettext,
-                      Helpers.convert_time_to_print(@selected_date)
                     )
                 )}
           </h1>
-          <%= for {_, article} <- @streams.article do %>
-            <div class="md:flex font-['Martian_Mono'] w-full bg-white p-4 rounded-2xl">
-              <img class="h-[22vh] w-[30em] me-5 rounded-md object-cover" src={article.header} />
+          <p class="text-gray-500 dark:text-gray-200 mt-2">
+            {Gettext.gettext(RednewsWeb.Gettext, Helpers.convert_time_to_print(@selected_date))}
+          </p>
+        </div>
 
-              <div class="relative md:mt-0 mt-5 w-full leading-6">
-                <div class="flex items-center  text-md text-black space-x-2">
-                  <img src={article.user.avatar} class="w-7 h-7 rounded-full" />
-                  <p class="">{article.user.username}</p>
-                  <p class="rounded-md">·</p>
-                  <p class="">{Gettext.gettext(RednewsWeb.Gettext, article.category)}</p>
-                </div>
+        <div class="relative md:w-96 md:mt-0 mt-5 w-full">
+          <input
+            type="text"
+            placeholder={gettext("Search articles...")}
+            phx-keyup="search_articles"
+            phx-debounce="300"
+            class="w-full px-5 py-3 rounded-full dark:bg-gray-800 dark:border-gray-700 bg-white border border-gray-200 focus:ring-2 focus:ring-indigo-500 transition-all shadow-md"
+          />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="absolute items-center h-full top-0 right-5 text-gray-400"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </div>
+      </header>
 
-                <.link href={"/articles/article/#{article.id}"}>
-                  <h1 class="text-2xl py-2">
-                    {article.title}
-                  </h1>
-                </.link>
-                <p class="text-gray-600">
-                  {if not is_nil(article.additional),
-                    do: String.slice(article.content, 0, 150),
-                    else: String.slice(article.content, 0, 250)}..
-                </p>
-                <div class="md:hidden block h-[14vh]"></div>
-                <div class="absolute md:mt-0 mt-14 text-gray-600 font-light w-full space-x-4 text-md  bottom-0 flex pt-4">
-                  <div class="flex w-fit space-x-2">
-                    <img src="/images/calendar.svg" class="w-6 h-6" />
-                    <p class="items-center">{article.inserted_at}</p>
-                  </div>
-                  <div class="flex items-cetner w-fit space-x-2">
-                    <img src="/images/views.svg" class="w-6 h-6" />
-                    <p class="items-center">
-                      {gettext("Reading time: %{time} min",
-                        time: Helpers.calculate_reading_time(article.content)
-                      )}
+      <%= if @selected_category == "all" && @selected_date == "all" && @search_term == ""   do %>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <%= if length(@streams.article.inserts) > 0 do %>
+            <div class="md:col-span-2 h-[35em] dark:bg-gray-800/90 backdrop-blur-sm bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all group">
+              <img
+                src={@first_article.header}
+                alt={@first_article.title}
+                class="w-full h-[23em] object-cover transform group-hover:scale-105 transition-transform"
+              />
+              <div class="p-6">
+                <div class="flex items-center space-x-3 mb-4">
+                  <img
+                    src={@first_article.user.avatar}
+                    class="w-10 h-10 rounded-full border-2 border-blue-500"
+                  />
+                  <div>
+                    <p class="text-sm dark:text-gray-300 text-gray-600">
+                      {@first_article.user.username}
+                    </p>
+                    <p class="text-xs w-fit text-blue-600 dark:bg-gray-600 dark:text-blue-200 bg-blue-50 px-2 py-1 rounded-full">
+                      {Gettext.gettext(RednewsWeb.Gettext, @first_article.category)}
                     </p>
                   </div>
                 </div>
+                <.link href={"/articles/article/#{@first_article.id}"}>
+                  <h2 class="text-2xl font-bold dark:text-gray-300 text-gray-800 hover:text-blue-600 transition-colors">
+                    {@first_article.title}
+                  </h2>
+                </.link>
+                <p class="mt-4 dark:text-gray-400 text-gray-600">
+                  {String.slice(@first_article.content, 0, 150)}...
+                </p>
               </div>
             </div>
-            <hr class="border-gray-500 border max-w-4xl mx-auto my-7" />
           <% end %>
+
+          <div class="space-y-6">
+            <%= for {_id, _, article, _} <- Enum.slice(Enum.reverse(@streams.article.inserts), 1,4) do %>
+              <.link href={"/articles/article/#{article.id}"}>
+                <div class="bg-white dark:bg-gray-800/90 backdrop-blur-sm rounded-xl mb-4 shadow-md hover:shadow-lg transition-all p-4 flex space-x-4">
+                  <img
+                    src={article.header}
+                    alt={article.title}
+                    class="w-24 h-24 object-cover rounded-lg"
+                  />
+                  <div class="flex items-center">
+                    <div class="items-center">
+                      <p class="text-sm text-blue-600 mb-2">
+                        {Gettext.gettext(RednewsWeb.Gettext, article.category)}
+                      </p>
+                      <p class="font-semibold dark:text-gray-300 text-gray-800 hover:text-blue-600">
+                        {article.title}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </.link>
+            <% end %>
+          </div>
         </div>
-        <div class="h-[5vh]"></div>
-      </div>
-    <% else %>
-      <div class="max-w-4xl mx-auto mt-2 bg-white rounded-2xl pb-8 text-2xl  text-center font-bold">
-        <img
-          class="rounded-2xl h-[55vh] w-full"
-          src="https://i.pinimg.com/originals/4d/c8/2c/4dc82c5997a8a4b8ab7968ec1c67c678.gif"
-        />
-        <h1 class="py-8">
-          {gettext("There are no articles in the %{category} category for %{date}",
-            category:
-              Gettext.gettext(
-                RednewsWeb.Gettext,
-                Helpers.convert_category_to_print(@selected_category)
-              ),
-            date:
-              Gettext.gettext(
-                RednewsWeb.Gettext,
-                Helpers.convert_time_to_print(@selected_date)
-              )
-          )}
-        </h1>
-        <.link
-          href="/articles/new"
-          class="text-rose-600 border-rose-600 border-2 px-4 py-2 rounded-md hover:bg-rose-400 hover:text-white hover:border-0 mt-6 font-bold  text-xl"
-        >
-          {gettext("I will write!")}
-        </.link>
-      </div>
-    <% end %>
+      <% end %>
+
+      <%= if length(@streams.article.inserts) != 0 do %>
+        <div class="mt-6">
+          <h2 class="text-3xl dark:text-gray-300 font-bold mb-8 text-gray-800">
+            {gettext("More Articles")}
+          </h2>
+          <div class="space-y-6">
+            <%= if @selected_tags != "" do %>
+              <div class="border-2 w-fit px-3 py-2 flex items-center rounded-lg bg-gray-400 text-xl text-gray-800 dark:text-gray-900 font-bold mt-4">
+                <a
+                  href={
+                    ~p"/articles?filter=#{Jason.encode!(%{"options" => "tags", "params" => "all"})}"
+                  }
+                  class="text-sm hover:text-gray-600"
+                >
+                  &times; {gettext("Clear tag filter")}
+                </a>
+              </div>
+            <% end %>
+            <%= for {_, article} <- @streams.article do %>
+              <div class="bg-white h-[14em] dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-md hover:shadow-lg transition-all overflow-hidden md:flex-row flex-col flex">
+                <img
+                  src={article.header}
+                  alt={article.title}
+                  class="md:w-[15em] w-full h-[15em] object-cover"
+                />
+                <div class="p-6 flex-grow">
+                  <div class="flex  items-center space-x-3 mb-4">
+                    <img
+                      src={article.user.avatar}
+                      class="w-10 h-10 rounded-full border-2 border-blue-500"
+                    />
+                    <div class="space-y-1">
+                      <p class="text-sm  dark:text-gray-300 text-gray-600">
+                        {article.user.username}
+                      </p>
+                      <p class="text-xs w-fit dark:text-blue-200 dark:bg-gray-600 text-blue-600 bg-blue-50 px-2 py-1 rounded-full">
+                        {Gettext.gettext(RednewsWeb.Gettext, article.category)}
+                      </p>
+                    </div>
+                  </div>
+                  <.link href={"/articles/article/#{article.id}"}>
+                    <h3 class="text-xl dark:text-gray-200 font-bold text-gray-800 hover:text-blue-600 mb-2">
+                      {article.title}
+                    </h3>
+                  </.link>
+                  <p class="text-gray-600 dark:text-gray-300 mb-4">
+                    {String.slice(article.content, 0, 150)}...
+                  </p>
+                  <div class="md:flex items-center text-gray-500 text-sm md:mt-0 mt-5 md:space-x-4">
+                    <div class="flex items-center space-x-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                      </svg>
+                      <span>{article.inserted_at}</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                      </svg>
+                      <span>
+                        {gettext("Reading time: %{time} min",
+                          time: Helpers.calculate_reading_time(article.content)
+                        )}
+                      </span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center">
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                          <g
+                            id="SVGRepo_tracerCarrier"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                          </g>
+                          <g id="SVGRepo_iconCarrier">
+                            <path
+                              d="M8.5 3H11.5118C12.2455 3 12.6124 3 12.9577 3.08289C13.2638 3.15638 13.5564 3.27759 13.8249 3.44208C14.1276 3.6276 14.387 3.88703 14.9059 4.40589L20.5 10M7.5498 10.0498H7.5598M9.51178 6H8.3C6.61984 6 5.77976 6 5.13803 6.32698C4.57354 6.6146 4.1146 7.07354 3.82698 7.63803C3.5 8.27976 3.5 9.11984 3.5 10.8V12.0118C3.5 12.7455 3.5 13.1124 3.58289 13.4577C3.65638 13.7638 3.77759 14.0564 3.94208 14.3249C4.1276 14.6276 4.38703 14.887 4.90589 15.4059L8.10589 18.6059C9.29394 19.7939 9.88796 20.388 10.5729 20.6105C11.1755 20.8063 11.8245 20.8063 12.4271 20.6105C13.112 20.388 13.7061 19.7939 14.8941 18.6059L16.1059 17.3941C17.2939 16.2061 17.888 15.612 18.1105 14.9271C18.3063 14.3245 18.3063 13.6755 18.1105 13.0729C17.888 12.388 17.2939 11.7939 16.1059 10.6059L12.9059 7.40589C12.387 6.88703 12.1276 6.6276 11.8249 6.44208C11.5564 6.27759 11.2638 6.15638 10.9577 6.08289C10.6124 6 10.2455 6 9.51178 6ZM8.0498 10.0498C8.0498 10.3259 7.82595 10.5498 7.5498 10.5498C7.27366 10.5498 7.0498 10.3259 7.0498 10.0498C7.0498 9.77366 7.27366 9.5498 7.5498 9.5498C7.82595 9.5498 8.0498 9.77366 8.0498 10.0498Z"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                            </path>
+                          </g>
+                        </svg>
+                        <div class="flex space-x-2 items-center">
+                          <h1>{gettext("Tags")}:</h1>
+                          <%= for tag <- article.tags do %>
+                            <span
+                              class="cursor-pointer hover:text-gray-800 dark:hover:text-gray-200"
+                              phx-click="filtred"
+                              phx-value-filter={Jason.encode!(%{options: "tags", params: tag})}
+                            >
+                              {tag}
+                            </span>
+                          <% end %>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% else %>
+        <div class="text-center py-4 space-x-8 container mx-auto max-w-5xl">
+          <img
+            src="https://i.pinimg.com/originals/b2/d3/03/b2d3039339e81352196c878de6aefa41.gif"
+            alt="No channels"
+            class="mx-auto mb-8 rounded-2xl w-full h-[35em] object-cover"
+          />
+          <h2 class="text-3xl dark:text-gray-200 font-bold text-gray-800 mb-4">
+            {gettext("No articles found for %{category} on %{date}",
+              category:
+                Gettext.gettext(
+                  RednewsWeb.Gettext,
+                  Helpers.convert_category_to_print(@selected_category)
+                ),
+              date:
+                Gettext.gettext(
+                  RednewsWeb.Gettext,
+                  Helpers.convert_time_to_print(@selected_date)
+                )
+            )}
+          </h2>
+          <.link
+            href="/articles/new"
+            class="inline-block mt-6 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-full hover:from-purple-700 hover:to-pink-600 transition-all"
+          >
+            {gettext("Create Article")}
+          </.link>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>
 

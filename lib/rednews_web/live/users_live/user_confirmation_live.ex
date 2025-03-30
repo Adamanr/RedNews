@@ -35,7 +35,7 @@ defmodule RednewsWeb.UserConfirmationLive do
       {:ok, _} ->
         {:noreply,
          socket
-         |> put_flash(:info, "User confirmed successfully.")
+         |> put_flash(:info, gettext("User confirmed successfully"))
          |> redirect(to: ~p"/")}
 
       :error ->
