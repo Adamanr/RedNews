@@ -413,7 +413,11 @@ defmodule Rednews.Accounts do
           from(c in Channels, where: ^params[:tags] in c.tags)
 
         :author ->
-          from(c in Channels, where: ^params[:user_id] == c.user_id)
+          if Map.has_key?(params, :user_ids) do
+            from(c in Channels, where: c.user_id in ^params[:user_ids])
+          else
+            from(c in Channels, where: c.user_id == ^params[:user_id])
+          end
 
         :date ->
           case params[:date] do
@@ -493,6 +497,11 @@ defmodule Rednews.Accounts do
     |> where([c], c.user_id == ^user_id)
     |> select([c], %{name: c.name, id: c.id})
     |> Repo.all()
+  end
+
+  def user_has_channels?(user_id) do
+    from(c in Channels, where: c.user_id == ^user_id)
+    |> Repo.exists?()
   end
 
   @doc """
@@ -657,5 +666,412 @@ defmodule Rednews.Accounts do
   """
   def change_channels(%Channels{} = channels, attrs \\ %{}) do
     Channels.changeset(channels, attrs)
+  end
+
+  # Subscriptions
+
+  import Ecto.Query, warn: false
+  alias Rednews.Repo
+  alias Rednews.Accounts.Subscription
+
+  @doc """
+  Subscribes a user to another user's articles.
+
+  Creates a new subscription if none exists, or updates an existing one to enable article subscriptions.
+
+  ## Parameters
+    - subscriber_id: ID of the user who is subscribing
+    - target_user_id: ID of the user whose articles are being subscribed to
+
+  ## Returns
+    - {:ok, %Subscription{}} on success
+    - {:error, changeset} on failure
+  """
+  def subscribe_to_user_articles(subscriber_id, target_user_id) do
+    case get_subscription(subscriber_id, "user", target_user_id) do
+      nil ->
+        %Subscription{}
+        |> Subscription.changeset(%{
+          subscriber_id: subscriber_id,
+          target_type: "user",
+          target_id: target_user_id,
+          subscribe_articles: true,
+          subscribe_channels: false
+        })
+        |> Repo.insert()
+
+      subscription ->
+        subscription
+        |> Subscription.changeset(%{subscribe_articles: true})
+        |> Repo.update()
+    end
+  end
+
+  @doc """
+  Unsubscribes a user from another user's articles.
+
+  Updates the subscription to disable article notifications or deletes it if no channel subscriptions remain.
+
+  ## Parameters
+    - subscriber_id: ID of the user who is unsubscribing
+    - target_user_id: ID of the user whose articles are being unsubscribed from
+
+  ## Returns
+    - {:ok, %Subscription{}} or {:ok, nil} on success
+    - {:error, changeset} on failure
+  """
+  def unsubscribe_from_user_articles(subscriber_id, target_user_id) do
+    case get_subscription(subscriber_id, "user", target_user_id) do
+      nil ->
+        {:ok, nil}
+
+      subscription ->
+        if subscription.subscribe_channels do
+          subscription
+          |> Subscription.changeset(%{subscribe_articles: false})
+          |> Repo.update()
+        else
+          Repo.delete(subscription)
+        end
+    end
+  end
+
+  @doc """
+  Subscribes a user to another user's channels.
+
+  Creates a new subscription if none exists, or updates an existing one to enable channel subscriptions.
+
+  ## Parameters
+    - subscriber_id: ID of the user who is subscribing
+    - target_user_id: ID of the user whose channels are being subscribed to
+
+  ## Returns
+    - {:ok, %Subscription{}} on success
+    - {:error, changeset} on failure
+  """
+  def subscribe_to_user_channels(subscriber_id, target_user_id) do
+    case get_subscription(subscriber_id, "user", target_user_id) do
+      nil ->
+        %Subscription{}
+        |> Subscription.changeset(%{
+          subscriber_id: subscriber_id,
+          target_type: "user",
+          target_id: target_user_id,
+          subscribe_articles: false,
+          subscribe_channels: true
+        })
+        |> Repo.insert()
+
+      subscription ->
+        subscription
+        |> Subscription.changeset(%{subscribe_channels: true})
+        |> Repo.update()
+    end
+  end
+
+  @doc """
+  Unsubscribes a user from another user's channels.
+
+  Updates the subscription to disable channel notifications or deletes it if no article subscriptions remain.
+
+  ## Parameters
+    - subscriber_id: ID of the user who is unsubscribing
+    - target_user_id: ID of the user whose channels are being unsubscribed from
+
+  ## Returns
+    - {:ok, %Subscription{}} or {:ok, nil} on success
+    - {:error, changeset} on failure
+  """
+  def unsubscribe_from_user_channels(subscriber_id, target_user_id) do
+    case get_subscription(subscriber_id, "user", target_user_id) do
+      nil ->
+        {:ok, nil}
+
+      subscription ->
+        if subscription.subscribe_articles do
+          subscription
+          |> Subscription.changeset(%{subscribe_channels: false})
+          |> Repo.update()
+        else
+          Repo.delete(subscription)
+        end
+    end
+  end
+
+  @doc """
+  Subscribes a user to a specific channel.
+
+  Creates a new channel subscription if none exists (handles conflicts gracefully).
+
+  ## Parameters
+    - subscriber_id: ID of the user who is subscribing
+    - channel_id: ID of the channel being subscribed to
+
+  ## Returns
+    - {:ok, %Subscription{}} on success
+    - {:error, changeset} on failure
+  """
+  def subscribe_to_channel(subscriber_id, channel_id) do
+    %Subscription{}
+    |> Subscription.changeset(%{
+      subscriber_id: subscriber_id,
+      target_type: "channel",
+      target_id: channel_id,
+      subscribe_articles: false,
+      subscribe_channels: true
+    })
+    |> Repo.insert(on_conflict: :nothing)
+  end
+
+  @doc """
+  Unsubscribes a user from a specific channel.
+
+  Deletes the channel subscription if it exists.
+
+  ## Parameters
+    - subscriber_id: ID of the user who is unsubscribing
+    - channel_id: ID of the channel being unsubscribed from
+
+  ## Returns
+    - {:ok, %Subscription{}} or {:ok, nil} on success
+    - {:error, changeset} on failure
+  """
+  def unsubscribe_from_channel(subscriber_id, channel_id) do
+    case get_subscription(subscriber_id, "channel", channel_id) do
+      nil -> {:ok, nil}
+      subscription -> Repo.delete(subscription)
+    end
+  end
+
+  @doc """
+  Internal helper to find a specific subscription.
+
+  ## Parameters
+    - subscriber_id: ID of the subscribing user
+    - target_type: "user" or "channel"
+    - target_id: ID of the target being subscribed to
+
+  ## Returns
+    - %Subscription{} if found
+    - nil if not found
+  """
+  defp get_subscription(subscriber_id, target_type, target_id) do
+    Repo.one(
+      from s in Subscription,
+        where: s.subscriber_id == ^subscriber_id,
+        where: s.target_type == ^target_type,
+        where: s.target_id == ^target_id
+    )
+  end
+
+  @doc """
+  Subscribes a user to all content from another user (both articles and channels).
+
+  Creates a new subscription with both flags enabled.
+
+  ## Parameters
+    - subscriber_id: ID of the user who is subscribing
+    - target_user_id: ID of the user whose content is being subscribed to
+
+  ## Returns
+    - {:ok, %Subscription{}} on success
+    - {:error, changeset} on failure
+  """
+  def subscribe_to_all_user_content(subscriber_id, target_user_id) do
+    %Subscription{}
+    |> Subscription.changeset(%{
+      subscriber_id: subscriber_id,
+      target_type: "user",
+      target_id: target_user_id,
+      subscribe_articles: true,
+      subscribe_channels: true
+    })
+    |> Repo.insert()
+  end
+
+  @doc """
+  Completely unsubscribes a user from another user (removes all subscriptions).
+
+  Deletes all subscription records between these users.
+
+  ## Parameters
+    - subscriber_id: ID of the user who is unsubscribing
+    - target_user_id: ID of the user being unsubscribed from
+
+  ## Returns
+    - {:ok, count} where count is number of records deleted
+    - {:error, reason} on failure
+  """
+  def unsubscribe_from_user(subscriber_id, target_user_id) do
+    query =
+      from(s in Subscription,
+        where: s.subscriber_id == ^subscriber_id,
+        where: s.target_type == "user",
+        where: s.target_id == ^target_user_id
+      )
+
+    Repo.delete_all(query)
+  end
+
+  @doc """
+  Checks if a user is subscribed to another user's articles.
+
+  ## Parameters
+    - subscriber_id: ID of the potential subscriber
+    - target_user_id: ID of the user whose articles are being checked
+
+  ## Returns
+    - boolean: true if subscribed, false otherwise
+  """
+  def subscribed_to_user_articles?(subscriber_id, target_user_id) do
+    query =
+      from(s in Subscription,
+        where: s.subscriber_id == ^subscriber_id,
+        where: s.target_type == "user",
+        where: s.target_id == ^target_user_id,
+        where: s.subscribe_articles == true
+      )
+
+    Repo.exists?(query)
+  end
+
+  @doc """
+  Checks if a user is subscribed to another user's channels.
+
+  ## Parameters
+    - subscriber_id: ID of the potential subscriber
+    - target_user_id: ID of the user whose channels are being checked
+
+  ## Returns
+    - boolean: true if subscribed, false otherwise
+  """
+  def subscribed_to_user_channels?(subscriber_id, target_user_id) do
+    query =
+      from(s in Subscription,
+        where: s.subscriber_id == ^subscriber_id,
+        where: s.target_type == "user",
+        where: s.target_id == ^target_user_id,
+        where: s.subscribe_channels == true
+      )
+
+    Repo.exists?(query)
+  end
+
+  @doc """
+  Checks if a user is subscribed to a specific channel.
+
+  ## Parameters
+    - subscriber_id: ID of the potential subscriber
+    - channel_id: ID of the channel being checked
+
+  ## Returns
+    - boolean: true if subscribed, false otherwise
+  """
+  def subscribed_to_channel?(subscriber_id, channel_id) do
+    query =
+      from(s in Subscription,
+        where: s.subscriber_id == ^subscriber_id,
+        where: s.target_type == "channel",
+        where: s.target_id == ^channel_id,
+        where: s.subscribe_channels == true
+      )
+
+    Repo.exists?(query)
+  end
+
+  @doc """
+  Lists all subscriptions for a given user.
+
+  ## Parameters
+    - subscriber_id: ID of the user whose subscriptions to retrieve
+
+  ## Returns
+    - List of %Subscription{} records
+  """
+  def list_user_subscriptions(subscriber_id) do
+    query =
+      from(s in Subscription,
+        where: s.subscriber_id == ^subscriber_id
+      )
+
+    Repo.all(query)
+  end
+
+  @doc """
+  Lists all user-to-user subscriptions for a given subscriber.
+
+  ## Parameters
+    - subscriber_id: ID of the user whose user subscriptions to retrieve
+
+  ## Returns
+    - List of %Subscription{} records where target_type is "user"
+  """
+  def list_user_subscriptions_to_users(subscriber_id) do
+    query =
+      from(s in Subscription,
+        where: s.subscriber_id == ^subscriber_id,
+        where: s.target_type == "user"
+      )
+
+    Repo.all(query)
+  end
+
+  @doc """
+  Lists all channel subscriptions for a given user.
+
+  ## Parameters
+    - subscriber_id: ID of the user whose channel subscriptions to retrieve
+
+  ## Returns
+    - List of %Subscription{} records where target_type is "channel"
+  """
+  def list_user_channel_subscriptions(subscriber_id) do
+    query =
+      from(s in Subscription,
+        where: s.subscriber_id == ^subscriber_id,
+        where: s.target_type == "channel"
+      )
+
+    Repo.all(query)
+  end
+
+  @doc """
+  Updates a subscription with new attributes.
+
+  ## Parameters
+    - subscription_id: ID of the subscription to update
+    - attrs: Map of attributes to change
+
+  ## Returns
+    - {:ok, %Subscription{}} on success
+    - {:error, changeset} on failure
+  """
+  def update_subscription(subscription_id, %{} = attrs) do
+    Subscription
+    |> Repo.get(subscription_id)
+    |> Subscription.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Updates subscription flags for a specific subscription.
+
+  ## Parameters
+    - subscription_id: ID of the subscription to update
+    - subscribe_articles: boolean for article subscription status
+    - subscribe_channels: boolean for channel subscription status
+
+  ## Returns
+    - {:ok, %Subscription{}} on success
+    - {:error, changeset} on failure
+  """
+  def update_subscription_flags(subscription_id, subscribe_articles, subscribe_channels) do
+    Subscription
+    |> Repo.get(subscription_id)
+    |> Subscription.changeset(%{
+      subscribe_articles: subscribe_articles,
+      subscribe_channels: subscribe_channels
+    })
+    |> Repo.update()
   end
 end

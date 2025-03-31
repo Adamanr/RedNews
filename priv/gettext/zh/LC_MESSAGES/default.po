@@ -753,3 +753,45 @@ msgstr "作为客人"
 
 msgid "Article Content"
 msgstr "文章内容"
+
+msgid "Your Personal Feed"
+msgstr "你的个人资料"
+
+msgid "Curated content from your subscriptions"
+msgstr "从您的订阅中精选的内容"
+
+msgid "All Content"
+msgstr "所有内容"
+
+msgid "Subscribed to articles"
+msgstr "已订阅文章"
+
+msgid "Subscribed to channels"
+msgstr "已订阅频道"
+
+msgid "Unsubscribed from articles"
+msgstr "已取消订阅文章"
+
+msgid "Unsubscribed from channels"
+msgstr "已取消订阅频道"
+
+msgid "Subscription failed"
+msgstr "订阅失败"
+
+msgid "Unsubscription failed"
+msgstr "取消订阅失败"
+
+msgid "You need to log in first"
+msgstr "请先登录"
+
+msgid "Failed to delete channels"
+msgstr "删除频道失败"
+
+msgid "Subscribed to channel"
+msgstr "已订阅频道"
+
+msgid "Unsubscribed from channel"
+msgstr "已取消订阅频道"
+
+msgid "Feed"
+msgstr "饲料"

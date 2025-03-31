@@ -151,7 +151,11 @@ defmodule Rednews.Posts do
           from(a in Articles, where: fragment("? = ANY(?)", ^tag, a.tags))
 
         :author ->
-          from(a in Articles, where: a.user_id == ^params[:user_id])
+          if Map.has_key?(params, :user_ids) do
+            from(a in Articles, where: a.user_id in ^params[:user_ids])
+          else
+            from(a in Articles, where: a.user_id == ^params[:user_id])
+          end
 
         :date ->
           case params[:date] do
@@ -372,7 +376,7 @@ defmodule Rednews.Posts do
       channels ->
         channels
         |> Task.async_stream(fn channel ->
-          list_headlines(:channel, %{channel: channel.id})
+          list_headlines(:channel, %{channel_id: channel.id})
         end)
         |> Stream.map(fn {:ok, headlines} -> headlines end)
         |> Enum.to_list()
@@ -410,10 +414,11 @@ defmodule Rednews.Posts do
           from(h in Headlines, where: ^params[:tags] in h.tags)
 
         :channel ->
-          from(h in Headlines,
-            where: h.channel_id == ^params[:channel],
-            order_by: [desc: h.inserted_at]
-          )
+          if Map.has_key?(params, :channel_ids) do
+            from(h in Headlines, where: h.channel_id in ^params[:channel_ids])
+          else
+            from(h in Headlines, where: h.channel_id == ^params[:channel_id])
+          end
 
         :date ->
           case params[:date] do

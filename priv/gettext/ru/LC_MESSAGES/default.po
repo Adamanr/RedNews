@@ -777,3 +777,45 @@ msgstr "Содержание статьи"
 
 msgid "Feed"
 msgstr "Лента"
+
+msgid "Your Personal Feed"
+msgstr "Ваша личная лента"
+
+msgid "Curated content from your subscriptions"
+msgstr "Контент, отобранный из ваших подписок"
+
+msgid "All Content"
+msgstr "Весь контент"
+
+msgid "Subscribed to articles"
+msgstr "Вы подписались на статьи"
+
+msgid "Subscribed to channels"
+msgstr "Вы подписались на каналы"
+
+msgid "Unsubscribed from articles"
+msgstr "Вы отписались от статей"
+
+msgid "Unsubscribed from channels"
+msgstr "Вы отписались от каналов"
+
+msgid "Subscription failed"
+msgstr "Ошибка при подписке"
+
+msgid "Unsubscription failed"
+msgstr "Ошибка при отписке"
+
+msgid "You need to log in first"
+msgstr "Сначала нужно войти"
+
+msgid "Failed to delete channels"
+msgstr "Не удалось удалить каналы"
+
+msgid "Failed to delete articles"
+msgstr "Не удалось удалить статьи"
+
+msgid "Subscribed to channel"
+msgstr "Вы подписались на канал"
+
+msgid "Unsubscribed from channel"
+msgstr "Вы отписались от канала"

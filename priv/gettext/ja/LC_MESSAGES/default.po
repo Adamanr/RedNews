@@ -765,3 +765,42 @@ msgstr "記事の内容"
 
 msgid "Feed"
 msgstr "フィード"
+
+msgid "Your Personal Feed"
+msgstr "あなたの個人フィード"
+
+msgid "Curated content from your subscriptions"
+msgstr "あなたの購読元からのカーディネーションされたコンテンツ"
+
+msgid "All Content"
+msgstr "すべてのコンテンツ"
+
+msgid "Subscribed to articles"
+msgstr "記事に購読しました"
+
+msgid "Subscribed to channels"
+msgstr "チャンネルに購読しました"
+
+msgid "Unsubscribed from articles"
+msgstr "記事から購読を解除しました"
+
+msgid "Unsubscribed from channels"
+msgstr "チャンネルから購読を解除しました"
+
+msgid "Subscription failed"
+msgstr "購読に失敗しました"
+
+msgid "Unsubscription failed"
+msgstr "購読解除に失敗しました"
+
+msgid "You need to log in first"
+msgstr "ログインしてください"
+
+msgid "Failed to delete channels"
+msgstr "チャンネルの削除に失敗しました"
+
+msgid "Subscribed to channel"
+msgstr "チャンネルに購読しました"
+
+msgid "Unsubscribed from channel"
+msgstr "チャンネルから購読を解除しました"

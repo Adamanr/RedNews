@@ -177,6 +177,40 @@
               </.link>
             </div>
           <% end %>
+          <%= if @channel.user_id != @current_user.id do %>
+            <button
+              phx-click="toggle_subscription"
+              class={"
+                  w-full flex items-center justify-center px-4 py-3 border border-transparent rounded-xl shadow-md
+                  text-base font-bold text-white transition-all
+                  #{if @subscribed,
+                    do: "bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700",
+                    else: "bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700"}
+                "}
+            >
+              <%= if @subscribed do %>
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M20 12H4"
+                  />
+                </svg>
+                {gettext("Unsubscribe")}
+              <% else %>
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                {gettext("Subscribe")}
+              <% end %>
+            </button>
+          <% end %>
           <%= if @channel.links do %>
             <a
               href={@channel.links}

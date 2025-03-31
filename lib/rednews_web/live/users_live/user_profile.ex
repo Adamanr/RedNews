@@ -95,6 +95,104 @@ defmodule RednewsWeb.UsersLive.UserProfile do
                     {@user.desc || gettext("No description available")}
                   </p>
 
+                  <%= if @current_user.id != @user.id do %>
+                    <div class="mt-6">
+                      <h3 class="text-xl font-bold text-gray-900 dark:text-gray-200 mb-3">
+                        {gettext("Subscription Options")}
+                      </h3>
+
+                      <div class="flex flex-wrap pb-5 gap-3">
+                        <%= if @subscribed_articles do %>
+                          <button
+                            phx-click="unsubscribe_articles"
+                            phx-value-target={@user.id}
+                            class="px-4 py-2 bg-red-100 text-red-800 rounded-lg hover:bg-red-200 transition-all flex items-center"
+                          >
+                            <svg
+                              class="w-5 h-5 mr-2"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M20 12H4"
+                              />
+                            </svg>
+                            {gettext("Unsubscribe from Articles")}
+                          </button>
+                        <% else %>
+                          <button
+                            phx-click="subscribe_articles"
+                            phx-value-target={@user.id}
+                            class="px-4 py-2 bg-indigo-100 text-indigo-800 rounded-lg hover:bg-indigo-200 transition-all flex items-center"
+                          >
+                            <svg
+                              class="w-5 h-5 mr-2"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 4v16m8-8H4"
+                              />
+                            </svg>
+                            {gettext("Subscribe to Articles")}
+                          </button>
+                        <% end %>
+
+                        <%= if @subscribed_channels do %>
+                          <button
+                            phx-click="unsubscribe_channels"
+                            phx-value-target={@user.id}
+                            class="px-4 py-2 bg-red-100 text-red-800 rounded-lg hover:bg-red-200 transition-all flex items-center"
+                          >
+                            <svg
+                              class="w-5 h-5 mr-2"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M20 12H4"
+                              />
+                            </svg>
+                            {gettext("Unsubscribe from Channels")}
+                          </button>
+                        <% else %>
+                          <button
+                            phx-click="subscribe_channels"
+                            phx-value-target={@user.id}
+                            class="px-4 py-2 bg-purple-100 text-purple-800 rounded-lg hover:bg-purple-200 transition-all flex items-center"
+                          >
+                            <svg
+                              class="w-5 h-5 mr-2"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 4v16m8-8H4"
+                              />
+                            </svg>
+                            {gettext("Subscribe to Channels")}
+                          </button>
+                        <% end %>
+                      </div>
+                    </div>
+                  <% end %>
+
                   <%= if @user.links && length(@user.links) > 0 do %>
                     <div class="mt-6">
                       <h3 class="text-xl font-bold text-gray-900 mb-3">{gettext("Links")}</h3>
@@ -249,11 +347,26 @@ defmodule RednewsWeb.UsersLive.UserProfile do
   end
 
   @impl true
-  def mount(%{"id" => user_id}, _session, socket) do
+  def mount(%{"id" => user_id}, session, socket) do
     user = Accounts.get_user!(user_id)
     articles = Posts.list_article(:author, %{user_id: user.id})
     news = Posts.list_user_headlines(user.id) |> Repo.preload(:channel)
     channels = Accounts.list_channels(:author, %{user_id: user.id}) |> Repo.preload(:user)
+    current_user = Helpers.get_current_user(session)
+
+    subscribed_articles =
+      if current_user do
+        Accounts.subscribed_to_user_articles?(current_user.id, user_id)
+      else
+        false
+      end
+
+    subscribed_channels =
+      if current_user do
+        Accounts.subscribed_to_user_channels?(current_user.id, user_id)
+      else
+        false
+      end
 
     active_tab =
       cond do
@@ -271,6 +384,9 @@ defmodule RednewsWeb.UsersLive.UserProfile do
       |> assign(:page_title, "#{user.username}'s Profile")
       |> assign(:articles, articles)
       |> assign(:news, news)
+      |> assign(:subscribed_articles, subscribed_articles)
+      |> assign(:subscribed_channels, subscribed_channels)
+      |> assign(:current_user, current_user)
       |> assign(:gradient, Helpers.random_gradient())
       |> assign(:channels, channels)
       |> assign(:current_tab, Enum.at(["Articles", "News", "Channels"], active_tab))
@@ -303,6 +419,78 @@ defmodule RednewsWeb.UsersLive.UserProfile do
       end)
 
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("subscribe_articles", %{"target" => target_user_id}, socket) do
+    target_user_id = String.to_integer(target_user_id)
+
+    case Accounts.subscribe_to_user_articles(socket.assigns.current_user.id, target_user_id) do
+      {:ok, _} ->
+        socket =
+          socket
+          |> put_flash(:info, gettext("Subscribed to articles"))
+          |> assign(:subscribed_articles, true)
+
+        {:noreply, socket}
+
+      {:error, _} ->
+        {:noreply, put_flash(socket, :error, gettext("Subscription failed"))}
+    end
+  end
+
+  @impl true
+  def handle_event("unsubscribe_articles", %{"target" => target_user_id}, socket) do
+    target_user_id = String.to_integer(target_user_id)
+
+    case Accounts.unsubscribe_from_user_articles(socket.assigns.current_user.id, target_user_id) do
+      {:ok, _} ->
+        socket =
+          socket
+          |> put_flash(:info, gettext("Unsubscribed from articles"))
+          |> assign(:subscribed_articles, false)
+
+        {:noreply, socket}
+
+      {:error, _} ->
+        {:noreply, put_flash(socket, :error, gettext("Unsubscription failed"))}
+    end
+  end
+
+  @impl true
+  def handle_event("subscribe_channels", %{"target" => target_user_id}, socket) do
+    target_user_id = String.to_integer(target_user_id)
+
+    case Accounts.subscribe_to_user_channels(socket.assigns.current_user.id, target_user_id) do
+      {:ok, _} ->
+        socket =
+          socket
+          |> put_flash(:info, gettext("Subscribed to channels"))
+          |> assign(:subscribed_channels, true)
+
+        {:noreply, socket}
+
+      {:error, _} ->
+        {:noreply, put_flash(socket, :error, gettext("Subscription failed"))}
+    end
+  end
+
+  @impl true
+  def handle_event("unsubscribe_channels", %{"target" => target_user_id}, socket) do
+    target_user_id = String.to_integer(target_user_id)
+
+    case Accounts.unsubscribe_from_user_channels(socket.assigns.current_user.id, target_user_id) do
+      {:ok, _} ->
+        socket =
+          socket
+          |> put_flash(:info, gettext("Unsubscribed from channels"))
+          |> assign(:subscribed_channels, false)
+
+        {:noreply, socket}
+
+      {:error, _} ->
+        {:noreply, put_flash(socket, :error, gettext("Unsubscription failed"))}
+    end
   end
 
   @impl true
